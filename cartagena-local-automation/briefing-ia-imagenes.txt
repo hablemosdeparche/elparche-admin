@@ -1,0 +1,142 @@
+=========================================================
+  BRIEFING COMPLETO PARA IA SOBRE GENERACIÓN DE IMÁGENES
+  Copia y pega esto en el nuevo chat de IA
+=========================================================
+
+## PROYECTO: Directorio visual de 50 lugares turísticos de Cartagena
+
+Necesito que transformes FOTOS REALES de 50 lugares de Cartagena
+en ilustraciones digitales estilo vectorial plano para un directorio
+web. Yo te daré links de TripAdvisor con fotos de cada lugar, y tú
+las convertirás en ilustraciones con las siguientes reglas.
+
+## ESTILO REQUERIDO (OBLIGATORIO)
+
+Todas las ilustraciones deben seguir EXACTAMENTE este estilo visual:
+
+- **Ilustración digital minimalista en estilo vectorial plano**
+- Colores sólidos planos (sin degradados, sin sombras complejas)
+- Líneas limpias y definidas (tipo vectorial)
+- Composición minimalista centrada en el sujeto principal
+- Sin texturas, sin fondos fotográficos
+- Paleta de colores: tonos cálidos caribeños (terracota, ocre,
+  dorado, verde palma, azul caribe) sobre fondo neutro claro
+- Formato: cuadrado (1:1), 1024x1024 píxeles
+
+**Referencia de estilo**: Tengo 4 imágenes de referencia generadas
+por Gemini que debo subirte para que veas el estilo exacto. Se llaman:
+- Gemini_Generated_Image_is82rfis82rfis82 1.png
+- Gemini_Generated_Image_ad5gnbad5gnbad5g 1.png
+- Gemini_Generated_Image_ni79tkni79tkni79 1.png
+- Gemini_Generated_Image_pxdi8upxdi8upxdi 1.png
+
+## REGLAS LEGALES (OBLIGATORIO)
+
+Para que la ilustración sea considerada OBRA ORIGINAL y NO DERIVADA,
+debes aplicar estas transformaciones a cada foto:
+
+1. **TRANSFORMACIÓN ESTILÍSTICA** (la más importante):
+   Convertir la foto real en ilustración con líneas nítidas, colores
+   planos, estilo vectorial. Esto por sí solo ya constituye una
+   obra original porque cada línea es creada desde cero.
+
+2. **NOMBRES Y LOGOS INTACTOS**: El nombre del local, logotipos
+   principales y letreros icónicos deben mantenerse legibles y
+   reconocibles. La gente debe poder identificar el local.
+
+3. **PERSONAS**: Quítalas todas. Los lugares deben verse vacíos.
+   Si prefieres, puedes cambiarlas de posición/ropa, pero la opción
+   más segura es eliminarlas por completo.
+
+4. **ALTERACIÓN DE ELEMENTOS MENORES**: Cambia detalles que no
+   afecten el reconocimiento del lugar: lámparas genéricas, cuadros
+   de fondo, botellas en estantes, texturas de paredes, etc.
+
+5. **COMPOSICIÓN COMO REFERENCIA, NO COPIA**: Usa la foto como guía
+   de proporciones y distribución, pero redibuja todo desde cero
+   para garantizar que cada línea sea creación artística original.
+
+## FLUJO DE TRABAJO
+
+Paso 1: Yo te digo qué lugar quiero (ej. "Alquímico")
+Paso 2: Yo te paso el link de TripAdvisor con la foto del local
+Paso 3: Tú accedes al link o te describo la imagen
+Paso 4: Tú generas la ilustración transformada según las reglas
+Paso 5: Repetimos para los 50 lugares
+
+## LISTA DE LUGARES (50)
+
+--- 🍺 BARES ---
+1. Alquímico - Bar 3 pisos, fachada colonial, plantas colgantes
+2. Café Havana - Fachada azul intenso, letrero neón "Havana"
+3. El Pasquín de Joaco Gastro Bar - Esquina colonial
+4. Donde Fidel Salsa Club - Entrada frente a Torre del Reloj
+5. Café del Mar - Terraza en muralla con vista al mar
+6. El Barón Café & Cocktail Bar - Terraza frente a plaza
+7. La Movida - Rooftop 2 niveles, luces colgantes
+
+--- ☕ CAFÉS ---
+8. Época Café Bar - Fachada beige, letrero dorado
+9. Ábaco Libros y Café - Librería-café con estantes de madera
+10. Café del Mural - Sillas coloridas, mural grande
+11. Libertario Coffee Roasters - Tostaduría con ventanal
+12. Manna Breakfast & Lunch - Café de desayuno
+13. Señor Titis Coffee & Gifts - Tienda-café artesanías
+
+--- 🍽 COMIDA ---
+14. Celele - Casa colonial con patio interior
+15. Carmen Cartagena - Casona colonial restaurada
+16. Buena Vida Marisquería - Rooftop con mariscos
+17. Interno - Fachada colonial puerta de madera
+18. La Cevichería - Toldos azules y blancos
+19. San Pascual Baylón - Casa colonial patio y fuente
+20. Baroca Sabor Ancestral - Rooftop con velas
+21. El Burlador - Casona siglo XVII
+22. Totopo - Local esquinero en Getsemaní
+23. Restaurante Olano - Terraza colonial
+
+--- 🎨 ARTE / CULTURA ---
+24. Museo del Oro Zenú - Fachada colonial
+25. Museo de Arte Moderno - Fachada blanca
+26. San Pedro Claver - Iglesia barroca
+27. Museo Naval del Caribe - Edificio colonial
+28. Casa Museo Rafael Núñez - Casa colonial jardín
+29. Palacio de la Inquisición - Edificio colonial
+30. Las Bóvedas - Galerías en muralla
+
+--- 🌅 PLANES / TOURS ---
+31. Playa Blanca - Playa arena blanca
+32. Aviario Nacional - Túnel naturaleza flamencos
+33. Chiva Tour - Bus colorido
+34. Tour en Kayak - Kayak manglares
+35. Buceo Islas del Rosario - Arrecife coral
+36. Cerro de La Popa - Convento en colina
+37. Torre del Reloj - Arco con reloj
+38. Plaza de la Trinidad - Iglesia amarilla
+39. Mercado de Bazurto - Toldos frutas pescado
+
+--- 🌙 ROOFTOP / DISCOS ---
+40. Amaré Rooftop - Piscina infinita
+41. Bazurto Social Club - Fachada neón
+42. La Jugada Club House - Entrada estilo Gatsby
+43. Seven 7 Times - Edificio 5 ambientes
+44. Casa Cruxada - Fachada colonial vanguardista
+45. 1811 Rooftop - Vista techos coloniales
+46. Barra 7 - Coctelería oculta
+47. Xo Rooftop - Terraza minimalista
+48. Club Prestige - Discoteca Bocagrande
+49. Pikete - Discoteca urbana
+50. Boheme Lounge - Lounge íntimo shows
+
+## REFERENCIAS VISUALES
+
+Tengo archivos con links a fotos reales de cada lugar que puedo
+consultar: Google Maps, Instagram y TripAdvisor. Yo te pasaré
+el link de la foto específica que quiero transformar.
+
+## OBJETIVO FINAL
+
+50 ilustraciones estilo vectorial plano, consistentes entre sí,
+sin personas, que representen cada lugar de forma reconocible
+usando fotos reales como referencia pero transformándolas en
+obras originales.

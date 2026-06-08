@@ -1,0 +1,334 @@
+=========================================================
+  PROMPT PARA GENERAR IMÁGENES ESTILO GEMINI
+  (Usar con Google Imagen / Gemini API)
+=========================================================
+
+--- REFERENCIA DE ESTILO (subir 4 imágenes como style reference) ---
+Archivos en C:\Users\DIEGO\Desktop\imag\
+- Gemini_Generated_Image_is82rfis82rfis82 1.png
+- Gemini_Generated_Image_ad5gnbad5gnbad5g 1.png
+- Gemini_Generated_Image_ni79tkni79tkni79 1.png
+- Gemini_Generated_Image_pxdi8upxdi8upxdi 1.png
+
+Estilo: ilustración digital plana, líneas limpias, colores sólidos sin
+degradados, composición minimalista, sin fondos fotográficos, sin
+sombras complejas, sin texturas. Estilo vectorial moderno.
+
+=========================================================
+  PLANTILLA DEL PROMPT (por cada lugar)
+=========================================================
+
+[SUBIR 4 IMÁGENES DE REFERENCIA como style reference / image-to-image]
+
+PROMPT TEXTO:
+
+"Crea una ilustración digital minimalista en estilo vectorial plano
+de [NOMBRE_LUGAR] en [BARRIO], Cartagena.
+
+La imagen debe mostrar el lugar de forma representativa: [DESCRIPCIÓN
+VISUAL BREVE].
+
+Estilo: colores sólidos planos, líneas limpias y definidas, sin
+degradados, composición minimalista centrada en el sujeto principal,
+sin fondos complejos, sin texturas, sin sombras realistas.
+
+Paleta de colores: tonos cálidos caribeños (terracota, ocre, dorado,
+verde palma, azul caribe) sobre fondo neutro claro.
+
+Formato: horizontal, 1024x1024 o 1536x1536, aspecto cuadrado."
+
+=========================================================
+  PROMPTS POR CATEGORÍA + LUGAR
+=========================================================
+
+--- 🍺 BARES ---
+
+1. Alquímico (Centro Histórico)
+"Ilustración vectorial plana de un bar de tres pisos con fachada
+colonial, plantas colgantes en balcones de madera, letrero 'Alquímico'
+en dorado, puerta vintage, farol en la entrada. Sin personas.
+Colores: terracota, ocre, verde oscuro."
+
+2. Café Havana (Getsemaní)
+"Ilustración vectorial plana de un bar con fachada color azul intenso,
+letrero neón 'Havana', puerta abierta dejando ver luces rojas y
+amarillas, paredes con fotos vintage. Sin personas.
+Colores: azul marino, rojo, amarillo mostaza."
+
+3. El Pasquín de Joaco Gastro Bar (Centro)
+"Ilustración vectorial plana de una esquina colonial con toldo
+rayado rojo y crema, mesas en la acera, macetas colgantes, letrero
+de madera. Sin personas. Colores: crema, terracota, verde oliva."
+
+4. Donde Fidel Salsa Club (Centro)
+"Ilustración vectorial plana de la entrada de un salsero frente a
+Torre del Reloj, marquesina con luces, pared con fotos de salseros,
+puerta de madera abierta. Sin personas.
+Colores: rojo ladrillo, amarillo, negro."
+
+5. Café del Mar (Centro)
+"Ilustración vectorial plana de una terraza en la muralla con vista
+al mar Caribe, toldo blanco, sillones, barra, atardecer con sol
+naranja sobre el horizonte. Sin personas.
+Colores: naranja, azul marino, crema, dorado."
+
+6. El Barón Café & Cocktail Bar (Centro)
+"Ilustración vectorial plana de una terraza elegante frente a una
+plaza colonial, sillones de mimbre, barra de madera, faroles,
+plantas en macetas. Sin personas.
+Colores: marrón, beige, dorado, verde."
+
+7. La Movida (Centro)
+"Ilustración vectorial plana de un rooftop de dos niveles con barra
+iluminada, luces colgantes, vista a techos coloniales, cielo
+nocturno estrellado. Sin personas.
+Colores: negro, dorado, rojo, azul noche."
+
+--- ☕ CAFÉS ---
+
+8. Época Café Bar (Centro)
+"Ilustración vectorial plana de una cafetería con fachada beige,
+letrero 'Época' en dorado, sillas de mimbre en la entrada, plantas
+colgantes, ventanal con vidrio. Sin personas.
+Colores: beige, marrón, dorado, verde."
+
+9. Ábaco Libros y Café (Centro)
+"Ilustración vectorial plana de una librería-café con estantes de
+madera hasta el techo, escalera tipo biblioteca, lámpara colgante,
+mesa con libros abiertos y una taza de café. Sin personas.
+Colores: marrón madera, crema, dorado."
+
+10. Café del Mural (Getsemaní)
+"Ilustración vectorial plana de una cafetería pequeña con sillas
+coloridas en la acera, un mural grande y colorido en la pared
+contigua, toldo a rayas. Sin personas.
+Colores: amarillo, azul, rojo, verde."
+
+11. Libertario Coffee Roasters (Getsemaní)
+"Ilustración vectorial plana de una tostaduría con ventanal amplio,
+máquina de tostar café visible desde la calle, sacos de café,
+letrero 'Libertario'. Sin personas.
+Colores: gris claro, marrón café, verde hoja."
+
+12. Manna Breakfast & Lunch (Centro)
+"Ilustración vectorial plana de un café de desayuno con toldo crema,
+mesas con manteles a cuadros, plato con pancakes y frutas, macetas,
+letrero 'Manna'. Sin personas.
+Colores: crema, rosa, verde menta, marrón."
+
+13. Señor Titis Coffee & Gifts (Centro)
+"Ilustración vectorial plana de una tienda-café con bolsas de café
+en la vitrina, artesanías colombianas en estantes, una taza humeante,
+letrero colorido 'Señor Titis'. Sin personas.
+Colores: rojo, amarillo, marrón, naranja."
+
+--- 🍽 COMIDA ---
+
+14. Celele (Centro)
+"Ilustración vectorial plana de un restaurante en casa colonial con
+patio interior, mesas con manteles blancos, plantas tropicales,
+plato con camarones. Sin personas.
+Colores: blanco, verde tropical, crema, coral."
+
+15. Carmen Cartagena (Centro)
+"Ilustración vectorial plana de una casona colonial restaurada con
+terraza, arcos de piedra, plantas colgantes, plato con cerdo
+glaseado. Sin personas. Colores: piedra, verde, terracota, dorado."
+
+16. Buena Vida Marisquería (Centro)
+"Ilustración vectorial plana de un rooftop con vista a la ciudad,
+barra, sombrillas, plato de mariscos y un cóctel. Sin personas.
+Colores: azul cielo, blanco, coral, dorado."
+
+17. Interno (San Diego)
+"Ilustración vectorial plana de la fachada de un edificio colonial
+con puerta de madera, letrero 'Interno', un plato con pescado.
+Sin personas. Colores: beige, marrón, verde oliva."
+
+18. La Cevichería (Centro)
+"Ilustración vectorial plana de un restaurante con toldos azules y
+blancos, mesas en la acera, plato de ceviche con limón. Sin personas.
+Colores: azul, blanco, amarillo, verde."
+
+19. San Pascual Baylón (Centro)
+"Ilustración vectorial plana de una casa colonial con patio y fuente,
+mesas de madera, plato con sancocho humeante. Sin personas.
+Colores: piedra, verde, azul, crema."
+
+20. Baroca Sabor Ancestral (Centro)
+"Ilustración vectorial plana de un rooftop con velas, vista a las
+murallas, plato con pescado en hoja de bijao. Sin personas.
+Colores: naranja, dorado, marrón, verde."
+
+21. El Burlador (Centro)
+"Ilustración vectorial plana de una casona del siglo XVII con patio,
+plato de paella, copa de vino, arcos coloniales. Sin personas.
+Colores: piedra, rojo vino, dorado, verde."
+
+22. Totopo (Getsemaní)
+"Ilustración vectorial plana de un local esquinero en una plaza,
+mesas coloridas, letrero 'Totopo', tacos y margarita. Sin personas.
+Colores: verde, rojo, blanco, amarillo."
+
+23. Restaurante Olano (Centro)
+"Ilustración vectorial plana de un restaurante íntimo con terraza
+colonial, plato con muelas de cangrejo, vela en la mesa. Sin personas.
+Colores: beige, coral, marrón, dorado."
+
+--- 🎨 ARTE ---
+
+24. Museo del Oro Zenú (Centro)
+"Ilustración vectorial plana de fachada colonial con puerta de
+madera pesada, vitrina con piezas de oro zenú, luz cálida interior.
+Sin personas. Colores: dorado, marrón, crema, negro."
+
+25. Museo de Arte Moderno (Centro)
+"Ilustración vectorial plana de fachada colonial blanca con
+letrero, cuadro abstracto colorido en la entrada. Sin personas.
+Colores: blanco, azul, rojo, amarillo."
+
+26. Santuario San Pedro Claver (Centro)
+"Ilustración vectorial plana de iglesia barroca con fachada blanca,
+arco de piedra, campanario, palmeras. Sin personas.
+Colores: blanco, gris piedra, verde, dorado."
+
+27. Museo Naval del Caribe (Centro)
+"Ilustración vectorial plana de edificio colonial frente a la
+muralla, maqueta de barco antiguo visible. Sin personas.
+Colores: azul marino, blanco, gris, dorado."
+
+28. Casa Museo Rafael Núñez (El Cabrero)
+"Ilustración vectorial plana de casa de campo colonial con jardín,
+palmeras, balcón de madera. Sin personas.
+Colores: blanco, verde jardín, azul cielo."
+
+29. Palacio de la Inquisición (Centro)
+"Ilustración vectorial plana de imponente edificio colonial con
+balcones de madera, portal arqueado. Sin personas.
+Colores: piedra, marrón, crema."
+
+30. Las Bóvedas (Centro)
+"Ilustración vectorial plana de arcos dentro de la muralla con
+galerías de artesanías, hamacas coloridas colgadas. Sin personas.
+Colores: piedra, arcoíris, crema."
+
+--- 🌅 PLANES ---
+
+31. Playa Blanca (Barú)
+"Ilustración vectorial plana de playa de arena blanca, mar turquesa,
+palmeras inclinadas, dos sombrillas. Sin personas.
+Colores: turquesa, arena, verde palma, blanco."
+
+32. Aviario Nacional (Barú)
+"Ilustración vectorial plana de entrada al aviario con túnel de
+naturaleza, flamencos rosados visibles. Sin personas.
+Colores: verde selva, azul, rosa flamenco, amarillo."
+
+33. Chiva Tour (Centro)
+"Ilustración vectorial plana de un bus chiva colorida decorada,
+luces de colores, recorriendo calle empedrada. Sin personas.
+Colores: amarillo, rojo, azul, verde."
+
+34. Tour en Kayak (Centro/Bahía)
+"Ilustración vectorial plana de kayak amarillo sobre agua azul,
+manglares verdes al fondo. Sin personas.
+Colores: amarillo, azul, verde manglar."
+
+35. Buceo Islas del Rosario
+"Ilustración vectorial plana de arrecife de coral con peces
+tropicales y tortuga marina bajo el agua. Sin personas.
+Colores: azul profundo, coral, naranja, turquesa."
+
+36. Cerro de La Popa
+"Ilustración vectorial plana de colina verde con convento blanco
+en la cima, vista panorámica de la ciudad al fondo.
+Sin personas. Colores: verde, blanco, azul cielo."
+
+37. Torre del Reloj (Centro)
+"Ilustración vectorial plana de torre de arco de piedra con reloj,
+entrada a la ciudad amurallada. Sin personas.
+Colores: piedra, marrón, dorado, azul."
+
+38. Plaza de la Trinidad (Getsemaní)
+"Ilustración vectorial plana de plaza con iglesia amarilla al fondo,
+árboles frondosos. Sin personas.
+Colores: amarillo, verde, gris piedra."
+
+39. Mercado de Bazurto
+"Ilustración vectorial plana de mercado con toldos de colores,
+frutas tropicales apiladas, pescado fresco. Sin personas.
+Colores: rojo, naranja, verde, azul."
+
+40. Amaré Rooftop (Centro)
+"Ilustración vectorial plana de rooftop con piscina infinita, vista
+a la ciudad amurallada al atardecer. Sin personas.
+Colores: azul piscina, naranja atardecer, dorado."
+
+--- 🌙 NOCHE ---
+
+41. Bazurto Social Club (Getsemaní)
+"Ilustración vectorial plana de fachada colorida con luces de neón,
+letrero 'Bazurto Social Club', música saliendo. Sin personas.
+Colores: rojo, azul neón, amarillo, negro."
+
+42. La Jugada Club House (Centro)
+"Ilustración vectorial plana de entrada elegante con luces doradas,
+estilo Gatsby, puerta negra con detalles dorados. Sin personas.
+Colores: negro, dorado, blanco."
+
+43. Seven 7 Times (Getsemaní)
+"Ilustración vectorial plana de edificio con 5 ambientes visibles,
+luces de colores en cada piso. Sin personas.
+Colores: púrpura, rosa neón, azul, dorado."
+
+44. Casa Cruxada (Centro)
+"Ilustración vectorial plana de fachada colonial con luces
+vanguardistas, puerta moderna, frente a plaza. Sin personas.
+Colores: blanco, azul eléctrico, neón."
+
+45. 1811 Rooftop (Centro)
+"Ilustración vectorial plana de rooftop con vista panorámica de
+techos coloniales y cúpulas, atardecer. Sin personas.
+Colores: naranja, terracota, azul noche, dorado."
+
+46. Barra 7 (Centro)
+"Ilustración vectorial plana de barra de coctelería oculta, puerta
+discreta, interior con luces cálidas y botellas. Sin personas.
+Colores: marrón, dorado, crema."
+
+47. Xo Rooftop (Centro)
+"Ilustración vectorial plana de terraza minimalista con vista a la
+ciudad amurallada, coctel de lychee. Sin personas.
+Colores: blanco, azul, dorado, verde hoja."
+
+48. Club Prestige (Bocagrande)
+"Ilustración vectorial plana de discoteca moderna en edificio alto,
+luces led moradas, entrada VIP. Sin personas.
+Colores: púrpura, dorado, negro."
+
+49. Pikete (Centro)
+"Ilustración vectorial plana de discoteca urbana con luces led,
+letrero neón 'Pikete'. Sin personas.
+Colores: rojo, azul, amarillo, negro."
+
+50. Boheme Lounge (Centro)
+"Ilustración vectorial plana de lounge íntimo con decoración
+cuidada, micrófono de pie para shows en vivo. Sin personas.
+Colores: burdeos, dorado, crema, azul noche.
+
+=========================================================
+  INSTRUCCIONES DE USO
+=========================================================
+
+1. En Google AI Studio: seleccionar modelo Imagen (Gemini)
+2. Subir las 4 imágenes de referencia de C:\Users\DIEGO\Desktop\imag\
+   como "style reference" o adjuntarlas al prompt
+3. Usar la plantilla de prompt para cada lugar
+4. Configuración recomendada:
+   - Aspect ratio: 1:1 (cuadrado)
+   - Style: "No style" (dejar que las referencias dicten el estilo)
+   - Add generation prompt: "Colores sólidos planos, líneas limpias,
+     sin degradados, ilustración digital minimalista, estilo vectorial
+     plano, sin texturas, composición minimalista"
+5. Descargar cada imagen y subir a ImgBB
+6. Actualizar `img` del lugar en `index.html`

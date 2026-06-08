@@ -1,0 +1,7 @@
+github-accounts.json
+*.xlsx
+*.xls
+Captura de pantalla*
+submissions/
+node_modules/
+.git/

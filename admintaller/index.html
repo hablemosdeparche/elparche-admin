@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Parche — Panel de registro para locales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --gold: #C9983A;
+  --gold-light: #E8B84B;
+  --dark: #0F0C08;
+  --dark2: #181309;
+  --card-bg: #1C1508;
+  --card-border: #2E2010;
+  --text: #F0E8D8;
+  --muted: #7A6A4A;
+  --muted2: #9A8A6A;
+  --tag-bg: #241A08;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --whatsapp: #25D366;
+  --success: #2ECC71;
+  --danger: #E74C3C;
+  --verified: #3498DB;
+  --bold-green: #00D47E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.5;
+}
+.app {
+  width: 100%; max-width: 520px;
+  position: relative; z-index: 1;
+  padding: 0 16px 120px;
+}
+
+/* ── HEADER ── */
+.app-header {
+  padding: 22px 0 14px;
+  position: sticky; top: 0; z-index: 200;
+  background: rgba(15,12,8,0.93);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,152,58,0.08);
+  margin: 0 -16px; padding-left: 16px; padding-right: 16px;
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon {
+  width: 36px; height: 36px; background: var(--gold); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--dark);
+}
+.logo-text h1 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--gold); line-height: 1; }
+.logo-text p { font-size: 8px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; font-family: 'Syne', sans-serif; }
+.city-badge {
+  font-size: 10px; font-family: 'Syne', sans-serif; font-weight: 600;
+  background: var(--tag-bg); color: var(--muted2); padding: 4px 10px;
+  border-radius: 6px; border: 1px solid var(--card-border);
+}
+
+/* ── HERO ── */
+.hero { text-align: center; padding: 28px 0; margin-top: 6px; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; color: var(--gold); line-height: 1.1; }
+.hero p { color: var(--muted); font-size: 13px; margin-top: 8px; font-family: 'Syne', sans-serif; letter-spacing: 0.5px; }
+.hero .free-badge {
+  display: inline-block; background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark); padding: 8px 20px; border-radius: 25px; font-family: 'Syne', sans-serif;
+  font-size: 12px; font-weight: 700; margin-top: 14px; letter-spacing: 0.5px;
+}
+
+/* ── STEPS ── */
+.steps { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.step {
+  display: flex; align-items: center; gap: 12px; background: var(--card-bg);
+  padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--card-border);
+}
+.step .num {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--gold);
+  color: var(--dark); font-family: 'Syne', sans-serif; font-size: 12px;
+  font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step .text { font-size: 13px; color: var(--muted2); }
+.step .text strong { color: var(--text); }
+
+/* ── SECTION ── */
+.section { margin-top: 28px; }
+.section-badge {
+  display: inline-block; font-family: 'Syne', sans-serif; font-size: 10px;
+  font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); background: var(--tag-bg); padding: 4px 12px;
+  border-radius: 20px; margin-bottom: 8px;
+}
+.section h2 {
+  font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
+  color: var(--text); line-height: 1.2; margin-bottom: 6px;
+}
+.section p { font-size: 14px; color: var(--muted2); line-height: 1.6; }
+
+/* ── PLANS ── */
+.plans { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.plan-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 16px; transition: all 0.3s;
+  position: relative; overflow: hidden; cursor: pointer;
+}
+.plan-card:hover { border-color: var(--muted2); }
+.plan-card.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.plan-card input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+.plan-card.featured {
+  background: linear-gradient(135deg, #1C1508 0%, #2E2010 100%);
+}
+.plan-card.featured::before {
+  content: 'RECOMENDADO'; font-family: 'Syne', sans-serif; font-size: 8px;
+  font-weight: 700; letter-spacing: 2px; color: var(--dark);
+  background: var(--gold); position: absolute; top: 10px; right: -30px;
+  padding: 2px 32px; transform: rotate(45deg);
+}
+.plan-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.plan-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.plan-name .check { color: var(--success); font-size: 11px; margin-left: 4px; }
+.plan-name .badge {
+  font-size: 9px; background: var(--tag-bg); padding: 2px 8px; border-radius: 10px;
+  color: var(--muted); margin-left: 6px; font-weight: 600;
+}
+.plan-price { text-align: right; }
+.plan-price .amount { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--gold); line-height: 1; }
+.plan-price .period { font-size: 10px; color: var(--muted); }
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 4px; margin: 8px 0 0; }
+.plan-features li { font-size: 12px; color: var(--muted2); display: flex; align-items: center; gap: 6px; }
+.plan-features li i { width: 13px; font-size: 10px; }
+.plan-features li .fa-check { color: var(--success); }
+.plan-features li .fa-times { color: var(--danger); opacity: 0.35; }
+.plan-features li .fa-star { color: var(--gold); }
+.plan-features li .fa-certificate { color: var(--verified); }
+
+/* ── FORM ── */
+.form-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); padding: 20px; margin-top: 16px;
+}
+.form-group { margin-bottom: 12px; }
+.form-group label {
+  display: block; font-family: 'Syne', sans-serif; font-size: 10px;
+  font-weight: 600; letter-spacing: 0.5px; color: var(--muted2);
+  margin-bottom: 4px; text-transform: uppercase;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; background: var(--dark); border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text);
+  font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+.form-group textarea { resize: vertical; min-height: 65px; }
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239A8A6A' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; cursor: pointer;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ── TAGS ── */
+.tag-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag-option {
+  padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  font-family: 'Syne', sans-serif; cursor: pointer; border: 1px solid var(--card-border);
+  background: var(--dark); color: var(--muted2); transition: all 0.2s; user-select: none;
+}
+.tag-option.selected { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+
+/* ── PHOTO ── */
+.photo-upload {
+  border: 2px dashed var(--card-border); border-radius: var(--radius-sm);
+  padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s;
+  background: var(--dark);
+}
+.photo-upload:hover { border-color: var(--gold); }
+.photo-upload.has-photo { border-color: var(--success); border-style: solid; }
+.photo-upload i { font-size: 24px; color: var(--muted); margin-bottom: 4px; }
+.photo-upload p { font-size: 11px; color: var(--muted); }
+.photo-upload img { max-width: 100%; max-height: 140px; border-radius: 8px; margin-top: 6px; }
+.photo-upload input[type="file"] { display: none; }
+
+/* ── SUBMIT ── */
+.submit-btn {
+  width: 100%; padding: 14px; border-radius: 10px;
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
+  text-align: center; border: none; background: var(--gold);
+  color: var(--dark); margin-top: 6px;
+}
+.submit-btn:hover { background: var(--gold-light); }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.submit-btn .fa-spinner { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.submit-btn.bold {
+  background: var(--bold-green); color: var(--dark);
+}
+.submit-btn.bold:hover { opacity: 0.9; }
+
+/* ── BOLD PAYMENT STATUS ── */
+.payment-flow {
+  display: none; margin-top: 16px;
+}
+.payment-flow.active { display: block; }
+.payment-step {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px;
+}
+.payment-step .step-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.payment-step.pending .step-icon { background: var(--tag-bg); color: var(--muted); }
+.payment-step.active .step-icon { background: var(--gold); color: var(--dark); animation: pulse 1.5s ease infinite; }
+.payment-step.done .step-icon { background: var(--success); color: white; }
+.payment-step .step-info { }
+.payment-step .step-info .title { font-size: 13px; font-weight: 600; color: var(--text); }
+.payment-step .step-info .desc { font-size: 11px; color: var(--muted); }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+.bold-pay-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 24px; background: var(--bold-green); color: var(--dark);
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  border: none; border-radius: 10px; cursor: pointer;
+  text-decoration: none; transition: opacity 0.2s; margin-top: 8px;
+}
+.bold-pay-btn:hover { opacity: 0.9; }
+
+/* ── WHATSAPP ── */
+.whatsapp-fallback {
+  text-align: center; margin-top: 12px; padding: 12px; border-radius: var(--radius-sm);
+  background: var(--tag-bg); border: 1px solid var(--card-border);
+}
+.whatsapp-fallback p { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.whatsapp-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+  border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 12px;
+  font-weight: 700; text-decoration: none; background: var(--whatsapp);
+  color: white; transition: opacity 0.2s;
+}
+.whatsapp-btn:hover { opacity: 0.85; }
+
+/* ── EDIT SECTION ── */
+.edit-card {
+  background: linear-gradient(135deg, #1C1508 0%, #2E2010 100%);
+  border: 1px solid var(--gold); border-radius: var(--radius);
+  padding: 18px; margin-top: 16px; text-align: center;
+}
+.edit-card .icon-big { font-size: 28px; color: var(--gold); margin-bottom: 6px; }
+.edit-card h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text); margin-bottom: 4px; }
+.edit-card p { font-size: 12px; color: var(--muted2); margin-bottom: 10px; }
+.edit-sub-info {
+  display: inline-block; background: var(--tag-bg); padding: 4px 14px;
+  border-radius: 20px; font-family: 'Syne', sans-serif; font-size: 11px;
+  color: var(--muted2); margin-bottom: 10px;
+}
+.edit-sub-info strong { color: var(--gold); font-size: 14px; }
+
+/* ── SUB SECTION ── */
+.sub-section-header {
+  display: flex; align-items: center; gap: 10px; margin: 20px 0 12px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--card-border);
+}
+.sub-section-header h3 {
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  color: var(--text); letter-spacing: 0.5px; text-transform: uppercase;
+}
+.sub-section-header .line { flex: 1; height: 1px; background: var(--card-border); }
+
+/* ── BILLING INFO ── */
+.billing-info {
+  background: var(--tag-bg); border-radius: var(--radius-sm);
+  padding: 12px; margin-top: 12px; font-size: 11px; color: var(--muted2);
+  line-height: 1.6; border: 1px solid var(--card-border);
+}
+.billing-info strong { color: var(--text); }
+
+/* ── FOOTER ── */
+.footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--card-border); }
+.footer p { font-size: 11px; color: var(--muted); }
+.footer .socials { display: flex; justify-content: center; gap: 14px; margin-bottom: 8px; }
+.footer .socials a { color: var(--muted); font-size: 16px; transition: color 0.2s; }
+.footer .socials a:hover { color: var(--gold); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm); padding: 14px 22px;
+  font-size: 13px; color: var(--text); z-index: 999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5); display: none;
+  max-width: 90%; text-align: center; font-family: 'Syne', sans-serif; font-weight: 600;
+}
+.toast.show { display: block; animation: fadeUp 0.3s ease; }
+.toast.success { border-color: var(--success); }
+.toast.error { border-color: var(--danger); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@media (max-width: 400px) {
+  .form-row { grid-template-columns: 1fr; }
+  .plan-header { flex-direction: column; gap: 4px; }
+  .plan-price { text-align: left; }
+  .hero h1 { font-size: 26px; }
+}
+
+/* ── ISSUE STATUS ── */
+.issue-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--gold); font-size: 13px; font-weight: 600;
+  text-decoration: none; font-family: 'Syne', sans-serif;
+}
+.issue-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">P</div>
+        <div class="logo-text">
+          <h1>El Parche</h1>
+          <p>Panel de administración</p>
+        </div>
+      </div>
+      <div class="city-badge" id="cityBadge">Todas las ciudades</div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Registrá tu local</h1>
+    <p>Aparecé en la guía turística de tu ciudad</p>
+    <div class="free-badge"><i class="fas fa-gift"></i> Primer mes gratis — Sin compromiso</div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <span class="section-badge">Cómo funciona</span>
+    <h2>Tres pasos</h2>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><div class="text"><strong>Elegí tu plan</strong> y completá el formulario</div></div>
+      <div class="step"><span class="num">2</span><div class="text"><strong>Pagá con Bold</strong> — Nequi, PSE, tarjeta o Bancolombia</div></div>
+      <div class="step"><span class="num">3</span><div class="text"><strong>Tu ficha se activa</strong> automáticamente en la guía de tu ciudad</div></div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section class="section" id="plans-section">
+    <span class="section-badge">Planes mensuales</span>
+    <h2>Elegí tu plan</h2>
+    <p>El <strong>primer mes es gratis</strong>. Cancelá cuando quieras.</p>
+
+    <div class="plans" id="planSelector">
+      <label class="plan-card selected" data-plan="presencia">
+        <input type="radio" name="plan" value="Presencia Basica" checked>
+        <div class="plan-header">
+          <div class="plan-name">Presencia Básica</div>
+          <div class="plan-price"><div class="amount">$30.000</div><div class="period">/mes</div></div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Listado en la guía de tu ciudad</li>
+          <li><i class="fas fa-check"></i> Nombre, barrio, categoría y horario</li>
+          <li><i class="fas fa-check"></i> Una imagen del local</li>
+          <li><i class="fas fa-check"></i> Menú con hasta 4 productos</li>
+          <li><i class="fas fa-check"></i> Teléfono e Instagram visibles</li>
+          <li><i class="fas fa-check"></i> Enlace directo a WhatsApp</li>
+          <li><i class="fas fa-times"></i> Sin borde verificado</li>
+          <li><i class="fas fa-times"></i> Sin prioridad en búsquedas</li>
+        </ul>
+      </label>
+
+      <label class="plan-card" data-plan="verificado">
+        <input type="radio" name="plan" value="Verificado">
+        <div class="plan-header">
+          <div class="plan-name">Verificado <span class="check"><i class="fas fa-check-circle"></i></span></div>
+          <div class="plan-price"><div class="amount">$60.000</div><div class="period">/mes</div></div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Todo lo de Presencia Básica</li>
+          <li><i class="fas fa-certificate"></i> Badge "Verificado" + borde dorado</li>
+          <li><i class="fas fa-check"></i> Descripción personalizada (200 caracteres)</li>
+          <li><i class="fas fa-check"></i> Menú completo (hasta 8 productos)</li>
+          <li><i class="fas fa-check"></i> Hasta 3 etiquetas personalizadas</li>
+        </ul>
+      </label>
+
+      <label class="plan-card" data-plan="destacado">
+        <input type="radio" name="plan" value="Destacado">
+        <div class="plan-header">
+          <div class="plan-name">Destacado <span class="badge">Primeros</span></div>
+          <div class="plan-price"><div class="amount">$80.000</div><div class="period">/mes</div></div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Todo lo de Verificado</li>
+          <li><i class="fas fa-star"></i> Aparece entre los primeros de su categoría</li>
+          <li><i class="fas fa-check"></i> Badge "Destacado" visible</li>
+          <li><i class="fas fa-check"></i> Prioridad en búsquedas</li>
+        </ul>
+      </label>
+
+      <label class="plan-card featured" data-plan="completo">
+        <input type="radio" name="plan" value="Completo">
+        <div class="plan-header">
+          <div class="plan-name">Completo <span class="badge">Recomendado</span></div>
+          <div class="plan-price"><div class="amount">$100.000</div><div class="period">/mes</div></div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Verificado + Destacado incluidos</li>
+          <li><i class="fas fa-check"></i> Borde dorado + Badge destacado</li>
+          <li><i class="fas fa-check"></i> Aparece primero siempre</li>
+          <li><i class="fas fa-check"></i> Prioridad absoluta en búsquedas</li>
+          <li><i class="fas fa-check"></i> Una imagen profesional del local</li>
+          <li><i class="fas fa-check"></i> Enlace directo a reservas</li>
+        </ul>
+      </label>
+    </div>
+
+    <div class="billing-info">
+      <strong><i class="fas fa-info-circle"></i> Facturación</strong><br>
+      Primer mes <strong>gratis</strong>. Luego se cobra cada 30 días vía Bold.
+      Si no renovás, tu ficha se <strong>oculta automáticamente</strong> (no se borra).
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section class="section" id="form-section">
+    <span class="section-badge">Formulario</span>
+    <h2>Datos de tu local</h2>
+    <p>Completá todos los campos. La imagen la podés subir o pasar después por WhatsApp.</p>
+
+    <form id="registerForm" novalidate>
+      <div class="sub-section-header"><div class="line"></div><h3>Ubicación</h3><div class="line"></div></div>
+
+      <div class="form-group">
+        <label>Ciudad</label>
+        <select id="citySelect" required>
+          <option value="">Seleccioná una ciudad</option>
+          <option>Bogotá</option>
+          <option>Medellín</option>
+          <option>Cali</option>
+          <option>Cartagena</option>
+          <option>Santa Marta</option>
+          <option>Barranquilla</option>
+          <option>Bucaramanga</option>
+          <option>Pereira</option>
+          <option>Manizales</option>
+          <option>Cúcuta</option>
+          <option>Ibagué</option>
+          <option>Villavicencio</option>
+          <option>Armenia</option>
+          <option>Neiva</option>
+          <option>Sincelejo</option>
+          <option>Pasto</option>
+          <option>Montería</option>
+          <option>Valledupar</option>
+          <option>San Andrés</option>
+          <option>Eje Cafetero</option>
+          <option>Villa de Leyva</option>
+          <option>San Gil</option>
+          <option>Leticia</option>
+          <option>Mompox</option>
+          <option>Popayán</option>
+          <option>Guatapé</option>
+          <option>Providencia</option>
+          <option>Nuquí</option>
+          <option>San Agustín</option>
+          <option>Tunja</option>
+          <option>Riohacha</option>
+          <option>Quibdó</option>
+          <option>Yopal</option>
+          <option>Arauca</option>
+          <option>Mocoa</option>
+        </select>
+      </div>
+
+      <div class="sub-section-header"><div class="line"></div><h3>Datos del negocio</h3><div class="line"></div></div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre del local</label>
+          <input type="text" id="venueName" placeholder="Ej: Café Havana" required>
+        </div>
+        <div class="form-group">
+          <label>NIT (sin digito de verificación)</label>
+          <input type="text" id="venueNit" placeholder="Ej: 900123456" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Barrio / Zona</label>
+          <input type="text" id="venueBarrio" placeholder="Ej: Centro Histórico" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Categoría</label>
+        <select id="categorySelect" required>
+          <option value="">Seleccioná una categoría</option>
+          <option value="bares">🍺 Bares</option>
+          <option value="cafe">☕ Café</option>
+          <option value="comida">🍽️ Comida / Restaurantes</option>
+          <option value="arte">🎨 Arte / Cultura</option>
+          <option value="plan">🌅 Plan / Turismo</option>
+          <option value="noche">🌙 Noche / Discotecas</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Descripción (máx. 200 caracteres)</label>
+        <textarea id="venueDesc" placeholder="Contanos de qué se trata tu local..." maxlength="200"></textarea>
+        <div style="text-align:right;font-size:10px;color:var(--muted);margin-top:2px;"><span id="charCount">0</span>/200</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Horario</label>
+          <input type="text" id="venueHours" placeholder="Ej: Lun-Sáb 10am-11pm">
+        </div>
+        <div class="form-group">
+          <label>Rango de precio</label>
+          <select id="venuePrice">
+            <option value="$ Económico">$ Económico</option>
+            <option value="$$ Promedio" selected>$$ Promedio</option>
+            <option value="$$$ Exclusivo">$$$ Exclusivo</option>
+            <option value="$$$$ Alta cocina">$$$$ Alta cocina</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Teléfono / WhatsApp</label>
+          <input type="tel" id="venuePhone" placeholder="+57 300 123 4567" required>
+        </div>
+        <div class="form-group">
+          <label>Instagram</label>
+          <input type="text" id="venueIg" placeholder="@tulocal">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Menú (productos separados por coma — máximo 4 en plan básico)</label>
+        <input type="text" id="venueMenu" placeholder="Ej: Mojito, Ceviche, Pasta, Pizza">
+      </div>
+
+      <div class="sub-section-header"><div class="line"></div><h3>Etiquetas (máximo 3)</h3><div class="line"></div></div>
+
+      <div class="form-group">
+        <div class="tag-grid" id="tagSelector">
+          <span class="tag-option" data-tag="Bares">🍺 Bares</span>
+          <span class="tag-option" data-tag="Café">☕ Café</span>
+          <span class="tag-option" data-tag="Comida">🍽️ Comida</span>
+          <span class="tag-option" data-tag="Arte">🎨 Arte</span>
+          <span class="tag-option" data-tag="Plan">🌅 Plan</span>
+          <span class="tag-option" data-tag="Noche">🌙 Noche</span>
+          <span class="tag-option" data-tag="Cerveza">🍺 Cerveza</span>
+          <span class="tag-option" data-tag="Cocteles">🍹 Cocteles</span>
+          <span class="tag-option" data-tag="Música">🎵 Música</span>
+          <span class="tag-option" data-tag="Baile">💃 Baile</span>
+          <span class="tag-option" data-tag="Tradicional">🏛️ Tradicional</span>
+          <span class="tag-option" data-tag="Moderno">✨ Moderno</span>
+        </div>
+        <input type="hidden" id="selectedTags" value="">
+      </div>
+
+      <div class="sub-section-header"><div class="line"></div><h3>Foto del local (opcional)</h3><div class="line"></div></div>
+
+      <div class="form-group">
+        <label>Subí una foto (solo una — la usaremos como imagen del local)</label>
+        <div class="photo-upload" id="photoDropzone" onclick="document.getElementById('photoInput').click()">
+          <i class="fas fa-camera"></i>
+          <p>Hacé clic o arrastrá una foto</p>
+          <input type="file" id="photoInput" accept="image/*">
+          <img id="photoPreview" style="display:none;">
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <i class="fas fa-lock"></i> Continuar al pago
+      </button>
+    </form>
+  </section>
+
+  <!-- PAYMENT FLOW -->
+  <section class="payment-flow" id="paymentFlow">
+    <span class="section-badge">Pago</span>
+    <h2>Completá el pago</h2>
+    <p>Tu solicitud se procesará automáticamente cuando el pago se confirme.</p>
+
+    <div class="payment-step active" id="paymentStep1">
+      <div class="step-icon"><i class="fas fa-file-invoice"></i></div>
+      <div class="step-info">
+        <div class="title">Solicitud creada</div>
+        <div class="desc">Referencia: <strong id="paymentRef">—</strong></div>
+      </div>
+    </div>
+
+    <div class="payment-step pending" id="paymentStep2">
+      <div class="step-icon"><i class="fas fa-credit-card"></i></div>
+      <div class="step-info">
+        <div class="title">Esperando pago</div>
+        <div class="desc" id="paymentStep2Desc">Hacé clic en "Pagar con Bold" para completar</div>
+      </div>
+    </div>
+
+    <div class="payment-step pending" id="paymentStep3">
+      <div class="step-icon"><i class="fas fa-cog"></i></div>
+      <div class="step-info">
+        <div class="title">Procesando</div>
+        <div class="desc">Cuando el pago se confirme, procesamos automáticamente</div>
+      </div>
+    </div>
+
+    <div class="payment-step pending" id="paymentStep4">
+      <div class="step-icon"><i class="fas fa-check"></i></div>
+      <div class="step-info">
+        <div class="title">Listo</div>
+        <div class="desc">Tu local aparece en la guía</div>
+      </div>
+    </div>
+
+    <a class="bold-pay-btn" id="boldPayBtn" href="#" target="_blank">
+      <i class="fas fa-bolt"></i> Pagar con Bold
+    </a>
+    <p style="font-size:11px;color:var(--muted);margin-top:8px;">
+      Aceptamos Nequi, PSE, tarjetas y Botón Bancolombia
+    </p>
+  </section>
+
+  <!-- WHATSAPP FALLBACK -->
+  <section style="margin-top:20px;">
+    <div class="whatsapp-fallback">
+      <p><i class="fas fa-shield-alt"></i> Si preferís, también podés enviarnos los datos por WhatsApp y te enviamos el link de pago</p>
+      <a class="whatsapp-btn" id="whatsappFallbackBtn" href="#" target="_blank">
+        <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- EDIT VENUE -->
+  <section class="section" id="edit-section">
+    <span class="section-badge">Editar local</span>
+    <h2>¿Ya estás registrado?</h2>
+    <p>Actualizá la información de tu ficha: imagen, descripción, menú, horario, teléfono, Instagram.
+    <strong>Las estrellas y puntuaciones no se modifican.</strong></p>
+
+    <div class="edit-card">
+      <div class="icon-big"><i class="fas fa-edit"></i></div>
+      <h3>Editar ficha</h3>
+      <p>Actualizá los datos de tu local. Costo único de <strong>$10.000</strong> por edición.</p>
+      <div class="edit-sub-info">Pago único de <strong>$10.000</strong></div>
+      <ul class="steps" style="margin:10px 0;">
+        <li class="step"><span class="num">1</span><div class="text">Completá el formulario indicando qué querés cambiar</div></li>
+        <li class="step"><span class="num">2</span><div class="text">Pagá <strong>$10.000</strong> por la edición vía Bold o WhatsApp</div></li>
+        <li class="step"><span class="num">3</span><div class="text">Recibí confirmación y tu ficha se actualiza</div></li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <form id="editForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre del local</label>
+            <input type="text" id="editVenueName" placeholder="Ej: Café Havana" required>
+          </div>
+          <div class="form-group">
+            <label>Ciudad</label>
+            <select id="editCitySelect" required>
+              <option value="">Seleccioná una ciudad</option>
+              <option>Bogotá</option><option>Medellín</option><option>Cali</option>
+              <option>Cartagena</option><option>Santa Marta</option><option>Barranquilla</option>
+              <option>Bucaramanga</option><option>Pereira</option><option>Manizales</option>
+              <option>Cúcuta</option><option>Ibagué</option><option>Villavicencio</option>
+              <option>Armenia</option><option>Neiva</option><option>Sincelejo</option>
+              <option>Pasto</option><option>Montería</option><option>Valledupar</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>¿Qué querés cambiar?</label>
+          <select id="editField" required>
+            <option value="">Seleccioná una opción</option>
+            <option>Imagen del local</option>
+            <option>Descripción</option>
+            <option>Menú</option>
+            <option>Horario</option>
+            <option>Teléfono</option>
+            <option>Instagram</option>
+            <option>Dirección / Barrio</option>
+            <option>Varios campos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nuevo valor / Detalle del cambio</label>
+          <textarea id="editDetail" placeholder="Describí qué querés cambiar..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="editSubmitBtn">
+          <i class="fas fa-edit"></i> Solicitar edición
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- PAYMENT METHODS -->
+  <section class="section">
+    <span class="section-badge">Medios de pago</span>
+    <h2>Pagá con Bold</h2>
+    <p>Bold procesa todos los pagos de forma segura. Aceptamos:</p>
+    <div class="form-card" style="margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--card-border);">
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-mobile-alt"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Nequi</div><div style="font-size:11px;color:var(--muted);">A través de Bold</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--card-border);">
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-university"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">PSE / Bancolombia</div><div style="font-size:11px;color:var(--muted);">Transferencia bancaria</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--card-border);">
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-credit-card"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Tarjetas crédito/débito</div><div style="font-size:11px;color:var(--muted);">Visa, Mastercard, Amex</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-hand-holding-usd"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Efectivo</div><div style="font-size:11px;color:var(--muted);">Corresponsales bancarios</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <span class="section-badge">FAQ</span>
+    <h2>Preguntas frecuentes</h2>
+    <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
+        <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Qué pasa si no pago un mes?</div>
+        <div style="font-size:12px;color:var(--muted2);">Tu ficha se oculta automáticamente (no se borra). Si pagás de nuevo, la reactivamos al instante.</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
+        <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Cómo sé que mi pago se procesó?</div>
+        <div style="font-size:12px;color:var(--muted2);">Bold te envía un comprobante. Nosotros verificamos automáticamente y activamos tu ficha.</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
+        <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Puedo cambiar de plan?</div>
+        <div style="font-size:12px;color:var(--muted2);">Sí, en cualquier momento. Se ajusta el precio proporcional al mes en curso.</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
+        <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Cuánto tarda en estar mi ficha?</div>
+        <div style="font-size:12px;color:var(--muted2);">Apenas se confirme el pago vía Bold, tu ficha se activa automáticamente.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="socials">
+      <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/573218879876" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="#" title="TikTok"><i class="fab fa-tiktok"></i></a>
+    </div>
+    <p>El Parche — Guía de vida nocturna y gastronomía de Colombia</p>
+    <p style="margin-top:4px;">&copy; 2026 El Parche. Todos los derechos reservados.</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════
+const CONFIG = {
+  whatsapp: '573218879876',
+  githubToken: '{{GITHUB_PAT}}',
+  githubOwner: '{{GITHUB_OWNER}}',
+  githubRepo: '{{GITHUB_REPO}}',
+  boldApiKey: '{{BOLD_API_KEY}}',
+  boldBaseUrl: 'https://integrations.api.bold.co'
+};
+
+const PLAN_PRICES = {
+  'Presencia Basica': 30000,
+  'Verificado': 60000,
+  'Destacado': 80000,
+  'Completo': 100000
+};
+
+// ═══════════════════════════════════════
+// PLAN SELECTOR
+// ═══════════════════════════════════════
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', function() {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    this.classList.add('selected');
+    this.querySelector('input[type="radio"]').checked = true;
+    document.getElementById('form-section').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// ═══════════════════════════════════════
+// TAG SELECTOR (max 3)
+// ═══════════════════════════════════════
+let selectedTags = [];
+document.querySelectorAll('.tag-option').forEach(tag => {
+  tag.addEventListener('click', function() {
+    const val = this.dataset.tag;
+    if (this.classList.contains('selected')) {
+      this.classList.remove('selected');
+      selectedTags = selectedTags.filter(t => t !== val);
+    } else {
+      if (selectedTags.length >= 3) { showToast('Máximo 3 etiquetas', 'error'); return; }
+      this.classList.add('selected');
+      selectedTags.push(val);
+    }
+    document.getElementById('selectedTags').value = selectedTags.join(',');
+  });
+});
+
+// ═══════════════════════════════════════
+// PHOTO
+// ═══════════════════════════════════════
+document.getElementById('photoInput').addEventListener('change', function(e) {
+  if (this.files && this.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      const preview = document.getElementById('photoPreview');
+      preview.src = ev.target.result;
+      preview.style.display = 'block';
+      document.getElementById('photoDropzone').classList.add('has-photo');
+    };
+    reader.readAsDataURL(this.files[0]);
+  }
+});
+
+// ═══════════════════════════════════════
+// CHAR COUNT
+// ═══════════════════════════════════════
+document.getElementById('venueDesc').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length;
+});
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show';
+  if (type === 'success') t.classList.add('success');
+  if (type === 'error') t.classList.add('error');
+  setTimeout(() => t.className = 'toast', 4000);
+}
+
+// ═══════════════════════════════════════
+// BOLD API - CREATE CHECKOUT
+// ═══════════════════════════════════════
+async function createBoldCheckout(amount, reference, description) {
+  const body = {
+    amount_type: 'CLOSE',
+    amount: {
+      currency: 'COP',
+      total_amount: amount
+    },
+    description: description.substring(0, 100),
+    payment_methods: ['NEQUI', 'PSE', 'BOTON_BANCOLOMBIA', 'CREDIT_CARD']
+  };
+
+  const resp = await fetch(`${CONFIG.boldBaseUrl}/online/link/v1`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': CONFIG.boldApiKey
+    },
+    body: JSON.stringify(body)
+  });
+
+  const data = await resp.json();
+  if (data.errors && data.errors.length > 0) {
+    throw new Error(data.errors[0].message || 'Error Bold');
+  }
+  return data.payload;
+}
+
+// ═══════════════════════════════════════
+// GITHUB API - CREATE ISSUE
+// ═══════════════════════════════════════
+async function createGitHubIssue(title, body) {
+  const resp = await fetch(`https://api.github.com/repos/${CONFIG.githubOwner}/${CONFIG.githubRepo}/issues`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${CONFIG.githubToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.github+json'
+    },
+    body: JSON.stringify({ title, body, labels: ['nuevo-local'] })
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.message || 'Error GitHub');
+  return { number: data.number, url: data.html_url };
+}
+
+// ═══════════════════════════════════════
+// GITHUB API - UPDATE ISSUE
+// ═══════════════════════════════════════
+async function updateGitHubIssue(issueNumber, body) {
+  await fetch(`https://api.github.com/repos/${CONFIG.githubOwner}/${CONFIG.githubRepo}/issues/${issueNumber}`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${CONFIG.githubToken}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.github+json'
+    },
+    body: JSON.stringify(body)
+  });
+}
+
+// ═══════════════════════════════════════
+// GENERATE REFERENCE
+// ═══════════════════════════════════════
+function generateReference() {
+  const timestamp = Date.now().toString(36).toUpperCase();
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `ELPARCHE-${timestamp}-${rand}`;
+}
+
+// ═══════════════════════════════════════
+// UPLOAD IMAGE TO IMGBB
+// ═══════════════════════════════════════
+async function uploadToImgBB(base64) {
+  const resp = await fetch('https://api.imgbb.com/1/upload', {
+    method: 'POST',
+    body: new URLSearchParams({ key: '2bf08b9ce1d13ca9ddf785696f0ab9c9', image: base64 })
+  });
+  const data = await resp.json();
+  return data.status === 200 ? data.data.url : null;
+}
+
+// ═══════════════════════════════════════
+// WHATSAPP MESSAGE
+// ═══════════════════════════════════════
+function buildWhatsAppMsg(data) {
+  return encodeURIComponent(
+    `📋 *Nuevo registro - El Parche*\n` +
+    `━━━━━━━━━━━━━━━━━━\n` +
+    `🏙 *Ciudad:* ${data.ciudad}\n` +
+    `🏪 *Local:* ${data.nombre}\n` +
+    `📍 *Barrio:* ${data.barrio}\n` +
+    `📂 *Categoría:* ${data.categoria}\n` +
+    `💎 *Plan:* ${data.plan}\n` +
+    `💰 *Valor:* $${data.precio.toLocaleString('es-CO')}/mes\n` +
+    `🔗 *Link pago Bold:* ${data.boldUrl || 'Pendiente'}\n` +
+    `${data.descripcion ? `📝 *Desc:* ${data.descripcion}\n` : ''}` +
+    `${data.horario ? `🕐 *Horario:* ${data.horario}\n` : ''}` +
+    `${data.telefono ? `📱 *Tel:* ${data.telefono}\n` : ''}` +
+    `${data.instagram ? `📸 *IG:* @${data.instagram}\n` : ''}` +
+    `${data.menu ? `📋 *Menú:* ${data.menu}\n` : ''}` +
+    `${data.etiquetas ? `🏷️ *Tags:* ${data.etiquetas}\n` : ''}` +
+    `━━━━━━━━━━━━━━━━━━\n` +
+    `🎁 *Primer mes gratis*`
+  );
+}
+
+// ═══════════════════════════════════════
+// FORM SUBMIT
+// ═══════════════════════════════════════
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+  const flow = document.getElementById('paymentFlow');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+
+  // Gather data
+  const planRadio = document.querySelector('input[name="plan"]:checked');
+  const plan = planRadio ? planRadio.value : 'Presencia Basica';
+  const precio = PLAN_PRICES[plan] || 30000;
+
+  const data = {
+    ciudad: document.getElementById('citySelect').value,
+    nombre: document.getElementById('venueName').value,
+    nit: document.getElementById('venueNit').value.replace(/[^0-9]/g, ''),
+    categoria: document.getElementById('categorySelect').value,
+    barrio: document.getElementById('venueBarrio').value,
+    plan: plan,
+    precio: precio,
+    descripcion: document.getElementById('venueDesc').value,
+    horario: document.getElementById('venueHours').value,
+    telefono: document.getElementById('venuePhone').value,
+    instagram: document.getElementById('venueIg').value.replace('@', ''),
+    menu: document.getElementById('venueMenu').value,
+    etiquetas: document.getElementById('selectedTags').value
+  };
+
+  // Validate
+  if (!data.ciudad || !data.nombre || !data.nit || !data.categoria || !data.barrio || !data.telefono) {
+    showToast('Completá todos los campos obligatorios', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-lock"></i> Continuar al pago';
+    return;
+  }
+
+  if (data.nit.length < 5) {
+    showToast('NIT inválido — debe tener al menos 5 dígitos', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-lock"></i> Continuar al pago';
+    return;
+  }
+
+  // Validar duplicados contra venues.json
+  try {
+    const venuesResp = await fetch('venues.json');
+    if (venuesResp.ok) {
+      const allVenues = await venuesResp.json();
+      const dupNit = allVenues.find(v => v.nit === data.nit && v.ciudad === data.ciudad);
+      const dupName = allVenues.find(v => v.nombre.toLowerCase() === data.nombre.toLowerCase() && v.ciudad === data.ciudad);
+      if (dupNit) {
+        showToast(`El NIT ${data.nit} ya está registrado en ${data.ciudad} como "${dupNit.nombre}"`, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock"></i> Continuar al pago';
+        return;
+      }
+      if (dupName) {
+        showToast(`El local "${data.nombre}" ya existe en ${data.ciudad}`, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock"></i> Continuar al pago';
+        return;
+      }
+    }
+  } catch (e) { console.log('Venues.json no disponible, omitiendo validación', e); }
+
+  // Upload photo if present
+  let fotoUrl = '';
+  const photoInput = document.getElementById('photoInput');
+  if (photoInput.files && photoInput.files[0]) {
+    try {
+      const reader = new FileReader();
+      fotoUrl = await new Promise(resolve => {
+        reader.onload = async function(e) {
+          const base64 = e.target.result.split(',')[1];
+          const url = await uploadToImgBB(base64);
+          resolve(url || '');
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      });
+    } catch (e) { console.error('Photo upload error:', e); }
+  }
+
+  // Generate reference
+  const reference = generateReference();
+
+  try {
+    // Step 1: Create Bold checkout
+    const boldDesc = `${data.nombre} - ${plan} - ${data.ciudad}`;
+    const boldData = await createBoldCheckout(precio, reference, boldDesc);
+
+    document.getElementById('paymentRef').textContent = reference;
+
+    // Step 2: Create GitHub Issue
+    const issueBody =
+      `## Nuevo registro: ${data.nombre}\n\n` +
+      `**Ciudad:** ${data.ciudad}\n` +
+      `**NIT:** ${data.nit}\n` +
+      `**Plan:** ${plan} ($${precio.toLocaleString('es-CO')}/mes)\n` +
+      `**Referencia Bold:** ${reference}\n` +
+      `**Link de pago:** ${boldData.url}\n\n` +
+      `---\n\n` +
+      `**Barrio:** ${data.barrio}\n` +
+      `**Categoría:** ${data.categoria}\n` +
+      `**Teléfono:** ${data.telefono}\n` +
+      `**Instagram:** ${data.instagram || '—'}\n` +
+      `**Horario:** ${data.horario || '—'}\n` +
+      `**Descripción:** ${data.descripcion || '—'}\n` +
+      `**Menú:** ${data.menu || '—'}\n` +
+      `**Etiquetas:** ${data.etiquetas || '—'}\n` +
+      `**Foto URL:** ${fotoUrl || '—'}\n\n` +
+      `<!-- bold-status:pending -->`;
+
+    const issue = await createGitHubIssue(
+      `[${data.ciudad}] ${data.nombre} — ${plan}`,
+      issueBody
+    );
+
+    // Step 3: Update payment flow UI
+    document.getElementById('paymentStep1').className = 'payment-step done';
+    document.getElementById('paymentStep1').querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+
+    document.getElementById('paymentStep2').className = 'payment-step active';
+    document.getElementById('paymentStep2Desc').innerHTML =
+      `<a href="${boldData.url}" target="_blank" style="color:var(--gold);">Hacé clic acá para pagar</a> — Te redirigimos a Bold`;
+
+    // Update Bold button
+    document.getElementById('boldPayBtn').href = boldData.url;
+
+    // WhatsApp fallback
+    data.boldUrl = boldData.url;
+    const waMsg = buildWhatsAppMsg(data);
+    document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
+
+    // Show payment flow
+    flow.classList.add('active');
+    flow.scrollIntoView({ behavior: 'smooth' });
+
+    showToast('Solicitud creada. Ahora pagá con Bold.', 'success');
+
+    // Step 4: Poll GitHub for status updates
+    pollPaymentStatus(issue.number, reference);
+
+  } catch (e) {
+    console.error('Error:', e);
+    showToast('Error al procesar. Usá WhatsApp como respaldo.', 'error');
+
+    // WhatsApp fallback
+    data.boldUrl = 'Pendiente';
+    const waMsg = buildWhatsAppMsg(data);
+    document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
+  }
+
+  btn.innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
+});
+
+// ═══════════════════════════════════════
+// POLL PAYMENT STATUS
+// ═══════════════════════════════════════
+function pollPaymentStatus(issueNumber, reference) {
+  const step2 = document.getElementById('paymentStep2');
+  const step3 = document.getElementById('paymentStep3');
+  const step4 = document.getElementById('paymentStep4');
+
+  const checkStatus = async () => {
+    try {
+      const resp = await fetch(
+        `https://api.github.com/repos/${CONFIG.githubOwner}/${CONFIG.githubRepo}/issues/${issueNumber}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${CONFIG.githubToken}`,
+            'Accept': 'application/vnd.github+json'
+          }
+        }
+      );
+      const issue = await resp.json();
+
+      // Check if issue has been updated with payment status
+      if (issue.body && issue.body.includes('bold-status:paid')) {
+        step2.className = 'payment-step done';
+        step2.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+        step3.className = 'payment-step done';
+        step3.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+        step4.className = 'payment-step active';
+        step4.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+        showToast('¡Pago confirmado! Tu local se está activando.', 'success');
+        return;
+      }
+
+      if (issue.body && issue.body.includes('bold-status:failed')) {
+        step2.className = 'payment-step pending';
+        showToast('El pago no se completó. Intentá de nuevo.', 'error');
+        return;
+      }
+
+      // Still pending - poll again
+      if (issue.state === 'open') {
+        setTimeout(checkStatus, 5000);
+      }
+    } catch (e) {
+      console.error('Poll error:', e);
+      setTimeout(checkStatus, 10000);
+    }
+  };
+
+  // Start polling after 10 seconds (to give workflow time to start)
+  // Then poll every 5 seconds
+  setTimeout(() => {
+    checkStatus();
+    // Also poll every 30 seconds as backup
+    setInterval(checkStatus, 30000);
+  }, 10000);
+}
+
+// ═══════════════════════════════════════
+// EDIT FORM
+// ═══════════════════════════════════════
+document.getElementById('editForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('editVenueName').value;
+  const city = document.getElementById('editCitySelect').value;
+  const field = document.getElementById('editField').value;
+  const detail = document.getElementById('editDetail').value;
+
+  const msg = encodeURIComponent(
+    `✏️ *Edición - El Parche*\n` +
+    `━━━━━━━━━━━━━━━━━━\n` +
+    `🏪 *Local:* ${name}\n` +
+    `🏙 *Ciudad:* ${city}\n` +
+    `🔧 *Cambio:* ${field}\n` +
+    `📝 *Detalle:* ${detail}\n` +
+    `━━━━━━━━━━━━━━━━━━\n` +
+    `*Requiere suscripción activa*`
+  );
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${msg}`, '_blank');
+  showToast('Solicitud de edición enviada por WhatsApp', 'success');
+  this.reset();
+});
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.querySelector('.plan-card[data-plan="presencia"]').click();
+</script>
+</body>
+</html>

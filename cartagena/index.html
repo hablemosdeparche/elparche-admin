@@ -1,0 +1,1060 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MV73QKBV');</script>
+<!-- End Google Tag Manager -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartagena Local — El Parche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root {
+  --gold: #C9983A;
+  --gold-light: #E8B84B;
+  --coral: #C94F2A;
+  --dark: #0F0C08;
+  --dark2: #181309;
+  --card-bg: #1C1508;
+  --card-border: #2E2010;
+  --text: #F0E8D8;
+  --muted: #7A6A4A;
+  --muted2: #9A8A6A;
+  --tag-bg: #241A08;
+  --nav-bg: #0F0C08;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --whatsapp: #25D366;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+.app {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 90px;
+}
+
+/* ── HEADER ── */
+.app-header {
+  padding: 22px 20px 14px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(15,12,8,0.93);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(201,152,58,0.08);
+}
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.logo h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; line-height: 1; }
+.logo p { font-size: 9px; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-top: 3px; font-family: 'Syne', sans-serif; }
+.search-box { position: relative; margin-bottom: 12px; }
+.search-box input {
+  width: 100%; background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 12px; padding: 10px 14px 10px 38px; color: var(--text);
+  font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+}
+.search-box input::placeholder { color: var(--muted); }
+.search-box input:focus { border-color: var(--gold); }
+.search-box::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
+.cats-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.cats-scroll::-webkit-scrollbar { display: none; }
+.cat-pill {
+  flex-shrink: 0; padding: 6px 15px; border-radius: 20px; font-size: 12px;
+  font-weight: 600; font-family: 'Syne', sans-serif; cursor: pointer;
+  border: 1px solid var(--card-border); background: var(--card-bg);
+  color: var(--muted2); transition: all 0.2s; white-space: nowrap;
+}
+.cat-pill.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+
+/* ── SCREENS ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── BANNER ── */
+.banner {
+  margin: 16px 16px 0;
+  background: linear-gradient(135deg, #2A1505, #1C0F03);
+  border: 1px solid #3D2008; border-radius: var(--radius);
+  overflow: hidden; transition: border-color 0.2s;
+}
+.banner:hover { border-color: var(--gold); }
+.banner-header { padding: 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; user-select: none; }
+.banner-flame { font-size: 28px; animation: pulso 2s infinite; }
+@keyframes pulso { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+.banner-texto h3 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--text); }
+.banner-texto p { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.banner-arrow { margin-left: auto; color: var(--gold); font-size: 18px; transition: transform 0.3s; flex-shrink: 0; }
+.banner.open .banner-arrow { transform: rotate(90deg); }
+.banner-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.banner.open .banner-body { max-height: 600px; }
+.banner-event-item { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-top: 1px solid rgba(201,152,58,0.08); }
+.bev-icon { font-size: 22px; background: rgba(255,255,255,0.04); padding: 8px; border-radius: 10px; flex-shrink: 0; }
+.bev-info h5 { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.bev-info p { font-size: 11px; color: var(--muted2); }
+.banner-cta { padding: 14px 16px; border-top: 1px solid rgba(201,152,58,0.1); }
+.btn-ver-eventos {
+  width: 100%; background: var(--gold); color: var(--dark); border: none;
+  border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 700;
+  font-family: 'Syne', sans-serif; cursor: pointer; transition: background 0.2s, transform 0.1s;
+}
+.btn-ver-eventos:hover { background: var(--gold-light); }
+.btn-ver-eventos:active { transform: scale(0.98); }
+
+/* ── SEC HEADER ── */
+.sec-header { display: flex; justify-content: space-between; align-items: center; padding: 22px 16px 12px; }
+.sec-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; font-style: italic; color: var(--text); }
+
+/* ── PLACES FEED ── */
+.places-feed { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
+.place-card {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); overflow: hidden; cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+  opacity: 0; transform: translateY(16px); animation: cardIn 0.45s ease forwards;
+}
+@keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+.place-card:hover { border-color: rgba(201,152,58,0.4); }
+.place-card.verified { border: 1.5px solid var(--gold); box-shadow: 0 0 16px rgba(201,152,58,0.15); }
+.place-card.verified:hover { border-color: var(--gold-light); box-shadow: 0 0 20px rgba(201,152,58,0.3); }
+
+.place-thumb {
+  width: 100%;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+  position: relative;
+  overflow: hidden;
+}
+.place-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+.place-thumb .place-svg-icon {
+  position: relative;
+  z-index: 1;
+}
+.place-thumb.has-img .place-svg-icon {
+  display: none;
+}
+.place-thumb .img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 60%, rgba(15,12,8,0.85));
+  pointer-events: none;
+}
+.pt1 { background: radial-gradient(ellipse at 30% 60%, #3D1A05 0%, #130800 100%); }
+.pt2 { background: radial-gradient(ellipse at 30% 60%, #051828 0%, #020A10 100%); }
+.pt3 { background: radial-gradient(ellipse at 30% 60%, #0A2810 0%, #030E05 100%); }
+.pt4 { background: radial-gradient(ellipse at 30% 60%, #1A0528 0%, #0A0215 100%); }
+.pt5 { background: radial-gradient(ellipse at 30% 60%, #1A1505 0%, #0A0800 100%); }
+.pt6 { background: radial-gradient(ellipse at 30% 60%, #001A20 0%, #00080F 100%); }
+.pt7 { background: radial-gradient(ellipse at 30% 60%, #201A00 0%, #0A0800 100%); }
+.pt8 { background: radial-gradient(ellipse at 30% 60%, #200A0A 0%, #0A0303 100%); }
+
+.place-svg-icon { width: 80px; height: 80px; opacity: 0.85; }
+
+.place-rating-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(0,0,0,0.75); border: 1px solid rgba(201,152,58,0.4);
+  border-radius: 8px; padding: 4px 10px; font-size: 12px; color: var(--gold);
+  display: flex; align-items: center; gap: 4px; font-weight: 600; font-family: 'Syne', sans-serif;
+}
+.heart-btn {
+  position: absolute; top: 12px; right: 12px;
+  width: 34px; height: 34px; background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer; transition: transform 0.2s, border-color 0.2s; z-index: 2;
+}
+.heart-btn:hover { border-color: rgba(226,75,74,0.5); }
+.heart-btn.saved { color: #E24B4A; border-color: rgba(226,75,74,0.4); }
+.place-info { padding: 14px 16px 16px; }
+.place-info h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.place-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.p-tag { font-size: 10px; padding: 3px 9px; border-radius: 6px; background: var(--tag-bg); color: var(--muted2); border: 1px solid var(--card-border); font-family: 'Syne', sans-serif; }
+.place-barrio { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.place-barrio i { color: var(--muted2); font-size: 11px; }
+
+/* ── EVENTOS SCREEN ── */
+.events-screen-header { padding: 20px 16px 0; }
+.events-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--gold); font-style: italic; }
+.events-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; margin-bottom: 14px; }
+.events-feed { padding: 16px 16px 0; display: flex; flex-direction: column; gap: 16px; }
+.ev-card-full {
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s;
+  opacity: 0; animation: cardIn 0.45s ease forwards;
+}
+.ev-card-full:hover { border-color: rgba(201,152,58,0.3); }
+.ev-thumb-full { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 64px; position: relative; }
+.et1 { background: radial-gradient(ellipse at center, #4A1A05 0%, #1A0800 100%); }
+.et2 { background: radial-gradient(ellipse at center, #0A2810 0%, #040E06 100%); }
+.et3 { background: radial-gradient(ellipse at center, #200A40 0%, #0A0318 100%); }
+.et4 { background: radial-gradient(ellipse at center, #2A1A00 0%, #0F0800 100%); }
+.et5 { background: radial-gradient(ellipse at center, #001A2A 0%, #00080F 100%); }
+.ev-badge-full {
+  position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 7px;
+  font-size: 10px; font-weight: 700; font-family: 'Syne', sans-serif;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.ev-badge-full.hoy { background: var(--gold); color: var(--dark); }
+.ev-badge-full.gratis { background: #1A5530; color: #5DCB85; }
+.ev-badge-full.dia { background: rgba(255,255,255,0.12); color: var(--text); }
+.ev-info-full { padding: 16px; }
+.ev-info-full h3 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.ev-detail-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted2); margin-bottom: 6px; }
+
+/* ── MAPA ── */
+.map-screen { display: flex; flex-direction: column; height: calc(100vh - 140px); }
+#map { flex: 1; width: 100%; min-height: 400px; }
+.leaflet-popup-content-wrapper { background: var(--card-bg) !important; color: var(--text) !important; border: 1px solid var(--gold) !important; border-radius: 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important; }
+.leaflet-popup-tip { background: var(--gold) !important; }
+.popup-name { font-weight: 600; font-size: 14px; color: var(--gold); margin-bottom: 4px; }
+.popup-barrio { font-size: 12px; color: var(--muted2); }
+
+/* ── GUARDADOS ── */
+.saved-screen-header { padding: 20px 16px 16px; }
+.saved-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; font-style: italic; color: var(--gold); }
+.saved-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; }
+.saved-empty { text-align: center; padding: 60px 30px; color: var(--muted); }
+.saved-empty-icon { font-size: 48px; margin-bottom: 16px; }
+.saved-empty h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--muted2); margin-bottom: 8px; }
+.saved-empty p { font-size: 13px; line-height: 1.6; }
+
+/* ══════════════════════════════════
+   MODAL — todo en una pantalla
+══════════════════════════════════ */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 500; display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  backdrop-filter: blur(6px);
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+
+.modal-sheet {
+  width: 100%; max-width: 480px;
+  background: var(--dark2);
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid var(--card-border);
+  border-left: 1px solid var(--card-border);
+  border-right: 1px solid var(--card-border);
+  height: 96vh;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.34,1.1,0.64,1);
+  display: flex;
+  flex-direction: column;
+}
+.overlay.open .modal-sheet { transform: translateY(0); }
+
+/* Hero compacto con imagen de Cartagena */
+.modal-hero {
+  width: calc(100% - 32px);
+  margin: 14px 16px 0;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.modal-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10,6,2,0.62);
+}
+
+.modal-hero-icon {
+  position: relative;
+  z-index: 2;
+  width: 72px;
+  height: 72px;
+  opacity: 0.95;
+}
+
+.modal-handle {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  z-index: 3;
+}
+
+.modal-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 30px; height: 30px;
+  background: rgba(0,0,0,0.65);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: var(--text);
+  transition: background 0.2s; z-index: 3;
+}
+.modal-close:hover { background: rgba(201,152,58,0.35); }
+
+/* Scroll solo en el body del modal */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 18px 20px;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.modal-body::-webkit-scrollbar { display: none; }
+
+.modal-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: var(--text);
+  line-height: 1.2; flex: 1; margin-right: 10px;
+}
+
+.modal-barrio {
+  font-size: 12px; color: var(--muted2);
+  display: flex; align-items: center; gap: 4px;
+  margin-bottom: 10px;
+}
+
+.modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.m-tag {
+  font-size: 10px; padding: 3px 9px; border-radius: 6px;
+  background: var(--tag-bg); color: var(--muted2);
+  border: 1px solid var(--card-border); font-family: 'Syne', sans-serif;
+}
+
+.modal-desc {
+  font-size: 13px; color: var(--muted2); line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+
+.modal-rating-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.stars { display: flex; gap: 2px; }
+.star { font-size: 14px; }
+.star.on { color: var(--gold); }
+.rating-num { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--gold); }
+.rating-count { font-size: 11px; color: var(--muted); }
+
+.modal-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.detail-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 10px 12px; }
+.detail-box .d-label { font-size: 8px; color: var(--muted); font-family: 'Syne', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+.detail-box .d-val { font-size: 12px; color: var(--text); font-weight: 500; line-height: 1.4; }
+
+.info-line { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); margin-bottom: 8px; }
+.info-line i { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.info-line .i-label { font-size: 9px; color: var(--muted); font-family: 'Syne', sans-serif; letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
+
+.modal-divider { border: none; border-top: 1.5px solid #6A5540; margin: 16px 0; }
+.info-line { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); margin-bottom: 6px; }
+.info-line i { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+
+.menu-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.menu-box .mb-title { font-size: 9px; font-family: 'Syne', sans-serif; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.menu-box ul { list-style: none; padding: 0; }
+.menu-box ul li { font-size: 12px; color: var(--muted2); padding: 3px 0; display: flex; align-items: center; }
+
+.modal-body { padding-bottom: 0; }
+#modal-info { margin-bottom: 10px; }
+
+.modal-cta {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: var(--dark2); border-top: 1px solid var(--card-border);
+  display: flex; gap: 8px; padding: 12px 20px 18px;
+  z-index: 600;
+}
+.modal-sheet { padding-bottom: 90px; }
+.btn-primary {
+  flex: 1; background: var(--gold); color: var(--dark); border: none;
+  border-radius: 12px; padding: 13px; font-size: 13px; font-weight: 700;
+  font-family: 'Syne', sans-serif; cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-primary:hover { background: var(--gold-light); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-icon {
+  width: 46px; height: 46px; background: var(--card-bg); color: var(--muted2);
+  border: 1px solid var(--card-border); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; cursor: pointer; transition: border-color 0.2s, color 0.2s; flex-shrink: 0;
+}
+.btn-icon:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: rgba(15,12,8,0.97); border-top: 1px solid var(--card-border);
+  display: flex; justify-content: space-around; padding: 12px 0 18px; z-index: 300;
+}
+.nav-it { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 0 20px; }
+.nav-it .nav-icon { font-size: 20px; transition: transform 0.2s; display: flex; align-items: center; justify-content: center; }
+.nav-it .nav-icon i { display: block; }
+.nav-it .nav-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'Syne', sans-serif; transition: color 0.2s; }
+.nav-it.active .nav-label { color: var(--gold); }
+.nav-it.active .nav-icon { transform: scale(1.15); }
+.nav-it.active .nav-icon i { color: var(--gold); }
+
+/* ── WHATSAPP FLOTANTE ── */
+.wa-float { position: fixed; bottom: 88px; right: calc(50% - 228px); z-index: 400; }
+.wa-btn {
+  background: var(--whatsapp); border: none; border-radius: 50px;
+  padding: 10px 16px 10px 12px; display: flex; align-items: center; gap: 8px;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+  transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+}
+.wa-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(37,211,102,0.5); }
+.wa-btn-icon { font-size: 20px; }
+.wa-btn-text { font-size: 12px; font-weight: 700; color: white; font-family: 'Syne', sans-serif; white-space: nowrap; }
+.wa-btn-sub { font-size: 8px; color: rgba(255,255,255,0.8); font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+@media (max-width: 480px) { .wa-float { right: 16px; } }
+</style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MV73QKBV"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div class="header-top">
+      <div class="logo">
+        <h1>Cartagena Local</h1>
+        <p>Lo que hacen los de aquí</p>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Buscar parches, barrios, lugares...">
+    </div>
+    <div class="cats-scroll">
+      <div class="cat-pill active" onclick="setFilter('todos',this)">Todos</div>
+      <div class="cat-pill" onclick="setFilter('bares',this)">🍺 Bares</div>
+      <div class="cat-pill" onclick="setFilter('cafe',this)">☕ Cafés</div>
+      <div class="cat-pill" onclick="setFilter('comida',this)">🍽 Comida</div>
+      <div class="cat-pill" onclick="setFilter('plan',this)">🌅 Planes</div>
+      <div class="cat-pill" onclick="setFilter('arte',this)">🎨 Arte</div>
+      <div class="cat-pill" onclick="setFilter('noche',this)">🌙 Noche</div>
+    </div>
+  </div>
+
+  <!-- SCREEN: INICIO -->
+  <div class="screen active" id="screen-inicio">
+    <div class="banner" id="banner-eventos">
+      <div class="banner-header" onclick="toggleBanner()">
+        <div class="banner-flame">🔥</div>
+        <div class="banner-texto">
+          <h3>¿Qué hacer esta noche?</h3>
+          <p>Eventos programados para el mes</p>
+        </div>
+        <div class="banner-arrow">❯</div>
+      </div>
+      <div class="banner-body">
+        <div id="banner-events-list"></div>
+        <div class="banner-cta">
+          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año →</button>
+        </div>
+      </div>
+    </div>
+    <div class="sec-header"><h2>Lugares</h2></div>
+    <div class="places-feed" id="places-feed"></div>
+  </div>
+
+  <!-- SCREEN: EVENTOS -->
+  <div class="screen" id="screen-eventos">
+    <div class="events-screen-header">
+      <h2>Agenda</h2>
+      <p>Próximos eventos en Cartagena</p>
+    </div>
+      <div class="events-feed" id="events-feed"></div>
+  </div>
+
+  <!-- SCREEN: MAPA -->
+  <div class="screen" id="screen-mapa">
+    <div class="map-screen"><div id="map"></div></div>
+  </div>
+
+  <!-- SCREEN: GUARDADOS -->
+  <div class="screen" id="screen-guardados">
+    <div class="saved-screen-header"><h2>Guardados</h2><p>Tus lugares favoritos</p></div>
+    <div id="saved-container" style="padding:0 16px;"></div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-it active" id="nav-inicio" onclick="goScreen('screen-inicio')"><div class="nav-icon"><i class="fa-solid fa-house"></i></div><div class="nav-label">Inicio</div></div>
+  <div class="nav-it" id="nav-eventos" onclick="goScreen('screen-eventos')"><div class="nav-icon"><i class="fa-regular fa-calendar"></i></div><div class="nav-label">Eventos</div></div>
+  <div class="nav-it" id="nav-mapa" onclick="goScreen('screen-mapa')"><div class="nav-icon"><i class="fa-solid fa-map"></i></div><div class="nav-label">Mapa</div></div>
+  <div class="nav-it" id="nav-guardados" onclick="goScreen('screen-guardados')"><div class="nav-icon"><i class="fa-regular fa-heart"></i></div><div class="nav-label">Guardados</div></div>
+</nav>
+
+<!-- BOTON REGISTRO -->
+<div class="wa-float">
+  <a class="wa-btn" href="https://cartagenalocal.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
+    <span class="wa-btn-icon">📋</span>
+    <span class="wa-btn-text">Registra tu local</span>
+  </a>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal-sheet" id="modal-sheet">
+    <div class="modal-hero" id="modal-hero">
+      <div class="modal-handle"></div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+      <svg class="modal-hero-icon" id="modal-hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="modal-body">
+      <div class="modal-top-row">
+        <h2 class="modal-title" id="modal-title"></h2>
+      </div>
+      <div class="modal-barrio" id="modal-barrio"></div>
+      <div class="modal-tags" id="modal-tags"></div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-divider"></div>
+      <div class="modal-rating-row" id="modal-rating"></div>
+      <div class="modal-details" id="modal-details"></div>
+      <div class="modal-divider"></div>
+      <div id="modal-info"></div>
+      <div id="modal-menu"></div>
+      <div class="modal-cta">
+        <button class="btn-primary" id="btn-como-llegar"><i class="fa-solid fa-location-dot"></i> Cómo llegar</button>
+        <button class="btn-icon" id="btn-modal-heart" onclick="toggleSaveFromModal()"><i class="fa-regular fa-heart"></i></button>
+        <button class="btn-icon" onclick="sharePlace()"><i class="fa-solid fa-share-from-square"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// SVG ICONS
+// ══════════════════════════════════════
+const svgIcons = {
+  bares: `<circle cx="40" cy="28" r="18" stroke="#C9983A" stroke-width="2.5" fill="none"/>
+    <path d="M28 28 Q28 52 40 52 Q52 52 52 28" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M52 20 L58 16 L58 32 L52 28" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    <path d="M34 52 L46 52" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M37 56 L43 56" stroke="#C9983A" stroke-width="2" stroke-linecap="round"/>`,
+
+  cafe: `<path d="M24 30 Q24 54 40 54 Q56 54 56 30" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M24 30 L56 30" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M56 34 Q64 34 64 42 Q64 50 56 50" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M32 54 L48 54" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M36 22 Q36 16 40 18 Q44 20 44 14" stroke="#C9983A" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+
+  comida: `<path d="M28 18 L28 40" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M28 18 Q20 26 20 32 Q20 40 28 40" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M28 40 L28 62" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M50 18 L50 28 Q50 36 42 36 Q50 36 50 44 L50 62" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+
+  plan: `<circle cx="40" cy="40" r="22" stroke="#C9983A" stroke-width="2.5" fill="none"/>
+    <path d="M40 18 L40 24" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M40 56 L40 62" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M18 40 L24 40" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M56 40 L62 40" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M40 40 L50 30" stroke="#C9983A" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="40" cy="40" r="3" fill="#C9983A"/>`,
+
+  arte: `<rect x="18" y="22" width="44" height="36" rx="4" stroke="#C9983A" stroke-width="2.5" fill="none"/>
+    <circle cx="30" cy="33" r="4" stroke="#C9983A" stroke-width="2" fill="none"/>
+    <path d="M18 46 L30 36 L40 44 L50 32 L62 46" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+
+  noche: `<path d="M44 18 Q32 20 28 32 Q24 44 34 52 Q44 60 56 54 Q44 56 40 46 Q36 36 44 28 Q48 22 44 18Z" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="56" cy="28" r="2.5" fill="#C9983A"/>
+    <circle cx="62" cy="38" r="1.5" fill="#C9983A"/>
+    <circle cx="52" cy="20" r="1.5" fill="#C9983A"/>`,
+
+  default: `<circle cx="40" cy="40" r="22" stroke="#C9983A" stroke-width="2.5" fill="none"/>
+    <circle cx="40" cy="40" r="6" fill="#C9983A"/>`
+};
+
+function getSVG(cat) {
+  const map = {
+    bares:'bares', cafe:'cafe', comida:'comida',
+    plan:'plan', arte:'arte', noche:'noche'
+  };
+  return svgIcons[map[cat]] || svgIcons.default;
+}
+
+// ══════════════════════════════════════
+// DATOS
+// ══════════════════════════════════════
+const places = [
+  // ═══ BARES ═══
+  { id:1, orden:999, bg:'pt1', cat:'bares', name:'Alquímico', nit:'', barrio:'Centro Histórico', tags:['Coctelería','Tres pisos','Top 50 mundial'], rating:4.7, horario:'Mar–Sáb · 5pm–2am', precio:'$$$ Exclusivo', desc:'Reconocido entre los 50 mejores bares del mundo. Tres pisos con propuestas distintas: cócteles de los años 20, coctelería clásica y sabores caribeños en la azotea.', img:'https://images.pexels.com/photos/17119947/pexels-photo-17119947.jpeg?w=1920', telefono:'+57 605 660 0907', instagram:'alquimicocartagena', menu:['Coctel de mango con tamarindo','Old Fashioned caribeño','Ceviche de camarón','Tostones con hogao'], coords:[10.4237,-75.5497] },
+  { id:2, orden:999, bg:'pt2', cat:'bares', name:'Café Havana', nit:'', barrio:'Getsemaní', tags:['Salsa','Música en vivo','Rumba'], rating:4.6, horario:'Vie–Dom · 8pm–3am', precio:'$$$ Exclusivo', desc:'El templo de la salsa en Cartagena. Paredes empapeladas de fotos vintage y una banda en vivo que enciende la pista cada noche. Imperdible si te gusta bailar.', img:'https://images.pexels.com/photos/2188012/pexels-photo-2188012.jpeg?w=1920', telefono:'+57 605 664 7450', instagram:'cafehavana_cartagena', menu:['Mojito cubano','Daiquirí de fresa','Ron con cola','Cerveza Águila'], coords:[10.4222,-75.5454] },
+  { id:3, orden:999, bg:'pt3', cat:'bares', name:'El Pasquín de Joaco Gastro Bar', nit:'', barrio:'Centro Histórico', tags:['Gastro bar','Brunch','Música local'], rating:4.8, horario:'Lun–Dom · 8am–2am', precio:'$$$ Exclusivo', desc:'Esquina colonial convertida en gastro bar de moda. Brunch espectacular, comida deliciosa y una apuesta por la música local que lo hace único en el Centro.', img:'https://images.pexels.com/photos/31155820/pexels-photo-31155820.jpeg?w=1920', telefono:'+57 300 813 5762', instagram:'elpasquindejoaco', menu:['Tartar de atún','Pulpo al olivo','Hamburguesa artesanal','Limonada de coco'], coords:[10.4234,-75.5494] },
+  { id:4, orden:999, bg:'pt4', cat:'bares', name:'Donde Fidel Salsa Club', nit:'', barrio:'Centro Histórico', tags:['Salsa','Pegado','Torre del Reloj'], rating:4.4, horario:'Lun–Dom · 6pm–2am', precio:'$$ Promedio', desc:'Frente a la Torre del Reloj, este antro salsero es parada obligada. Paredes con fotos de leyendas, cerveza fría y salsa las 24/7. No sabes bailar? Aquí aprendes.', img:'https://images.pexels.com/photos/28184044/pexels-photo-28184044.jpeg?w=1920', telefono:'+57 300 456 7890', instagram:'dondefidelsalsa', menu:['Cerveza Águila','Ron Medellín','Mojito','Cubalibre'], coords:[10.4227,-75.5496] },
+  { id:5, orden:999, bg:'pt5', cat:'bares', name:'Café del Mar', nit:'', barrio:'Centro Histórico', tags:['Sunset','Vista al mar','Chill out'], rating:4.5, horario:'Dom–Jue 10am–12am, Vie–Sáb 10am–2am', precio:'$$$ Exclusivo', desc:'En plena muralla con vista al mar Caribe. El atardecer más famoso de Cartagena. Música chill-out, cócteles y una brisa que se lleva el calor de la ciudad.', img:'https://images.pexels.com/photos/12567801/pexels-photo-12567801.jpeg?w=1920', telefono:'+57 605 660 0045', instagram:'cafedelmarcartagena', menu:['Mojito','Piña Colada','Ceviche','Copa de vino'], coords:[10.4244,-75.5541] },
+  { id:6, orden:999, bg:'pt6', cat:'bares', name:'El Barón Café & Cocktail Bar', nit:'', barrio:'Centro Histórico', tags:['Terraza','Cócteles','Plaza Santo Domingo'], rating:4.3, horario:'Lun–Dom · 5pm–12am', precio:'$$ Exclusivo', desc:'Terraza elegante frente a la Plaza Santo Domingo. Perfecto para un cóctel al caer la tarde viendo pasar la vida cartagenera. Ambiente relajado y servicio impecable.', img:'https://images.pexels.com/photos/32089215/pexels-photo-32089215.jpeg?w=1920', telefono:'+57 300 567 8901', instagram:'elbaroncafe', menu:['Negroni','Gin Tonic','Margarita','Aperol Spritz'], coords:[10.4219,-75.5509] },
+  { id:7, orden:999, bg:'pt7', cat:'bares', name:'La Movida', nit:'', barrio:'Centro Histórico', tags:['Discoteca','Rooftop','Fiesta'], rating:4.4, horario:'Vie–Sáb · 9pm–3am', precio:'$$$ Exclusivo', desc:'Discoteca y rooftop en el corazón del Centro. Música variada, ambiente festivo y un público que viene a bailar hasta el cierre. Dos ambientes para dos momentos de la noche.', img:'https://images.pexels.com/photos/6982443/pexels-photo-6982443.jpeg?w=1920', telefono:'+57 300 678 9012', instagram:'lamovidacartagena', menu:['Botella de ron','Whisky nacional','Cerveza','Coctel de la casa'], coords:[10.4233,-75.5532] },
+
+  // ═══ CAFÉS ═══
+  { id:8, orden:999, bg:'pt8', cat:'cafe', name:'Época Café Bar', nit:'', barrio:'Centro Histórico', tags:['Café de especialidad','Brunch','Wifi'], rating:4.8, horario:'Lun–Dom · 7am–9pm', precio:'$$ Promedio', desc:'Cafetería de especialidad con ambiente parisino años 40. Café de origen colombiano certificado y una carta de desayunos que enamora. El cardamomo latte es legendario.', img:'https://images.pexels.com/photos/29250093/pexels-photo-29250093.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 300 789 0123', instagram:'epocacafebar', menu:['Cardamomo Latte','Espresso','Banana Bread','Sándwich de pollo'], coords:[10.4238,-75.5503] },
+  { id:9, orden:999, bg:'pt1', cat:'cafe', name:'Ábaco Libros y Café', nit:'', barrio:'Centro Histórico', tags:['Librería','Café','Lectura'], rating:4.6, horario:'Lun–Sáb · 9am–9pm', precio:'$$ Promedio', desc:'Librería-café de cuento con estantes hasta el techo y escalera tipo Beauty and the Beast. Café bien servido entre libros, ideal para una tarde de lectura o conversación.', img:'https://images.pexels.com/photos/32445699/pexels-photo-32445699.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 605 660 4745', instagram:'abacolibrosycafe', menu:['Cappuccino','Té chai','Brownie','Croissant'], coords:[10.4250,-75.5512] },
+  { id:10, orden:999, bg:'pt2', cat:'cafe', name:'Café del Mural', nit:'', barrio:'Getsemaní', tags:['Café','Arte callejero','Terraza'], rating:4.6, horario:'Lun–Dom · 8am–6pm', precio:'$ Económico', desc:'En pleno Getsemaní, frente al mural más instagrameable del barrio. Café de filtro, buena música y una terraza perfecta para ver la vida pasar. Punto de encuentro de viajeros.', img:'https://images.pexels.com/photos/30774028/pexels-photo-30774028.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 300 890 1234', instagram:'cafedelmuralctg', menu:['Tinto colombiano','Café con leche','Jugo de naranja','Pan de bono'], coords:[10.4201,-75.5465] },
+  { id:11, orden:999, bg:'pt3', cat:'cafe', name:'Libertario Coffee Roasters', nit:'', barrio:'Getsemaní', tags:['Tostadores','Especialidad','Coworking'], rating:4.7, horario:'Lun–Sáb · 7am–6pm', precio:'$$ Promedio', desc:'Tostaduría artesanal en Getsemaní. Café de especialidad recién tostado, preparaciones de filtro y espresso impecables. Espacio de coworking para los que trabajan remoto.', img:'https://images.pexels.com/photos/30339561/pexels-photo-30339561.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 300 901 2345', instagram:'libertariocoffeeroasters', menu:['Pour over','Espresso doble','Cold brew','Pan artesanal'], coords:[10.4220,-75.5450] },
+  { id:12, orden:999, bg:'pt4', cat:'cafe', name:'Manna Breakfast & Lunch', nit:'', barrio:'Centro Histórico', tags:['Desayuno','Brunch','Saludable'], rating:4.7, horario:'Lun–Dom · 7am–4pm', precio:'$$ Promedio', desc:'El mejor brunch del Centro. Ingredientes frescos, opciones saludables y un café que despierta hasta al más dormido. Atendido por su dueño, un argentino enamorado de Cartagena.', img:'https://images.pexels.com/photos/7664367/pexels-photo-7664367.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 301 012 3456', instagram:'mannacafebar', menu:['Acai bowl','Huevos benedictinos','Smoothie verde','Espresso'], coords:[10.4203,-75.5462] },
+  { id:13, orden:999, bg:'pt5', cat:'cafe', name:'Señor Titis Coffee & Gifts', nit:'', barrio:'Centro Histórico', tags:['Café','Regalos','Colombiano'], rating:4.5, horario:'Lun–Dom · 9am–8pm', precio:'$ Económico', desc:'Cafetería boutique que también vende artesanías colombianas. Café de la Sierra Nevada en cada taza, ambiente familiar y el mejor souvenir: una bolsa de café recién tostado.', img:'https://images.pexels.com/photos/29298129/pexels-photo-29298129.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 301 123 4567', instagram:'senortitiscoffee', menu:['Café filtrado','Chocolate caliente','Arepa con queso','Bocadillo veleño'], coords:[10.4265,-75.5481] },
+
+  // ═══ COMIDA ═══
+  { id:14, orden:999, bg:'pt6', cat:'comida', name:'Celele', nit:'', barrio:'Centro Histórico', tags:['Gastronomía','Alta cocina','Caribe'], rating:4.9, horario:'Mar–Sáb · 12pm–10pm', precio:'$$$ Alta cocina', desc:'Uno de los mejores restaurantes de Colombia según Latin America. Reconocido entre los mejores del pais.', img:'https://images.pexels.com/photos/29962487/pexels-photo-29962487.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 6790', instagram:'celelerestaurante', menu:['Tartar de camarones','Lomo de cerdo con corozo','Arroz de chipi chipi','Cocada con helado'], coords:[10.4222,-75.5445] },
+  { id:15, orden:999, bg:'pt7', cat:'comida', name:'Carmen Cartagena', nit:'', barrio:'Centro Histórico', tags:['Cocina fusión','Elegante','Chef'], rating:4.8, horario:'Mar–Dom · 12pm–11pm', precio:'$$$ Alta cocina', desc:'Restaurante emblemático dentro de una casa colonial restaurada. Fusión de sabores colombianos con técnicas internacionales. El cerdo con salsa de tamarindo y la terraza son imperdibles.', img:'https://images.pexels.com/photos/6844877/pexels-photo-6844877.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 7276', instagram:'carmencartagena', menu:['Cerdo glaseado con tamarindo','Ceviche de pescado','Arroz con coco y langostinos','Postre de tres leches'], coords:[10.4269,-75.5478] },
+  { id:16, orden:999, bg:'pt8', cat:'comida', name:'Buena Vida Marisquería y Rooftop', nit:'', barrio:'Centro Histórico', tags:['Mariscos','Rooftop','Vista'], rating:4.7, horario:'Lun–Dom · 12pm–11pm', precio:'$$$ Exclusivo', desc:'Marisquería en la azotea con vista panorámica de la ciudad. Mariscos frescos, coctelería de autor y un atardecer que compite con la comida. El lugar perfecto para una cena especial.', img:'https://images.pexels.com/photos/9360525/pexels-photo-9360525.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 7277', instagram:'buenavidamarisqueria', menu:['Ceviche mixto','Langosta al grill','Arroz de mariscos','Pulpo al olivo'], coords:[10.4242,-75.5518] },
+  { id:17, orden:999, bg:'pt1', cat:'comida', name:'Interno', nit:'', barrio:'San Diego', tags:['Cocina local','Proyecto social','Reservar'], rating:4.7, horario:'Mar–Sáb · 12pm–3pm', precio:'$$$ Exclusivo', desc:'Dentro de la cárcel de mujeres de San Diego. Cocina de autor que empodera a las internas a través de la gastronomía. Comer aquí es delicioso y transformador. Hay que reservar con días de anticipación.', img:'https://images.pexels.com/photos/6213723/pexels-photo-6213723.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 300 234 5678', instagram:'internocartagena', menu:['Menú degustación','Pescado en costra de coco','Arroz con frijol cabecita negra','Dulce de papaya'], coords:[10.4245,-75.5494] },
+  { id:18, orden:999, bg:'pt2', cat:'comida', name:'La Cevichería', nit:'', barrio:'Centro Histórico', tags:['Ceviche','Mariscos','Tradicional'], rating:4.6, horario:'Lun–Dom · 11am–10pm', precio:'$$ Promedio', desc:'Cevichería tradicional con más de 15 tipos de ceviche. El favorito de locales y turistas por igual. Ingredientes frescos, porciones generosas y un sabor que sabe a Caribe en cada bocado.', img:'https://images.pexels.com/photos/29168410/pexels-photo-29168410.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 1234', instagram:'lacevicheriactg', menu:['Ceviche de camarón','Ceviche mixto','Ceviche de pescado','Patacones con hogao'], coords:[10.4238,-75.5508] },
+  { id:19, orden:999, bg:'pt3', cat:'comida', name:'San Pascual Baylón', nit:'', barrio:'Centro Histórico', tags:['Colombiana','Casera','Familiar'], rating:4.8, horario:'Lun–Dom · 11am–9pm', precio:'$$ Promedio', desc:'Cocina colombiana casera en una casa colonial con patio. El sancocho de pescado los viernes es una institución. Platos generosos, bien servidos y con el sabor de la abuela cartagenera.', img:'https://images.pexels.com/photos/29496090/pexels-photo-29496090.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 300 345 6789', instagram:'sanpascualbaylon', menu:['Sancocho de pescado','Bandeja paisa','Arroz con coco','Jugo de corozo'], coords:[10.4240,-75.5502] },
+  { id:20, orden:999, bg:'pt4', cat:'comida', name:'Baroca Sabor Ancestral Rooftop', nit:'', barrio:'Centro Histórico', tags:['Ancestral','Rooftop','Cócteles'], rating:4.8, horario:'Lun–Dom · 12pm–11pm', precio:'$$$ Exclusivo', desc:'Cocina ancestral caribeña en rooftop con vista a las murallas. Sabores tradicionales reinventados con presentación impecable. El maridaje de cócteles con cada plato es una experiencia en sí misma.', img:'https://images.pexels.com/photos/31491025/pexels-photo-31491025.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 300 456 7890', instagram:'barocartagena', menu:['Ceviche de mango verde','Pescado en hoja de bijao','Arroz negrito','Cóctel de zapote'], coords:[10.4219,-75.5465] },
+  { id:21, orden:999, bg:'pt5', cat:'comida', name:'El Burlador Mediterráneo-Caribe', nit:'', barrio:'Centro Histórico', tags:['Mediterráneo','Mariscos','Elegante'], rating:4.7, horario:'Lun–Dom · 12pm–11pm', precio:'$$$ Exclusivo', desc:'Fusión mediterránea con ingredientes caribeños en una casona del siglo XVII. La paella de mariscos y el pulpo son los más pedidos. Atención impecable y un patio colonial que enamora.', img:'https://images.pexels.com/photos/8707059/pexels-photo-8707059.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 8990', instagram:'elburladorcartagena', menu:['Paella de mariscos','Pulpo a la parrilla','Ceviche de pescado','Crema catalana'], coords:[10.4236,-75.5501] },
+  { id:22, orden:999, bg:'pt6', cat:'comida', name:'Totopo', nit:'', barrio:'Getsemaní', tags:['Mexicano','Casual','Plaza'], rating:4.4, horario:'Lun–Dom · 12pm–10pm', precio:'$$ Promedio', desc:'En la esquina de la Plaza Fernández Madrid. Cocina mexicana con toque caribeño. Tacos, burritos y margaritas en un ambiente relajado. Perfecto para comer rico sin gastar de más.', img:'https://images.pexels.com/photos/5848706/pexels-photo-5848706.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 300 567 8901', instagram:'totopoctg', menu:['Tacos al pastor','Burrito de pollo','Margarita clásica','Guacamole'], coords:[10.4227,-75.5459] },
+  { id:23, orden:999, bg:'pt7', cat:'comida', name:'Restaurante Olano', nit:'', barrio:'Centro Histórico', tags:['Francesa','Caribe','Elegante'], rating:4.6, horario:'Mar–Sáb · 12pm–10pm', precio:'$$$ Exclusivo', desc:'Cocina francesa con alma caribeña en el Centro Histórico. Las muelas de cangrejo de entrada son legendarias. Menú degustación que sorprende en cada paso. Terraza íntima con encanto colonial.', img:'https://images.pexels.com/photos/8350134/pexels-photo-8350134.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 4567', instagram:'dondeolano', menu:['Muelas de cangrejo','Solomillo al vino tinto','Tartar de atún','Crème brûlée'], coords:[10.4235,-75.5503] },
+
+  // ═══ ARTE ═══
+  { id:24, orden:999, bg:'pt8', cat:'arte', name:'Museo del Oro Zenú', nit:'', barrio:'Centro Histórico', tags:['Oro','Arqueología','Historia'], rating:4.6, horario:'Mar–Sáb · 9am–6pm', precio:'$ Económico', desc:'Piezas de oro de la cultura Zenú en una casa colonial restaurada. Una colección fascinante que narra la historia precolombina del Caribe colombiano. Entrada muy económica y gratuita los domingos.', img:'https://images.pexels.com/photos/20610629/pexels-photo-20610629.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 5481', instagram:'museodelorogenu', menu:[''], coords:[10.4239,-75.5517] },
+  { id:25, orden:999, bg:'pt1', cat:'arte', name:'Museo de Arte Moderno de Cartagena', nit:'', barrio:'Centro Histórico', tags:['Arte','Moderno','Exposiciones'], rating:4.5, horario:'Mar–Dom · 10am–6pm', precio:'$ Económico', desc:'La colección de arte moderno y contemporáneo más importante de la ciudad. Obras de Enrique Grau, Alejandro Obregón y artistas emergentes del Caribe. Exposiciones temporales todo el año.', img:'https://images.pexels.com/photos/36900018/pexels-photo-36900018.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 5815', instagram:'mamcartagena', menu:[''], coords:[10.4228,-75.5503] },
+  { id:26, orden:999, bg:'pt2', cat:'arte', name:'Santuario Museo San Pedro Claver', nit:'', barrio:'Centro Histórico', tags:['Religioso','Colonial','Museo'], rating:4.7, horario:'Lun–Sáb · 8am–5pm', precio:'$ Económico', desc:'Iglesia y museo dedicado a San Pedro Claver, el esclavo de los esclavos. Arquitectura barroca impresionante, claustro colonial y una historia conmovedora. La plaza frente al museo es de las más bellas.', img:'https://images.pexels.com/photos/13809258/pexels-photo-13809258.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 1308', instagram:'sanpedroclaver', menu:[''], coords:[10.4227,-75.5505] },
+  { id:27, orden:999, bg:'pt3', cat:'arte', name:'Museo Naval del Caribe', nit:'', barrio:'Centro Histórico', tags:['Naval','Historia','Marítimo'], rating:4.4, horario:'Mar–Dom · 10am–5:30pm', precio:'$ Económico', desc:'Historia naval de Cartagena y el Caribe en un edificio colonial junto a la muralla. Maquetas de barcos, mapas antiguos y la historia de la defensa de la ciudad contra piratas e invasores.', img:'https://images.pexels.com/photos/28225743/pexels-photo-28225743.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 2440', instagram:'museonavaldelcaribe', menu:[''], coords:[10.4232,-75.5493] },
+  { id:28, orden:999, bg:'pt4', cat:'arte', name:'Casa Museo Rafael Núñez', nit:'', barrio:'El Cabrero', tags:['Historia','Casa museo','Presidente'], rating:4.5, horario:'Mar–Dom · 9am–5pm', precio:'$ Económico', desc:'La casa donde vivió Rafael Núñez, cuatro veces presidente de Colombia y autor de la Constitución de 1886. Mobilario original, objetos personales y un jardín que invita a la nostalgia.', img:'https://images.pexels.com/photos/14947524/pexels-photo-14947524.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 4040', instagram:'casamuseonunez', menu:[''], coords:[10.4153,-75.5449] },
+  { id:29, orden:999, bg:'pt5', cat:'arte', name:'Palacio de la Inquisición', nit:'', barrio:'Centro Histórico', tags:['Historia','Museo','Arquitectura'], rating:4.5, horario:'Lun–Sáb · 9am–6pm', precio:'$ Económico', desc:'Imponente edificio colonial que albergó el Tribunal del Santo Oficio. Museo Histórico de Cartagena con salas que narran la época colonial, la independencia y la inquisición. Imperdible.', img:'https://images.pexels.com/photos/20375711/pexels-photo-20375711.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 4570', instagram:'museohistoricoctg', menu:[''], coords:[10.4229,-75.5514] },
+  { id:30, orden:999, bg:'pt6', cat:'arte', name:'Las Bóvedas', nit:'', barrio:'Centro Histórico', tags:['Artesanías','Galería','Muralla'], rating:4.3, horario:'Lun–Dom · 9am–9pm', precio:'$ Económico', desc:'23 bóvedas construidas dentro de la muralla en el siglo XVIII, hoy convertidas en galería de artesanías y arte local. Esmeraldas, hamacas, cuadros y recuerdos auténticos de la costa caribe.', img:'https://images.pexels.com/photos/24514434/pexels-photo-24514434.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4246,-75.5536] },
+
+  // ═══ PLAN ═══
+  { id:31, orden:999, bg:'pt7', cat:'plan', name:'Playa Blanca (Isla Barú)', nit:'', barrio:'Barú', tags:['Playa','Mar cristalino','Escape'], rating:4.5, horario:'Todos los días · 6am–5pm', precio:'$$ Promedio', desc:'La playa más famosa cerca de Cartagena. Arena blanca, aguas turquesa y palmeras. Se llega en lancha o por carretera. Ideal para un día de sol, mar y ceviche frente al agua. Fin de semana llega temprano.', img:'https://images.pexels.com/photos/32214906/pexels-photo-32214906.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.2567,-75.6006] },
+  { id:32, orden:999, bg:'pt8', cat:'plan', name:'Aviario Nacional de Colombia', nit:'', barrio:'Barú', tags:['Aves','Naturaleza','Familia'], rating:4.7, horario:'Lun–Dom · 9am–4pm', precio:'$$ Promedio', desc:'El aviario más grande de Colombia con más de 170 especies de aves. Recorrido guiado entre túneles de naturaleza, jaguares y flamencos. Perfecto para ir en familia o con amigos. Combínalo con Playa Blanca.', img:'https://images.pexels.com/photos/15037526/pexels-photo-15037526.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 668 7171', instagram:'aviariocolombia', menu:[''], coords:[10.3056,-75.5614] },
+  { id:33, orden:999, bg:'pt1', cat:'plan', name:'Chiva Tour — Rumba en Chiva', nit:'', barrio:'Centro Histórico', tags:['Rumba','Tradicional','Recorrido'], rating:4.3, horario:'Todos los días · 8pm–12am', precio:'$$ Promedio', desc:'El clásico paseo en chiva rumbera por las calles de Cartagena. Música, baile, paradas en miradores y una noche que termina en discoteca. La forma más divertida de conocer la ciudad de noche.', img:'https://images.pexels.com/photos/13804522/pexels-photo-13804522.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 301 234 5678', instagram:'chivatourctg', menu:[''], coords:[10.4228,-75.5500] },
+  { id:34, orden:999, bg:'pt2', cat:'plan', name:'Tour en Kayak por la Bahía', nit:'', barrio:'Centro Histórico', tags:['Kayak','Manglares','Deporte'], rating:4.5, horario:'Lun–Dom · 7am–5pm', precio:'$$ Promedio', desc:'Remar por la bahía interna y los manglares de Cartagena. Una perspectiva única de la ciudad desde el agua. Guías locales que conocen la historia del puerto y la biodiversidad del ecosistema.', img:'https://images.pexels.com/photos/7483078/pexels-photo-7483078.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 301 345 6789', instagram:'', menu:[''], coords:[10.4250,-75.5450] },
+  { id:35, orden:999, bg:'pt3', cat:'plan', name:'Buceo en Islas del Rosario', nit:'', barrio:'Islas del Rosario', tags:['Buceo','Arrecifes','Marino'], rating:4.6, horario:'Salidas diarias · 7am–3pm', precio:'$$$ Exclusivo', desc:'Parque Nacional Natural Corales del Rosario. Buceo y snorkel en arrecifes de coral con peces tropicales, rayas y tortugas. Hay opciones para principiantes y certificados. Incluye almuerzo y transporte en lancha.', img:'https://images.pexels.com/photos/7970793/pexels-photo-7970793.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 301 456 7890', instagram:'parquecorales', menu:[''], coords:[10.1792,-75.7389] },
+  { id:36, orden:999, bg:'pt4', cat:'plan', name:'Cerro de La Popa', nit:'', barrio:'La Popa', tags:['Mirador','Historia','Vista 360°'], rating:4.5, horario:'Lun–Dom · 8am–6pm', precio:'$ Económico', desc:'El punto más alto de Cartagena con vista panorámica de toda la ciudad, la bahía y Bocagrande. Convento del siglo XVII en la cima. La vista al atardecer es espectacular y la brisa, inolvidable.', img:'https://images.pexels.com/photos/6381082/pexels-photo-6381082.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4202,-75.5274] },
+  { id:37, orden:999, bg:'pt5', cat:'plan', name:'Torre del Reloj', nit:'', barrio:'Centro Histórico', tags:['Mirador','Entrada','Fotos'], rating:4.5, horario:'Lun–Dom · 9am–8pm', precio:'$ Económico', desc:'La puerta principal de la ciudad amurallada. Subir a la torre te regala una vista espectacular de la Plaza de la Independencia y el arco que da la bienvenida a miles de viajeros cada año.', img:'https://images.pexels.com/photos/20375712/pexels-photo-20375712.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4231,-75.5493] },
+  { id:38, orden:999, bg:'pt6', cat:'plan', name:'Plaza de la Trinidad', nit:'', barrio:'Getsemaní', tags:['Plaza','Cultura','Gente local'], rating:4.4, horario:'Abierta siempre', precio:'Gratis', desc:'El corazón de Getsemaní. Plaza bulliciosa donde los vecinos se sientan a tomar fresco, los niños juegan fútbol y los turistas se mezclan con la vida real del barrio. Iglesia icónica al fondo.', img:'https://images.pexels.com/photos/18016887/pexels-photo-18016887.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4217,-75.5457] },
+  { id:39, orden:999, bg:'pt7', cat:'plan', name:'Mercado de Bazurto', nit:'', barrio:'Bazurto', tags:['Mercado','Local','Auténtico'], rating:4.3, horario:'Lun–Sáb · 5am–4pm', precio:'$ Económico', desc:'El mercado más auténtico de Cartagena. Frutas exóticas, pescado fresco, jugos naturales y el mejor frito de la ciudad. No es un lugar turístico sino la verdadera cara de Cartagena. Ideal para almorzar como local.', img:'https://images.pexels.com/photos/36895093/pexels-photo-36895093.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4067,-75.5220] },
+  { id:40, orden:999, bg:'pt8', cat:'plan', name:'Amaré Rooftop', nit:'', barrio:'Centro Histórico', tags:['Rooftop','Cócteles','Vista'], rating:4.5, horario:'Lun–Dom · 4pm–12am', precio:'$$$ Exclusivo', desc:'Azotea elegante con piscina infinita y vista a la ciudad amurallada. Cócteles de autor al atardecer con la brisa del Caribe. Ambiente sofisticado pero relajado. El lugar para un atardecer inolvidable.', img:'https://images.pexels.com/photos/33553690/pexels-photo-33553690.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 301 567 8901', instagram:'amarerooftop', menu:['Mojito de maracuyá','Piña colada','Ceviche','Copa de vino espumoso'], coords:[10.4252,-75.5521] },
+
+  // ═══ NOCHE ═══
+  { id:41, orden:999, bg:'pt1', cat:'noche', name:'Bazurto Social Club', nit:'', barrio:'Getsemaní', tags:['Champeta','Baile','Energía'], rating:4.6, horario:'Vie–Dom · 9pm–3am', precio:'$$ Promedio', desc:'Epicentro de la champeta en Getsemaní. Empieza como restaurante y se transforma en la discoteca más auténtica de la ciudad. La banda Bazurto All Star toca antes de la media noche. Baile asegurado.', img:'https://images.pexels.com/photos/30730352/pexels-photo-30730352.jpeg?w=1920', telefono:'+57 300 678 9012', instagram:'bazurtosocialclub', menu:['Cerveza','Ron','Champeta y salsa','Comida tradicional'], coords:[10.4220,-75.5458] },
+  { id:42, orden:999, bg:'pt2', cat:'noche', name:'La Jugada Club House', nit:'', barrio:'Centro Histórico', tags:['Urbano','Reggaetón','Elegante'], rating:4.5, horario:'Vie–Sáb · 9pm–3am', precio:'$$$ Exclusivo', desc:'Club house de los mismos creadores de La Movida. Inspiración Gatsby, música urbana y un sistema de sonido de última generación. Ambiente premium cerca de la Torre del Reloj. Fotos obligatorias.', img:'https://images.pexels.com/photos/1605417/pexels-photo-1605417.jpeg?w=1920', telefono:'+57 300 789 0123', instagram:'lajugadaclubhouse', menu:['Botella de whisky','Champán','Cerveza','Coctel de la casa'], coords:[10.4237,-75.5497] },
+  { id:43, orden:999, bg:'pt3', cat:'noche', name:'Seven 7 Times', nit:'', barrio:'Getsemaní', tags:['Discoteca','5 ambientes','Shows'], rating:4.5, horario:'Vie–Dom · 9pm–3am', precio:'$$$ Exclusivo', desc:'Cinco ambientes en un solo lugar: terraza, discoteca, sala de cócteles, karaoke y más. Shows en vivo de artistas locales. En Getsemaní, Calle Media Luna. Una experiencia nocturna completa en un solo sitio.', img:'https://images.pexels.com/photos/1766568/pexels-photo-1766568.jpeg?w=1920', telefono:'+57 300 890 1234', instagram:'seven7timescartagena', menu:['Cóctel de la casa','Cerveza','Whisky','Champán'], coords:[10.4214,-75.5448] },
+  { id:44, orden:999, bg:'pt4', cat:'noche', name:'Casa Cruxada', nit:'', barrio:'Centro Histórico', tags:['Electrónica','Regenerativo','Plaza'], rating:4.4, horario:'Vie–Sáb · 9pm–3am', precio:'$$$ Exclusivo', desc:'Iniciativa gastronómica y de ocio nocturno en Plaza Santo Domingo. Música electrónica, decoración vanguardista y un ambiente que atrae a los amantes de la fiesta alternativa. Entrada con lista.', img:'https://images.pexels.com/photos/9005515/pexels-photo-9005515.jpeg?w=1920', telefono:'+57 300 901 2345', instagram:'casacruxada', menu:['Coctel de autor','Cerveza artesanal','Vino','Comida fusión'], coords:[10.4258,-75.5492] },
+  { id:45, orden:999, bg:'pt5', cat:'noche', name:'1811 Rooftop & Cocktail Bar', nit:'', barrio:'Centro Histórico', tags:['Rooftop','Cócteles','Elegante'], rating:4.6, horario:'Mar–Dom · 5pm–2am', precio:'$$$ Exclusivo', desc:'Rooftop con la mejor vista de la ciudad amurallada. Cócteles creativos, comida deliciosa y un atardecer que paraliza. La atención de José Darío y Elvis es insuperable. Un imperdible de la vida nocturna.', img:'https://images.pexels.com/photos/31019869/pexels-photo-31019869.jpeg?w=1920', telefono:'+57 301 012 3456', instagram:'1811rooftop', menu:['Mojito de coco','Margarita de sandía','Ceviche','Lomo al trapo'], coords:[10.4259,-75.5497] },
+  { id:46, orden:999, bg:'pt6', cat:'noche', name:'Barra 7 — Cocktail Bar', nit:'', barrio:'Centro Histórico', tags:['Coctelería','Música','Cool'], rating:4.5, horario:'Mar–Dom · 6pm–1am', precio:'$$$ Exclusivo', desc:'Barra de cócteles escondida en el Centro. Te reciben con palomitas y agua, la música es impecable y la watermelon margarita es la estrella. Ambiente cool y relajado para empezar o terminar la noche.', img:'https://images.pexels.com/photos/8551429/pexels-photo-8551429.jpeg?w=1920', telefono:'+57 301 123 4567', instagram:'barra7cartagena', menu:['Watermelon Margarita','Gin Tonic de maracuyá','Moscow Mule','Ceviche'], coords:[10.4236,-75.5499] },
+  { id:47, orden:999, bg:'pt7', cat:'noche', name:'Xo Rooftop', nit:'', barrio:'Centro Histórico', tags:['Rooftop','Vistas','Sunset'], rating:4.5, horario:'Lun–Dom · 4pm–12am', precio:'$$$ Exclusivo', desc:'Terraza minimalista con las mejores vistas de la ciudad amurallada. Carta de cócteles con influencia asiática y caribeña. DJ residente con música electrónica suave. Perfecto para un atardecer con estilo.', img:'https://images.pexels.com/photos/32089215/pexels-photo-32089215.jpeg?w=1920', telefono:'+57 301 234 5678', instagram:'xorooftop', menu:['Coctel de lychee','Mango sticky rice','Ceviche nikkei','Vino espumoso'], coords:[10.4248,-75.5515] },
+  { id:48, orden:999, bg:'pt8', cat:'noche', name:'Club Prestige', nit:'', barrio:'Bocagrande', tags:['Discoteca','VIP','Bocagrande'], rating:4.3, horario:'Vie–Sáb · 10pm–3am', precio:'$$$ Exclusivo', desc:'Discoteca en Bocagrande con ambiente VIP. Música variada, luces espectaculares y un público que viene a vestirse bien. Mesas con botella y servicio personalizado. La noche más exclusiva de Bocagrande.', img:'https://images.pexels.com/photos/7269731/pexels-photo-7269731.jpeg?w=1920', telefono:'+57 301 345 6789', instagram:'clubprestigectg', menu:['Botella de vodka','Whisky premium','Champán','Cerveza importada'], coords:[10.4003,-75.5560] },
+  { id:49, orden:999, bg:'pt1', cat:'noche', name:'Pikete', nit:'', barrio:'Centro Histórico', tags:['Reggaetón','Urbano','Fiesta'], rating:4.3, horario:'Vie–Sáb · 9pm–3am', precio:'$$ Promedio', desc:'Discoteca urbana en el Centro. Reggaetón, hip hop y música latina a todo volumen. Pista de baile amplia, luces led y un ambiente joven y energético. Entrada a precio justo y licor accesible.', img:'https://images.pexels.com/photos/8928738/pexels-photo-8928738.jpeg?w=1920', telefono:'+57 301 456 7890', instagram:'piketectg', menu:['Cerveza','Ron con energia','Whisky nacional','Coctel'], coords:[10.4230,-75.5490] },
+  { id:50, orden:999, bg:'pt2', cat:'noche', name:'Boheme Lounge', nit:'', barrio:'Centro Histórico', tags:['Lounge','Música','Shows'], rating:4.6, horario:'Jue–Dom · 7pm–2am', precio:'$$$ Exclusivo', desc:'Bar lounge de autor con shows en vivo de artistas locales. Ambiente íntimo, decoración cuidada y una atmósfera que invita a quedarse más de la cuenta. Música en vivo que va del jazz a los ritmos caribeños.', img:'https://images.pexels.com/photos/8512201/pexels-photo-8512201.jpeg?w=1920', telefono:'+57 301 567 8901', instagram:'bohemecartagena', menu:['Coctel de la casa','Vino tinto','Ceviche','Tabla de quesos'], coords:[10.4241,-75.5504] },
+];
+
+// ══════════════════════════════════════
+// EVENTOS
+// ══════════════════════════════════════
+const eventList = [
+  { date:'2026-06-08', endDate:'2026-06-08', cat:'comida', icon:'🍳', name:'Asamblea de Cocina Tradicional', nit:'', place:'Centro Histórico', price:'Entrada libre', short:'8 de junio' },
+  { date:'2026-06-24', endDate:'2026-06-24', cat:'cultural', icon:'🎉', name:'Noche de San Juan', nit:'', place:'Playas y espacios públicos', price:'Entrada libre', short:'24 de junio' },
+  { date:'2026-07-03', endDate:'2026-07-05', cat:'cultural', icon:'🎸', name:'Rock Imperium Festival', nit:'', place:'Parque El Batel', price:'Desde 195€', short:'3–5 de julio' },
+  { date:'2026-07-09', endDate:'2026-11-05', cat:'arte', icon:'📖', name:'Festival Internacional de Poesía IPCC', nit:'', place:'Bibliotecas y centros culturales', price:'Entrada libre', short:'9 jul – 5 nov' },
+  { date:'2026-07-14', endDate:'2026-07-14', cat:'arte', icon:'🎭', name:'Agenda Cultural Alianza Francesa', nit:'', place:'Alianza Francesa, Centro', price:'Variable', short:'14 de julio' },
+  { date:'2026-07-17', endDate:'2026-07-25', cat:'cultural', icon:'🎶', name:'La Mar de Músicas', nit:'', place:'Varios enclaves históricos', price:'Variable', short:'17–25 de julio' },
+  { date:'2026-07-18', endDate:'2026-07-19', cat:'cultural', icon:'🥁', name:'Festival de Tambores', nit:'', place:'Palenque y plazas del Centro', price:'Entrada libre', short:'18–19 de julio' },
+  { date:'2026-08-13', endDate:'2026-08-13', cat:'noche', icon:'💃', name:'Día de la Champeta', nit:'', place:'Barrios de Cartagena', price:'Entrada libre', short:'13 de agosto' },
+  { date:'2026-08-15', endDate:'2026-08-15', cat:'comida', icon:'🫓', name:'Festival de la Arepa de Huevo', nit:'', place:'Getsemaní', price:'Desde $5.000 COP', short:'15 de agosto' },
+  { date:'2026-08-20', endDate:'2026-08-22', cat:'arte', icon:'🩰', name:'Festival Música y Danza del Mundo', nit:'', place:'Teatros y plazas del Centro', price:'Variable', short:'20–22 de agosto' },
+  { date:'2026-08-28', endDate:'2026-08-31', cat:'arte', icon:'✍️', name:'Parlamento Internacional de Escritores', nit:'', place:'Centro Histórico', price:'Entrada libre', short:'28–31 de agosto' },
+  { date:'2026-09-10', endDate:'2026-09-12', cat:'arte', icon:'🎷', name:'Festival Voces del Jazz', nit:'', place:'Plazas y teatros del Centro', price:'Variable', short:'10–12 de septiembre' },
+  { date:'2026-09-18', endDate:'2026-09-20', cat:'arte', icon:'🎸', name:'Festival de Guitarras', nit:'', place:'Auditorios del Centro', price:'Variable', short:'18–20 de septiembre' },
+  { date:'2026-09-21', endDate:'2026-09-21', cat:'arte', icon:'🎨', name:'Día del Artista Plástico', nit:'', place:'Galerías y espacios culturales', price:'Entrada libre', short:'21 de septiembre' },
+  { date:'2026-10-10', endDate:'2026-10-12', cat:'noche', icon:'💃', name:'Festival de Salsa de Cartagena', nit:'', place:'Clubes del Centro Histórico', price:'Desde $40.000 COP', short:'10–12 de octubre' },
+  { date:'2026-10-29', endDate:'2026-11-16', cat:'arte', icon:'🎷', name:'Cartagena Jazz Festival', nit:'', place:'Auditorio El Batel', price:'Por confirmar', short:'29 oct – 16 nov' },
+  { date:'2026-10-30', endDate:'2026-10-30', cat:'noche', icon:'🔥', name:'Noche de Candela y Jolgorio', nit:'', place:'Plazas del Centro Histórico', price:'Entrada libre', short:'30 de octubre' },
+  { date:'2026-11-01', endDate:'2026-11-04', cat:'arte', icon:'🪇', name:'Festival Regional de Gaitas', nit:'', place:'Barrio El Socorro', price:'Entrada libre', short:'1–4 de noviembre' },
+  { date:'2026-11-07', endDate:'2026-11-09', cat:'arte', icon:'📖', name:'Festival de Poesía de Cartagena', nit:'', place:'Bibliotecas y cafés del Centro', price:'Entrada libre', short:'7–9 de noviembre' },
+  { date:'2026-11-11', endDate:'2026-11-16', cat:'cultural', icon:'🎉', name:'Fiestas de Independencia', nit:'', place:'Calles del Centro Histórico', price:'Entrada libre', short:'11–16 de noviembre' },
+  { date:'2026-11-13', endDate:'2026-11-14', cat:'plan', icon:'⛵', name:'Festival Náutico', nit:'', place:'Bahía de Cartagena', price:'Entrada libre', short:'13–14 de noviembre' },
+  { date:'2026-11-29', endDate:'2026-11-29', cat:'cultural', icon:'🏊', name:'IRONMAN 70.3 Cartagena', nit:'', place:'Playas de Cartagena', price:'Inscripción ~$700 USD', short:'29 de noviembre' },
+  { date:'2026-12-15', endDate:'2026-12-22', cat:'arte', icon:'🎨', name:'Feria de Artesanías de Cartagena', nit:'', place:'Plaza de San Diego', price:'Entrada libre', short:'15–22 de diciembre' },
+  { date:'2026-12-16', endDate:'2026-12-24', cat:'cultural', icon:'⭐', name:'Novenas de Aguinaldos', nit:'', place:'Calles e iglesias del Centro', price:'Entrada libre', short:'16–24 de diciembre' },
+  { date:'2026-12-17', endDate:'2026-12-26', cat:'comida', icon:'🥟', name:'Festival del Pastel Cartagenero', nit:'', place:'Plaza de los Coches', price:'Desde $5.000 COP', short:'17–26 de diciembre' },
+];
+
+function getUpcomingEvents() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return eventList
+    .filter(e => new Date(e.endDate + 'T23:59:59') >= today)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+}
+
+const etClasses = ['et1','et2','et3','et4','et5'];
+const meses = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+
+function renderEventsList(list) {
+  const feed = document.getElementById('events-feed');
+  feed.innerHTML = '';
+  list.forEach((e, i) => {
+    const m = new Date(e.date).getMonth();
+    const card = document.createElement('div');
+    card.className = 'ev-card-full';
+    card.dataset.cat = e.cat;
+    card.innerHTML = `
+      <div class="ev-thumb-full ${etClasses[i % 5]}">${e.icon}<div class="ev-badge-full dia">${meses[m]}</div></div>
+      <div class="ev-info-full">
+        <h3>${e.name}</h3>
+        <div class="ev-detail-row"><span>🕐</span> ${e.short}</div>
+        <div class="ev-detail-row"><span>📍</span> ${e.place}</div>
+        <div class="ev-detail-row"><span>🎟</span> ${e.price}</div>
+      </div>`;
+    feed.appendChild(card);
+  });
+  if (list.length === 0) {
+    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No hay eventos próximos.</div>';
+  }
+}
+
+function renderBannerEvents() {
+  const upcoming = getUpcomingEvents();
+  const top5 = upcoming.slice(0, 5);
+  const container = document.getElementById('banner-events-list');
+  container.innerHTML = '';
+  top5.forEach(e => {
+    const item = document.createElement('div');
+    item.className = 'banner-event-item';
+    item.dataset.cat = e.cat;
+    item.innerHTML = `<div class="bev-icon">${e.icon}</div><div class="bev-info"><h5>${e.name}</h5><p>${e.short} · ${e.price}</p></div>`;
+    container.appendChild(item);
+  });
+}
+
+// ══════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════
+let saved = JSON.parse(localStorage.getItem('ctg_saved') || '[]');
+let currentFilter = 'todos';
+let currentSearch = '';
+let currentModal = null;
+let leafMap = null;
+let mapMarkers = [];
+let mapInitialized = false;
+let mapFocusPlace = null;
+
+// ══════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════
+function goScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-it').forEach(n => n.classList.remove('active'));
+  const navMap = {'screen-inicio':'nav-inicio','screen-eventos':'nav-eventos','screen-mapa':'nav-mapa','screen-guardados':'nav-guardados'};
+  if(navMap[id]) document.getElementById(navMap[id]).classList.add('active');
+  if(id==='screen-mapa') initMap();
+  if(id==='screen-guardados') renderSaved();
+  if(id==='screen-eventos') filterEvents();
+  if(id!=='screen-mapa' && mapFocusPlace!==null) { mapFocusPlace=null; updateMapPins(); }
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════════
+// FILTROS
+// ══════════════════════════════════════
+function setFilter(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderPlaces();
+  filterEvents();
+  updateMapPins();
+}
+
+document.getElementById('search-input').addEventListener('input', function(){
+  currentSearch = this.value.toLowerCase().trim();
+  renderPlaces();
+  filterEvents();
+  updateMapPins();
+});
+
+function matchesFilter(p) {
+  const catMatch = currentFilter === 'todos' || p.cat === currentFilter;
+  const searchMatch = !currentSearch || p.name.toLowerCase().includes(currentSearch) || p.barrio.toLowerCase().includes(currentSearch) || p.tags.some(t => t.toLowerCase().includes(currentSearch));
+  return catMatch && searchMatch;
+}
+
+// ══════════════════════════════════════
+// RENDER LUGARES
+// ══════════════════════════════════════
+function renderPlaces() {
+  const feed = document.getElementById('places-feed');
+  feed.innerHTML = '';
+  const filtered = places.filter(matchesFilter).sort((a,b)=>(a.orden||999)-(b.orden||999));
+  filtered.forEach((p, i) => {
+    feed.appendChild(makePlaceCard(p, i));
+  });
+  if(filtered.length === 0) {
+    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No se encontraron lugares.</div>';
+  }
+}
+
+function makePlaceCard(p, i) {
+  const isSaved = saved.includes(p.id);
+  const hasImg = !!p.img;
+  const d = document.createElement('div');
+  d.className = 'place-card' + (p.verified ? ' verified' : '');
+  d.style.animationDelay = (i * 0.06) + 's';
+  d.dataset.cat = p.cat;
+  d.innerHTML = `
+    <div class="place-thumb ${p.bg} ${hasImg?'has-img':''}">
+      ${hasImg ? `<img src="${p.img}" alt="${p.name}" loading="lazy"><div class="img-overlay"></div>` : `<svg class="place-svg-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">${getSVG(p.cat)}</svg>`}
+      <div class="place-rating-badge"><i class="fa-solid fa-star" style="font-size:10px;color:var(--gold)"></i> ${p.rating}</div>
+      <div class="heart-btn ${isSaved?'saved':''}" onclick="toggleSave(event,${p.id})">${isSaved?'<i class="fa-solid fa-heart" style="color:#E24B4A"></i>':'<i class="fa-regular fa-heart"></i>'}</div>
+    </div>
+    <div class="place-info">
+      <h3>${p.name}</h3>
+      <div class="place-tags">${p.tags.map(t=>`<span class="p-tag">${t}</span>`).join('')}</div>
+      <div class="place-barrio">📍 ${p.barrio}</div>
+    </div>`;
+  d.addEventListener('click', e => { if(!e.target.closest('.heart-btn')) openModal(p); });
+  return d;
+}
+
+// ══════════════════════════════════════
+// FILTER EVENTOS
+// ══════════════════════════════════════
+function filterEvents() {
+  const upcoming = getUpcomingEvents();
+  const filtered = upcoming.filter(e => {
+    const catOk = currentFilter === 'todos' || e.cat === currentFilter;
+    const text = (e.name + ' ' + e.place).toLowerCase();
+    const searchOk = !currentSearch || text.includes(currentSearch);
+    return catOk && searchOk;
+  }).slice(0, 10);
+  renderEventsList(filtered);
+  renderBannerEvents();
+}
+
+// ══════════════════════════════════════
+// MAPA
+// ══════════════════════════════════════
+function initMap() {
+  if(mapInitialized) { leafMap.invalidateSize(); updateMapPins(); return; }
+  mapInitialized = true;
+  leafMap = L.map('map', {zoomControl:true}).setView([10.4235,-75.5470],14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:19}).addTo(leafMap);
+  updateMapPins();
+}
+
+function updateMapPins() {
+  if(!mapInitialized) return;
+  mapMarkers.forEach(m => leafMap.removeLayer(m));
+  mapMarkers = [];
+  const toShow = mapFocusPlace !== null ? places.filter(p => p.id === mapFocusPlace) : places.filter(matchesFilter);
+  toShow.forEach(p => {
+    const icon = L.divIcon({
+      html:`<div style="background:#1C1508;border:2px solid #C9983A;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.5);"><svg viewBox="0 0 80 80" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">${getSVG(p.cat)}</svg></div>`,
+      className:'', nit:'', iconSize:[36,36], iconAnchor:[18,18]
+    });
+    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">📍 ${p.barrio}</div>`);
+    mapMarkers.push(marker);
+  });
+}
+
+function goToMap(place) {
+  closeModal();
+  mapFocusPlace = place.id;
+  setTimeout(() => {
+    goScreen('screen-mapa');
+    setTimeout(() => {
+      leafMap.setView(place.coords, 17, {animate:true});
+      mapMarkers.forEach(m => {
+        const ll = m.getLatLng();
+        if(Math.abs(ll.lat - place.coords[0]) < 0.0001) m.openPopup();
+      });
+    }, 350);
+  }, 380);
+}
+
+// ══════════════════════════════════════
+// MODAL
+// ══════════════════════════════════════
+function openModal(p) {
+  currentModal = p;
+  const isSaved = saved.includes(p.id);
+
+  const hero = document.getElementById('modal-hero');
+  const heroIcon = document.getElementById('modal-hero-icon');
+  if (p.img) {
+    hero.style.backgroundImage = `url(${p.img})`;
+    hero.style.background = `linear-gradient(rgba(15,12,8,0.3), rgba(15,12,8,0.6)), url(${p.img}) center/cover`;
+    heroIcon.style.display = 'none';
+  } else {
+    hero.style.background = '';
+    heroIcon.style.display = '';
+    heroIcon.innerHTML = getSVG(p.cat);
+  }
+
+  document.getElementById('modal-title').textContent = p.name;
+  document.getElementById('modal-tags').innerHTML = p.tags.map(t=>`<span class="m-tag">${t}</span>`).join('');
+  document.getElementById('modal-desc').textContent = p.desc;
+  document.getElementById('modal-barrio').innerHTML = `📍 ${p.barrio}`;
+
+  const full = Math.floor(p.rating);
+  const starsHtml = Array.from({length:5},(_,i)=>`<i class="star fa${i<full?'s':'r'} fa-star ${i<full?'on':'off'}"></i>`).join('');
+  document.getElementById('modal-rating').innerHTML = `<div class="stars">${starsHtml}</div><span class="rating-num">${p.rating}</span>`;
+
+  document.getElementById('modal-details').innerHTML = `
+    <div class="detail-box"><div class="d-label">Horario</div><div class="d-val">${p.horario}</div></div>
+    <div class="detail-box"><div class="d-label">Precio</div><div class="d-val">${p.precio}</div></div>`;
+
+  let infoHtml = '';
+  if (p.telefono) infoHtml += `<div class="info-line"><span>📞</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
+  if (p.instagram) infoHtml += `<div class="info-line"><span>📷</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
+  document.getElementById('modal-info').innerHTML = infoHtml;
+
+  if (p.menu && p.menu.some(it => it)) {
+    document.getElementById('modal-menu').innerHTML = `
+      <div class="menu-box">
+        <div class="mb-title">Menú destacado</div>
+        <ul>${p.menu.filter(it=>it).map(it=>`<li><i class="fa-regular fa-circle" style="font-size:6px;color:var(--gold);vertical-align:middle;margin-right:6px"></i>${it}</li>`).join('')}</ul>
+      </div>`;
+  } else {
+    document.getElementById('modal-menu').innerHTML = '';
+  }
+
+  document.getElementById('btn-modal-heart').innerHTML = isSaved ? '<i class="fa-solid fa-heart" style="color:#E24B4A"></i>' : '<i class="fa-regular fa-heart"></i>';
+  document.getElementById('btn-como-llegar').onclick = () => goToMap(p);
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentModal = null;
+}
+
+function handleOverlayClick(e) {
+  if(e.target === document.getElementById('overlay')) closeModal();
+}
+
+// ══════════════════════════════════════
+// GUARDAR
+// ══════════════════════════════════════
+function toggleSave(e, id) {
+  e.stopPropagation();
+  const btn = e.currentTarget;
+  if(saved.includes(id)) {
+    saved = saved.filter(s => s !== id);
+    btn.classList.remove('saved');
+    btn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+  } else {
+    saved.push(id);
+    btn.classList.add('saved');
+    btn.innerHTML = '<i class="fa-solid fa-heart" style="color:#E24B4A"></i>';
+    btn.style.transform = 'scale(1.4)';
+    setTimeout(() => btn.style.transform = '', 250);
+  }
+  localStorage.setItem('ctg_saved', JSON.stringify(saved));
+}
+
+function toggleSaveFromModal() {
+  if(!currentModal) return;
+  const id = currentModal.id;
+  const hb = document.getElementById('btn-modal-heart');
+  if(saved.includes(id)) { saved = saved.filter(s=>s!==id); hb.innerHTML='<i class="fa-regular fa-heart"></i>'; }
+  else { saved.push(id); hb.innerHTML='<i class="fa-solid fa-heart" style="color:#E24B4A"></i>'; }
+  localStorage.setItem('ctg_saved', JSON.stringify(saved));
+  renderPlaces();
+}
+
+function renderSaved() {
+  const c = document.getElementById('saved-container');
+  const sp = places.filter(p => saved.includes(p.id)).sort((a,b)=>(a.orden||999)-(b.orden||999));
+  if(sp.length === 0) {
+    c.innerHTML = `<div class="saved-empty"><div class="saved-empty-icon"><i class="fa-regular fa-heart"></i></div><h3>Aún no tienes guardados</h3><p>Toca el corazón en cualquier lugar para guardarlo aquí.</p></div>`;
+    return;
+  }
+  c.innerHTML = '';
+  const feed = document.createElement('div');
+  feed.className = 'places-feed';
+  sp.forEach((p,i) => feed.appendChild(makePlaceCard(p,i)));
+  c.appendChild(feed);
+}
+
+function sharePlace() {
+  if(!currentModal) return;
+  const p = currentModal;
+  if(navigator.share) {
+    navigator.share({title:p.name, text:`Mira este parche en Cartagena Local: ${p.name} — ${p.barrio}`, url:window.location.href});
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Enlace copiado!'));
+  }
+}
+
+function toggleBanner() {
+  document.getElementById('banner-eventos').classList.toggle('open');
+}
+
+// INIT
+renderPlaces();
+renderBannerEvents();
+</script>
+</body>
+</html>
+
+

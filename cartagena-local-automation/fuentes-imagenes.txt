@@ -1,0 +1,188 @@
+=========================================================
+  FUENTES PARA ENCONTRAR FOTOS DE CADA LOCAL
+  (Abre el link, elige la mejor foto, cópiala a Gemini)
+=========================================================
+
+--- 🍺 BARES ---
+
+1. Alquímico
+   Instagram: https://www.instagram.com/alquimicocartagena/
+   Google Maps: https://maps.app.goo.gl/8TqJSdP6cVfCmxHq8
+   TripAdvisor: https://www.tripadvisor.co/Attraction_Review-g297476-d23962015-Reviews-Alquimico-Cartagena_Cartagena_District_Bolivar_Department.html
+
+2. Café Havana
+   Instagram: https://www.instagram.com/cafehavana_cartagena/
+   Google Maps: https://maps.app.goo.gl/JYvPkHEPAcT5eWAaA
+
+3. El Pasquín de Joaco
+   Instagram: https://www.instagram.com/elpasquindejoaco/
+   Web: https://elpasquindejoaco.com/
+
+4. Donde Fidel Salsa Club
+   Fotos: https://hicartagena.com/donde-fidel/
+   Google Maps: https://maps.app.goo.gl/m6uLqQYHjjN4W6wn7
+
+5. Café del Mar
+   Instagram: https://www.instagram.com/cafedelmarcartagena/
+   Web: https://www.cafedelmarcartagena.com.co/
+
+6. El Barón Café & Cocktail Bar
+   Instagram: https://www.instagram.com/elbaroncafe/
+   Google Maps: Plaza Santo Domingo
+
+7. La Movida
+   Instagram: https://www.instagram.com/lamovidacartagena/
+   Google Maps: Centro Histórico
+
+--- ☕ CAFÉS ---
+
+8. Época Café Bar
+   Instagram: https://www.instagram.com/epocacafebar/
+   TripAdvisor: tiene 4.9 con fotos
+
+9. Ábaco Libros y Café
+   Instagram: https://www.instagram.com/abacolibrosycafe/
+   Google Maps: Cerca de la Catedral
+
+10. Café del Mural (Getsemaní)
+    Google Maps: Getsemaní, frente al mural
+
+11. Libertario Coffee Roasters
+    Instagram: https://www.instagram.com/libertariocoffeeroasters/
+    Google Maps: Getsemaní
+
+12. Manna Breakfast & Lunch
+    Instagram: https://www.instagram.com/mannacafebar/
+
+13. Señor Titis Coffee & Gifts
+    Google Maps: Centro Histórico
+
+--- 🍽 COMIDA ---
+
+14. Celele
+    Instagram: https://www.instagram.com/celelerestaurante/
+    Web: https://celele.com.co/
+
+15. Carmen Cartagena
+    Instagram: https://www.instagram.com/carmencartagena/
+
+16. Buena Vida Marisquería
+    Instagram: https://www.instagram.com/buenavidamarisqueria/
+
+17. Interno
+    Instagram: https://www.instagram.com/internocartagena/
+
+18. La Cevichería
+    Google Maps: Centro Histórico
+
+19. San Pascual Baylón
+    Google Maps: Centro Histórico
+
+20. Baroca Sabor Ancestral
+    Instagram: https://www.instagram.com/barocartagena/
+
+21. El Burlador
+    Instagram: https://www.instagram.com/elburladorcartagena/
+
+22. Totopo
+    Instagram: https://www.instagram.com/totopoctg/
+
+23. Restaurante Olano
+    Instagram: https://www.instagram.com/dondeolano/
+
+--- 🎨 ARTE ---
+
+24. Museo del Oro Zenú
+    Google Maps: Centro Histórico
+
+25. Museo de Arte Moderno
+    Instagram: https://www.instagram.com/mamcartagena/
+
+26. San Pedro Claver
+    Google Maps: Centro Histórico
+
+27. Museo Naval del Caribe
+    Google Maps: Centro Histórico
+
+28. Casa Museo Rafael Núñez
+    Google Maps: El Cabrero
+
+29. Palacio de la Inquisición
+    Google Maps: Centro Histórico
+
+30. Las Bóvedas
+    Google Maps: Muralla, Centro
+
+--- 🌅 PLANES ---
+
+31. Playa Blanca (Barú)
+    Google Maps: Isla Barú
+
+32. Aviario Nacional
+    Instagram: https://www.instagram.com/aviariocolombia/
+    Web: https://aviario.com.co/
+
+33. Chiva Tour
+    Google Maps: Centro Histórico
+
+34. Tour en Kayak
+    Google Maps: Bahía de Cartagena
+
+35. Buceo Islas del Rosario
+    Google Maps: Islas del Rosario
+
+36. Cerro de La Popa
+    Google Maps: La Popa
+
+37. Torre del Reloj
+    Google Maps: Centro Histórico
+
+38. Plaza de la Trinidad
+    Google Maps: Getsemaní
+
+39. Mercado de Bazurto
+    Google Maps: Bazurto
+
+40. Amaré Rooftop
+    Instagram: https://www.instagram.com/amarerooftop/
+
+--- 🌙 NOCHE ---
+
+41. Bazurto Social Club
+    Instagram: https://www.instagram.com/bazurtosocialclub/
+
+42. La Jugada Club House
+    Instagram: https://www.instagram.com/lajugadaclubhouse/
+
+43. Seven 7 Times
+    Instagram: https://www.instagram.com/seven7timescartagena/
+
+44. Casa Cruxada
+    Instagram: https://www.instagram.com/casacruxada/
+
+45. 1811 Rooftop
+    Instagram: https://www.instagram.com/1811rooftop/
+
+46. Barra 7
+    Instagram: https://www.instagram.com/barra7cartagena/
+
+47. Xo Rooftop
+    Instagram: https://www.instagram.com/xorooftop/
+
+48. Club Prestige
+    Instagram: https://www.instagram.com/clubprestigectg/
+
+49. Pikete
+    Instagram: https://www.instagram.com/piketectg/
+
+50. Boheme Lounge
+    Instagram: https://www.instagram.com/bohemecartagena/
+
+=========================================================
+  CÓMO USAR:
+  1. Abre el Instagram o Google Maps del lugar
+  2. Elige una foto que muestre bien la fachada/interior
+  3. Cópiala (guardas la imagen o abres en nueva pestaña)
+  4. La subes a Gemini como referencia visual
+  5. Gemini genera la ilustración estilo plano
+=========================================================
