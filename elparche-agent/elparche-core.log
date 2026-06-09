@@ -145,3 +145,14 @@
 [2026-06-08 23:22:05]   git NO detecta cambio (pwd=C:\Users\DIEGO hash=b7a51ade574107dc722de675cc6bb96cfa8647e8)
 [2026-06-08 23:22:05] --- RESUMEN POR CIUDAD ---
 [2026-06-08 23:22:05] cartagena            0 activos / 1 totales < 35 -- necesita rotacion
+[2026-06-08 23:22:09] Git push OK
+[2026-06-08 23:22:09] === CYCLE END: 1 expirados, 0 errores ===
+[2026-06-08 23:23:46] === EL PARCHE BILLING CYCLE ===
+[2026-06-08 23:23:47] Git pull OK
+[2026-06-08 23:23:47] EXPIRADO: Alquimico en cartagena (vencia 7/05/2026)
+[2026-06-08 23:23:47]   -> Ocultado en cartagena/index.html
+[2026-06-08 23:23:47]   DB escrito: 952 bytes, Estado=Vencido
+[2026-06-08 23:23:48]   git hash: fatal: could not open '@{payments=System.Object[]; venues=System.Object[]}' for reading: No such file or directory
+[2026-06-08 23:23:48]   git NO detecta cambio
+[2026-06-08 23:23:48] --- RESUMEN POR CIUDAD ---
+[2026-06-08 23:23:48] cartagena            0 activos / 1 totales < 35 -- necesita rotacion

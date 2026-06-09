@@ -31,11 +31,9 @@ if (!(Test-Path $DB)) { Log "ERROR: billing-db.json not found"; exit 1 }
 
 # Pull latest changes first to avoid conflicts
 try {
-    Push-Location $BASE
-    git config user.name "El Parche Bot"
-    git config user.email "bot@elparche.co" 2>$null
-    git pull --rebase origin main 2>&1 | Out-Null
-    Pop-Location
+    & git -C $BASE config user.name "El Parche Bot"
+    & git -C $BASE config user.email "bot@elparche.co" 2>$null
+    & git -C $BASE pull --rebase origin main 2>&1 | Out-Null
     Log "Git pull OK"
 } catch { Log "Git pull skipped: $_" }
 
@@ -117,14 +115,11 @@ if ($vencidos -gt 0 -and !$ReportOnly) {
         $estado = "?"
         if ($v1Text -match '"Estado":\s+"(\w+)"') { $estado = $matches[1] }
         Log "  DB escrito: $($v1.Length) bytes, Estado=$estado"
-        Push-Location $BASE
-        $pwd = Get-Location
-        $hash = git hash-object billing-db.json 2>&1
-        $diff = git diff --name-only -- billing-db.json 2>&1
-        Pop-Location
+        $hash = & git -C $BASE hash-object $DB 2>&1
+        $diff = & git -C $BASE diff --name-only -- $DB 2>&1
         if ($hash.Length -gt 0) { Log "  git hash: $hash" }
         if ($diff -match "billing-db") { Log "  git detecta cambio" }
-        else { Log "  git NO detecta cambio (pwd=$pwd hash=$hash)" }
+        else { Log "  git NO detecta cambio" }
     } catch { Log "ERROR al guardar billing-db.json: $_" }
 }
 
@@ -144,12 +139,10 @@ foreach ($kv in $reporte.GetEnumerator() | Sort-Object Name) {
 
 if (!$ReportOnly -and ($vencidos -gt 0 -or $modifiedHtml)) {
     try {
-        Push-Location $BASE
-        git add -A 2>&1 | Out-Null
-        git commit -m "Billing cycle: $vencidos expirados - $hoyStr" 2>&1 | Out-Null
-        git push origin main 2>&1 | Out-Null
+        & git -C $BASE add -A 2>&1 | Out-Null
+        & git -C $BASE commit -m "Billing cycle: $vencidos expirados - $hoyStr" 2>&1 | Out-Null
+        & git -C $BASE push origin main 2>&1 | Out-Null
         Log "Git push OK"
-        Pop-Location
     } catch { Log "Git error: $_" }
 }
 
