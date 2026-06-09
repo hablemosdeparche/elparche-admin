@@ -3,7 +3,6 @@ param([switch]$ReportOnly)
 $BASE   = "C:\Users\DIEGO\Desktop\moweb"
 $DB     = Join-Path $BASE "billing-db.json"
 $LOG    = Join-Path (Join-Path $BASE "elparche-agent") "elparche-core.log"
-$ADMIN  = Join-Path $BASE ".github"
 
 function Log($m) {
     $l = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $m"
@@ -11,15 +10,42 @@ function Log($m) {
     Add-Content $LOG "$l" -Encoding UTF8
 }
 
+function Normalize-Name($s) {
+    $norm = $s.ToLower().Trim()
+    $norm = $norm -replace '[áàâãä]', 'a' -replace '[éèêë]', 'e' -replace '[íìîï]', 'i' -replace '[óòôõö]', 'o' -replace '[úùûü]', 'u' -replace 'ñ', 'n' -replace '[^a-z0-9\s]', ''
+    return $norm
+}
+
+function Find-VenueInHtml($content, $nombre) {
+    $clean = $nombre.ToLower().Trim() -replace '[^a-z0-9\s]', ''
+    $pattern = "name\s*:\s*'([^']+)'"
+    $regex = [regex]::new($pattern)
+    $matches = $regex.Matches($content)
+    foreach ($m in $matches) {
+        $htmlName = $m.Groups[1].Value
+        $htmlClean = $htmlName.ToLower().Trim() -replace '[^a-z0-9\s]', ''
+        if ($htmlClean -eq $clean) {
+            $fullObjStart = $content.LastIndexOf('{', $m.Index)
+            $fullObjEnd = $content.IndexOf('}', $m.Index) + 1
+            if ($fullObjStart -ge 0 -and $fullObjEnd -gt $fullObjStart) {
+                return $content.Substring($fullObjStart, $fullObjEnd - $fullObjStart)
+            }
+        }
+    }
+    return $null
+}
+
 Log "=== EL PARCHE BILLING CYCLE ==="
 
 if (!(Test-Path $DB)) { Log "ERROR: billing-db.json not found"; exit 1 }
 
-$db = Get-Content $DB -Raw | ConvertFrom-Json
+$jsonRaw = Get-Content $DB -Raw -Encoding UTF8
+$db = $jsonRaw | ConvertFrom-Json
 $hoy = Get-Date
 $hoyStr = Get-Date -Format "dd/MM/yyyy"
 $vencidos = 0
 $errores = 0
+$modifiedHtml = $false
 
 foreach ($v in $db.venues) {
     if ($v.activo -ne $true -or $v.Estado -eq "Vencido") { continue }
@@ -35,17 +61,16 @@ foreach ($v in $db.venues) {
 
     if (!$ReportOnly -and (Test-Path $html)) {
         try {
-            $content = Get-Content $html -Raw
-            $esc = [regex]::Escape($nombre)
-            $match = [regex]::Match($content, "\{[^}]*name\s*:\s*'$esc'[^}]*\}")
-            if ($match.Success) {
-                $old = $match.Value
-                $new = $old -replace "orden:\d+", "orden:99999"
-                $content = $content.Replace($old, $new)
+            $content = Get-Content $html -Raw -Encoding UTF8
+            $objStr = Find-VenueInHtml $content $nombre
+            if ($objStr) {
+                $newStr = $objStr -replace "orden:\d+", "orden:99999"
+                $content = $content.Replace($objStr, $newStr)
                 [System.IO.File]::WriteAllText($html, $content, [System.Text.Encoding]::UTF8)
-                Log "  -> Ocultado en $ciudad/index.html (orden=99999)"
+                $modifiedHtml = $true
+                Log "  -> Ocultado en $ciudad/index.html"
             } else {
-                Log "  -> WARN: '$nombre' no encontrado en $html"
+                Log "  -> WARN: '$nombre' no encontrado en $html (buscando normalizado)"
             }
         } catch { Log "  -> ERROR: $_"; $errores++ }
     }
@@ -57,11 +82,9 @@ foreach ($v in $db.venues) {
     $vencidos++
 }
 
-if ($vencidos -gt 0) {
-    if (!$ReportOnly) {
-        $db | ConvertTo-Json -Depth 10 | Set-Content $DB -Encoding UTF8
-        Log "billing-db.json actualizado: $vencidos vencido(s)"
-    }
+if ($vencidos -gt 0 -and !$ReportOnly) {
+    [System.IO.File]::WriteAllText($DB, ($db | ConvertTo-Json -Depth 10), [System.Text.Encoding]::UTF8)
+    Log "billing-db.json actualizado: $vencidos vencido(s)"
 }
 
 $reporte = @{}
@@ -75,10 +98,10 @@ Log "--- RESUMEN POR CIUDAD ---"
 foreach ($kv in $reporte.GetEnumerator() | Sort-Object Name) {
     $r = $kv.Value
     $flag = if ($r.necesitaRotacion) { " < 35 -- necesita rotacion" } else { "" }
-    Log "${($kv.Name).PadRight(20)} $($r.activos) activos / $($r.total) totales$flag"
+    Log "$($kv.Name.PadRight(20)) $($r.activos) activos / $($r.total) totales$flag"
 }
 
-if (!$ReportOnly -and ($vencidos -gt 0 -or $errores -gt 0)) {
+if (!$ReportOnly -and ($vencidos -gt 0 -or $modifiedHtml)) {
     try {
         Push-Location $BASE
         git config user.name "El Parche Bot"
@@ -94,5 +117,4 @@ if (!$ReportOnly -and ($vencidos -gt 0 -or $errores -gt 0)) {
 
 Log "=== CYCLE END: $vencidos expirados, $errores errores ==="
 
-# Output structured summary for the tray app to read
 @{ date = $hoyStr; expired = $vencidos; errors = $errores; cities = $reporte } | ConvertTo-Json -Compress | Write-Output
