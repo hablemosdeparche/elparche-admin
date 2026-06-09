@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: hablemosdeparche/${{ matrix.city }}
-          token: ${{ secrets[format('{0}_PAT', matrix.city)] }}
+          token: ${{ secrets.GH_PAT }}
           path: city-${{ matrix.city }}
 
       - name: Check billing DB
