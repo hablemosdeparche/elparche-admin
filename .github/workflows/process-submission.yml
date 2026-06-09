@@ -1,0 +1,190 @@
+name: Process Web Submission
+
+on:
+  issues:
+    types: [opened, edited]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to process'
+        required: false
+
+jobs:
+  create-checkout:
+    if: github.event_name == 'issues' && contains(github.event.issue.body, 'bold-status:pending')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create Bold checkout
+        id: bold-checkout
+        shell: pwsh
+        env:
+          BOLD_API_KEY: ${{ secrets.BOLD_API_KEY }}
+        run: |
+          $body = @"
+          `$env:ISSUE_BODY
+          "@
+          $issueBody = "${{ github.event.issue.body }}"
+
+          # Extract data from issue body
+          $ciudad = if ($issueBody -match '\*\*Ciudad:\*\* (.+)') { $matches[1] }
+          $plan = if ($issueBody -match '\*\*Plan:\*\* (.+) \(\$') { $matches[1] }
+          $nombre = if ($issueBody -match '^## Nuevo registro: (.+)') { $matches[1] }
+          $ref = if ($issueBody -match 'Referencia Bold: (.+)') { $matches[1] }
+
+          if (!$ref) {
+            Write-Output "No Bold reference found"
+            exit 0
+          }
+
+          # Check if checkout already created (link in body)
+          if ($issueBody -match 'Link de pago: (https://checkout\.bold\.co/\S+)') {
+            Write-Output "Checkout already exists: $($matches[1])"
+            echo "payment-url=$($matches[1])" >> $env:GITHUB_OUTPUT
+            exit 0
+          }
+
+          # Extract price from plan
+          $prices = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
+          $amount = $prices[$plan]
+          if (!$amount) { $amount = 30000 }
+
+          # Create Bold checkout
+          $bodyJson = @{
+            amount_type = "CLOSE"
+            amount = @{
+              currency = "COP"
+              total_amount = $amount
+            }
+            description = "$nombre - $plan - $ciudad"
+            payment_methods = @("NEQUI", "PSE", "BOTON_BANCOLOMBIA", "CREDIT_CARD")
+          } | ConvertTo-Json
+
+          try {
+            $resp = Invoke-RestMethod -Uri "https://integrations.api.bold.co/online/link/v1" -Method Post `
+              -Body $bodyJson -ContentType "application/json" `
+              -Headers @{ "x-api-key" = "$env:BOLD_API_KEY" }
+
+            if ($resp.payload.url) {
+              Write-Output "Bold checkout created: $($resp.payload.url)"
+              echo "payment-url=$($resp.payload.url)" >> $env:GITHUB_OUTPUT
+              echo "bold-reference=$($resp.payload.payment_link)" >> $env:GITHUB_OUTPUT
+            }
+          } catch {
+            Write-Output "Bold API error: $_"
+          }
+
+      - name: Update issue with payment link
+        if: steps.bold-checkout.outputs.payment-url
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.bold-checkout.outputs.payment-url }}';
+            const body = context.payload.issue.body;
+            const updatedBody = body + `\n\n**Link de pago:** ${url}\n<!-- bold-url:${url} -->`;
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: updatedBody
+            });
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `🔗 **Pagá acá:** [${url}](${url})\n\nDespués del pago, procesamos automáticamente.`
+            });
+
+      - name: Start payment polling
+        if: steps.bold-checkout.outputs.payment-url
+        uses: actions/github-script@v7
+        id: poll-payment
+        env:
+          BOLD_API_KEY: ${{ secrets.BOLD_API_KEY }}
+        with:
+          script: |
+            const boldRef = '${{ steps.bold-checkout.outputs.bold-reference }}' || context.payload.issue.body.match(/Referencia Bold: (.+)/)?.[1];
+            const apiKey = process.env.BOLD_API_KEY;
+            const issueNumber = context.payload.issue.number;
+
+            if (!boldRef || !apiKey) {
+              core.setFailed('No Bold reference or API key');
+              return;
+            }
+
+            // Poll for up to 30 minutes (60 attempts * 30 seconds)
+            for (let i = 0; i < 60; i++) {
+              try {
+                const resp = await fetch(`https://integrations.api.bold.co/online/link/v1/${boldRef}`, {
+                  headers: { 'x-api-key': apiKey }
+                });
+                const data = await resp.json();
+
+                if (data.status === 'PAID' || data.payload?.status === 'PAID') {
+                  const status = data.status || data.payload?.status;
+                  core.info(`Payment PAID for ${boldRef}`);
+
+                  // Update issue body
+                  const currentBody = context.payload.issue.body;
+                  const newBody = currentBody.replace('bold-status:pending', 'bold-status:paid');
+                  await github.rest.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: newBody,
+                    state: 'closed'
+                  });
+
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: '✅ **Pago confirmado por Bold.** Procesando registro...'
+                  });
+
+                  // Trigger processing workflow
+                  await github.rest.actions.createWorkflowDispatch({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    workflow_id: 'process-payment.yml',
+                    ref: 'main',
+                    inputs: { issue_number: issueNumber.toString() }
+                  });
+
+                  core.setOutput('payment-status', 'paid');
+                  return;
+                }
+
+                if (data.status === 'EXPIRED' || data.payload?.status === 'EXPIRED') {
+                  const currentBody = context.payload.issue.body;
+                  const newBody = currentBody.replace('bold-status:pending', 'bold-status:failed');
+                  await github.rest.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: newBody
+                  });
+
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issueNumber,
+                    body: '❌ **El link de pago expiró.** Generá uno nuevo desde el formulario.'
+                  });
+
+                  core.setOutput('payment-status', 'expired');
+                  return;
+                }
+
+                core.info(`Payment status: ${data.status || 'PENDING'} - attempt ${i+1}/60`);
+              } catch (e) {
+                core.warning(`Poll error: ${e.message}`);
+              }
+
+              // Wait 30 seconds
+              await new Promise(resolve => setTimeout(resolve, 30000));
+            }
+
+            core.info('Polling timeout - payment not confirmed within 30 minutes');
