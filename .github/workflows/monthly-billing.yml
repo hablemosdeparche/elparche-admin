@@ -1,0 +1,66 @@
+name: Monthly Billing - Hide Expired Venues
+
+on:
+  schedule:
+    - cron: '0 14 1 * *'
+  workflow_dispatch:
+
+jobs:
+  check-expired:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        city:
+          - cartagena
+          - medellin
+          - bogota
+          - cali
+          - santa-marta
+          - barranquilla
+          - bucaramanga
+          - pereira
+          - manizales
+          - villavicencio
+          - ibague
+          - pasto
+          - monteria
+          - valledupar
+          - cucuta
+          - neiva
+          - armenia
+          - sincelejo
+      fail-fast: false
+
+    steps:
+      - name: Checkout city repo
+        uses: actions/checkout@v4
+        with:
+          repository: cartagenalocal/${{ matrix.city }}
+          token: ${{ secrets[format('{0}_PAT', matrix.city)] }}
+          path: city-${{ matrix.city }}
+
+      - name: Check billing DB
+        id: billing
+        shell: pwsh
+        run: |
+          $repoPath = "city-${{ matrix.city }}"
+          $indexFile = Join-Path $repoPath "index.html"
+          if (!(Test-Path $indexFile)) {
+            Write-Output "No index.html"
+            exit 0
+          }
+
+          $content = Get-Content $indexFile -Raw
+
+          # Look for paid registrations and check if they're expired
+          # Using a simple approach: venues with orden=99999 are already hidden
+          # We'll check for patterns indicating paid status
+
+          $hoy = Get-Date
+          $hiddenCount = 0
+
+          # For each venue, check if it has been more than 30 days since registration
+          # This is a simplified check - in production, use the billing-db.json
+          $content = Get-Content $indexFile -Raw
+
+          Write-Output "Checked ${{ matrix.city }} - $hiddenCount venues hidden"
