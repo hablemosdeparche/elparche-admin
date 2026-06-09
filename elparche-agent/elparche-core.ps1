@@ -39,7 +39,8 @@ try {
     Log "Git pull OK"
 } catch { Log "Git pull skipped: $_" }
 
-$jsonRaw = Get-Content $DB -Raw -Encoding UTF8
+$jsonBytes = [System.IO.File]::ReadAllBytes($DB)
+$jsonRaw = [System.Text.Encoding]::UTF8.GetString($jsonBytes).TrimStart([char]0xFEFF)
 $db = $jsonRaw | ConvertFrom-Json
 $hoy = Get-Date
 $hoyStr = Get-Date -Format "dd/MM/yyyy"
@@ -109,25 +110,12 @@ if ($vencidos -gt 0 -and !$ReportOnly) {
     $jsonOut = $db | ConvertTo-Json -Depth 10
     try {
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($jsonOut)
-        [System.IO.File]::WriteAllBytes($DB, $bytes)
-        Start-Sleep -Milliseconds 200
-        $verify = [System.IO.File]::ReadAllBytes($DB)
-        if ($verify.Length -gt 0) {
-            Log "billing-db.json actualizado ($($verify.Length) bytes)"
-        } else {
-            Log "WARN: WriteAllBytes resulto en 0 bytes, reintentando..."
-            $jsonOut | Out-File -FilePath $DB -Encoding UTF8 -Force
-            Start-Sleep -Milliseconds 200
-            $verify2 = [System.IO.File]::ReadAllBytes($DB)
-            Log "Out-File resulto en $($verify2.Length) bytes"
-        }
-    } catch {
-        Log "ERROR al guardar billing-db.json: $_"
-        try {
-            $jsonOut | Out-File -FilePath $DB -Encoding UTF8 -Force
-            Log "Out-File fallback usado"
-        } catch { Log "ERROR en fallback: $_" }
-    }
+        $tmp = "$DB.tmp"
+        [System.IO.File]::WriteAllBytes($tmp, $bytes)
+        Copy-Item -Path $tmp -Destination $DB -Force
+        Remove-Item -Path $tmp -Force -ErrorAction SilentlyContinue
+        Log "billing-db.json actualizado ($($bytes.Length) bytes)"
+    } catch { Log "ERROR al guardar billing-db.json: $_" }
 }
 
 $reporte = @{}
