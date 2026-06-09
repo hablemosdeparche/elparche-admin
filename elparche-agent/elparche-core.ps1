@@ -84,7 +84,8 @@ foreach ($v in $db.venues) {
                         $oldObj = $content.Substring($objStart, $objEnd - $objStart)
                         $newObj = $oldObj -replace "orden:\d+", "orden:99999"
                         $content = $content.Replace($oldObj, $newObj)
-                        [System.IO.File]::WriteAllBytes($html, [System.Text.Encoding]::UTF8.GetBytes($content))
+                        $bytes = [System.Text.Encoding]::UTF8.GetBytes($content)
+                        [System.IO.File]::WriteAllBytes($html, $bytes)
                         $modifiedHtml = $true
                         Log "  -> Ocultado en $ciudad/index.html"
                         $found = $true
@@ -106,8 +107,27 @@ foreach ($v in $db.venues) {
 
 if ($vencidos -gt 0 -and !$ReportOnly) {
     $jsonOut = $db | ConvertTo-Json -Depth 10
-    [System.IO.File]::WriteAllBytes($DB, [System.Text.Encoding]::UTF8.GetBytes($jsonOut))
-    Log "billing-db.json actualizado: $vencidos vencido(s)"
+    try {
+        $bytes = [System.Text.Encoding]::UTF8.GetBytes($jsonOut)
+        [System.IO.File]::WriteAllBytes($DB, $bytes)
+        Start-Sleep -Milliseconds 200
+        $verify = [System.IO.File]::ReadAllBytes($DB)
+        if ($verify.Length -gt 0) {
+            Log "billing-db.json actualizado ($($verify.Length) bytes)"
+        } else {
+            Log "WARN: WriteAllBytes resulto en 0 bytes, reintentando..."
+            $jsonOut | Out-File -FilePath $DB -Encoding UTF8 -Force
+            Start-Sleep -Milliseconds 200
+            $verify2 = [System.IO.File]::ReadAllBytes($DB)
+            Log "Out-File resulto en $($verify2.Length) bytes"
+        }
+    } catch {
+        Log "ERROR al guardar billing-db.json: $_"
+        try {
+            $jsonOut | Out-File -FilePath $DB -Encoding UTF8 -Force
+            Log "Out-File fallback usado"
+        } catch { Log "ERROR en fallback: $_" }
+    }
 }
 
 $reporte = @{}
