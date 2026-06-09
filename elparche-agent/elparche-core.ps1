@@ -52,7 +52,8 @@ foreach ($v in $db.venues) {
 
     if (!$ReportOnly -and (Test-Path $html)) {
         try {
-            $content = [System.IO.File]::ReadAllText($html)
+            $rawBytes = [System.IO.File]::ReadAllBytes($html)
+            $content = [System.Text.Encoding]::GetEncoding(1252).GetString($rawBytes)
             $prefix = "name:'"
             $pos = 0
             $found = $false
@@ -70,7 +71,7 @@ foreach ($v in $db.venues) {
                         $oldObj = $content.Substring($objStart, $objEnd - $objStart)
                         $newObj = $oldObj -replace "orden:\d+", "orden:99999"
                         $content = $content.Replace($oldObj, $newObj)
-                        [System.IO.File]::WriteAllText($html, $content)
+                        [System.IO.File]::WriteAllBytes($html, [System.Text.Encoding]::UTF8.GetBytes($content))
                         $modifiedHtml = $true
                         Log "  -> Ocultado en $ciudad/index.html"
                         $found = $true
@@ -92,8 +93,7 @@ foreach ($v in $db.venues) {
 
 if ($vencidos -gt 0 -and !$ReportOnly) {
     $jsonOut = $db | ConvertTo-Json -Depth 10
-    $utf8 = [System.Text.Encoding]::UTF8
-    [System.IO.File]::WriteAllText($DB, $utf8.GetString($utf8.GetBytes($jsonOut)))
+    [System.IO.File]::WriteAllBytes($DB, [System.Text.Encoding]::UTF8.GetBytes($jsonOut))
     Log "billing-db.json actualizado: $vencidos vencido(s)"
 }
 

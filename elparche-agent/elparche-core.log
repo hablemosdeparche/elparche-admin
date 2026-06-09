@@ -67,3 +67,11 @@
 [2026-06-08 23:04:26] billing-db.json actualizado: 1 vencido(s)
 [2026-06-08 23:04:27] --- RESUMEN POR CIUDAD ---
 [2026-06-08 23:04:27] cartagena            0 activos / 1 totales < 35 -- necesita rotacion
+[2026-06-08 23:04:37] Git push OK
+[2026-06-08 23:04:37] === CYCLE END: 1 expirados, 0 errores ===
+[2026-06-08 23:07:02] === EL PARCHE BILLING CYCLE ===
+[2026-06-08 23:07:03] EXPIRADO: Alquimico en cartagena (vencia 7/05/2026)
+[2026-06-08 23:07:03]   -> Ocultado en cartagena/index.html
+[2026-06-08 23:07:03] billing-db.json actualizado: 1 vencido(s)
+[2026-06-08 23:07:04] --- RESUMEN POR CIUDAD ---
+[2026-06-08 23:07:04] cartagena            0 activos / 1 totales < 35 -- necesita rotacion
