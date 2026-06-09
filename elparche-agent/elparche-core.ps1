@@ -48,16 +48,33 @@ $modifiedHtml = $false
 
 foreach ($v in $db.venues) {
     if ($v.activo -ne $true -or $v.Estado -eq "Vencido") { continue }
-    if ([string]::IsNullOrWhiteSpace($v.FechaVen)) { continue }
 
-    $fv = try { Get-Date $v.FechaVen -ErrorAction Stop } catch { $null }
-    if (!$fv -or $fv -gt $hoy) { continue }
+    $expirado = $false
+    $razon = ""
+
+    # Check 1: MP subscription cancelled by user or past due
+    if ($v.mp_status -in @("cancelled", "rejected", "past_due")) {
+        $expirado = $true
+        $razon = "MP: $($v.mp_status)"
+    }
+    # Check 2: Date-based expiration (legacy)
+    elseif ($v.FechaVen) {
+        $fv = try { Get-Date $v.FechaVen -ErrorAction Stop } catch { $null }
+        if ($fv -and $fv -le $hoy) {
+            $expirado = $true
+            $razon = "Fecha vencimiento: $($v.FechaVen)"
+        }
+    }
+    # Check 3: No FechaVen and no MP subscription = active (skip)
+    else { continue }
+
+    if (!$expirado) { continue }
 
     $nombre  = $v.Nombre
     $ciudad  = $v.Ciudad
     $html    = Join-Path (Join-Path $BASE $ciudad) "index.html"
     $normBusqueda = Normalize-Name $nombre
-    Log "EXPIRADO: $nombre en $ciudad (vencia $($v.FechaVen))"
+    Log "EXPIRADO: $nombre en $ciudad ($razon)"
 
     if (!$ReportOnly -and (Test-Path $html)) {
         try {
@@ -99,7 +116,7 @@ foreach ($v in $db.venues) {
 
     $v.Estado = "Vencido"
     $v.activo = $false
-    $v.Notas = "Vencido automaticamente - $hoyStr"
+    $v.Notas = "Vencido automaticamente - $razon - $hoyStr"
     $v.updatedAt = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
     $vencidos++
 }

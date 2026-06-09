@@ -271,6 +271,49 @@ jobs:
           git commit -m "Update venues.json: $nombre - $ciudad" || Write-Output "Nothing to commit"
           git push || Write-Output "Push failed"
 
+      - name: Store MP subscription in billing-db.json
+        shell: pwsh
+        run: |
+          $dbPath = "billing-db.json"
+          $db = if (Test-Path $dbPath) { Get-Content $dbPath -Raw -Encoding UTF8 | ConvertFrom-Json } else { @{ payments = @(); venues = @() } }
+
+          $nombre = "${{ steps.issue-data.outputs.nombre }}"
+          $ciudad = "${{ steps.city-slug.outputs.city-slug }}"
+          $plan = "${{ steps.issue-data.outputs.plan }}"
+          $precios = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
+          $precio = if ($precios.ContainsKey($plan)) { $precios[$plan] } else { 30000 }
+
+          $existing = $db.venues | Where-Object { $_.Nombre -eq $nombre -and $_.Ciudad -eq $ciudad }
+          if ($existing) {
+            $existing.activo = $true
+            $existing.Estado = "Activo"
+            $existing.updatedAt = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+          } else {
+            $nextId = if ($db.venues.Count -gt 0) { ($db.venues | ForEach-Object { $_.ID } | Measure-Object -Maximum).Maximum + 1 } else { 1 }
+            $newVenue = @{
+              ID = $nextId
+              Nombre = $nombre
+              Ciudad = $ciudad
+              Plan = $plan
+              Precio = "$precio"
+              Estado = "Activo"
+              activo = $true
+              FechaReg = (Get-Date -Format "dd/MM/yyyy")
+              updatedAt = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+            }
+            $db.venues += $newVenue
+          }
+
+          $db | ConvertTo-Json -Depth 10 | Set-Content $dbPath -Encoding UTF8
+          Write-Output "billing-db.json actualizado"
+
+          # Commit billing-db.json to central repo
+          git config user.name "El Parche Bot"
+          git config user.email "bot@elparche.co"
+          git add billing-db.json
+          git commit -m "MP subscription: $nombre - $ciudad - $(Get-Date -Format 'dd/MM/yyyy')" || Write-Output "Nothing to commit"
+          git push || Write-Output "Push failed"
+
       - name: Update GitHub Issue
         uses: actions/github-script@v7
         with:
@@ -285,8 +328,8 @@ jobs:
 
         **${{ steps.issue-data.outputs.nombre }}** ya aparece en la guía de **${{ steps.issue-data.outputs.ciudad }}** con el plan **${{ steps.issue-data.outputs.plan }}**.
 
-        📅 Próximo vencimiento: dentro de 30 días.
-        💰 Se renovará automáticamente por ${{ steps.issue-data.outputs.plan }}.
+        📅 Primer mes gratis.
+        💰 Se renovará automáticamente cada mes vía Mercado Pago.
 
         Si necesitás editar algo, respondé a este issue o escribinos por WhatsApp.`
             });

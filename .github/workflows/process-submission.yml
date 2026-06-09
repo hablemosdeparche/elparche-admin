@@ -1,4 +1,4 @@
-name: Process Web Submission
+name: Process Web Submission (MP)
 
 on:
   issues:
@@ -11,180 +11,88 @@ on:
 
 jobs:
   create-checkout:
-    if: github.event_name == 'issues' && contains(github.event.issue.body, 'bold-status:pending')
+    if: github.event_name == 'issues' && contains(github.event.issue.body, 'mp-status:pending')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Create Bold checkout
-        id: bold-checkout
-        shell: pwsh
+      - name: Create MP Subscription and update issue
+        id: create-mp
         env:
-          BOLD_API_KEY: ${{ secrets.BOLD_API_KEY }}
+          MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
+        shell: pwsh
         run: |
-          $body = @"
-          `$env:ISSUE_BODY
-          "@
-          $issueBody = "${{ github.event.issue.body }}"
+          $issueBody = '${{ github.event.issue.body }}'
+          $issueNum = if ('${{ github.event_name }}' -eq 'issues') { ${{ github.event.issue.number }} } else { 0 }
 
-          # Extract data from issue body
-          $ciudad = if ($issueBody -match '\*\*Ciudad:\*\* (.+)') { $matches[1] }
-          $plan = if ($issueBody -match '\*\*Plan:\*\* (.+) \(\$') { $matches[1] }
-          $nombre = if ($issueBody -match '^## Nuevo registro: (.+)') { $matches[1] }
-          $ref = if ($issueBody -match 'Referencia Bold: (.+)') { $matches[1] }
-
-          if (!$ref) {
-            Write-Output "No Bold reference found"
+          if ($issueBody -match 'mp-sub-id:\s*(\S+)') {
+            Write-Output "Subscription already exists: $($matches[1])"
             exit 0
           }
 
-          # Check if checkout already created (link in body)
-          if ($issueBody -match 'Link de pago: (https://checkout\.bold\.co/\S+)') {
-            Write-Output "Checkout already exists: $($matches[1])"
-            echo "payment-url=$($matches[1])" >> $env:GITHUB_OUTPUT
-            exit 0
-          }
+          # Extract data
+          $nombre = if ($issueBody -match '^## Nuevo registro: (.+)') { $matches[1].Trim() } else { "Venue" }
+          $ciudad = if ($issueBody -match '\*\*Ciudad:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $plan = if ($issueBody -match '\*\*Plan:\*\* (.+) \(\$') { $matches[1].Trim() } else { "Presencia Basica" }
+          $email = if ($issueBody -match '\*\*Email:\*\* (.+)') { $matches[1].Trim() } else { "" }
 
-          # Extract price from plan
           $prices = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
-          $amount = $prices[$plan]
-          if (!$amount) { $amount = 30000 }
+          $amount = if ($prices.ContainsKey($plan)) { $prices[$plan] } else { 30000 }
 
-          # Create Bold checkout
-          $bodyJson = @{
-            amount_type = "CLOSE"
-            amount = @{
-              currency = "COP"
-              total_amount = $amount
+          $externalRef = "elparche-$issueNum"
+
+          $headers = @{ Authorization = "Bearer $env:MP_ACCESS_TOKEN"; "Content-Type" = "application/json" }
+          $subBody = @{
+            reason = "$nombre - $plan - $ciudad"
+            external_reference = $externalRef
+            auto_recurring = @{
+              frequency = 1
+              frequency_type = "months"
+              transaction_amount = $amount
+              currency_id = "COP"
+              free_trial = @{
+                frequency = 1
+                frequency_type = "months"
+              }
             }
-            description = "$nombre - $plan - $ciudad"
-            payment_methods = @("NEQUI", "PSE", "BOTON_BANCOLOMBIA", "CREDIT_CARD")
-          } | ConvertTo-Json
+            back_url = "https://hablemosdeparche.github.io/admintaller/mp-success.html"
+            status = "pending"
+          } | ConvertTo-Json -Depth 10
 
           try {
-            $resp = Invoke-RestMethod -Uri "https://integrations.api.bold.co/online/link/v1" -Method Post `
-              -Body $bodyJson -ContentType "application/json" `
-              -Headers @{ "x-api-key" = "$env:BOLD_API_KEY" }
+            $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval" -Headers $headers -Method Post -Body $subBody -ContentType "application/json"
 
-            if ($resp.payload.url) {
-              Write-Output "Bold checkout created: $($resp.payload.url)"
-              echo "payment-url=$($resp.payload.url)" >> $env:GITHUB_OUTPUT
-              echo "bold-reference=$($resp.payload.payment_link)" >> $env:GITHUB_OUTPUT
-            }
+            $subId = $resp.id
+            $initPoint = $resp.init_point
+
+            Write-Output "MP Subscription: $subId"
+            echo "mp-sub-id=$subId" >> $env:GITHUB_OUTPUT
+            echo "mp-init-point=$initPoint" >> $env:GITHUB_OUTPUT
           } catch {
-            Write-Output "Bold API error: $_"
+            Write-Output "Error creating MP subscription: $_"
+            exit 1
           }
 
-      - name: Update issue with payment link
-        if: steps.bold-checkout.outputs.payment-url
+      - name: Update issue with subscription info
+        if: steps.create-mp.outputs.mp-sub-id
         uses: actions/github-script@v7
         with:
           script: |
-            const url = '${{ steps.bold-checkout.outputs.payment-url }}';
+            const subId = '${{ steps.create-mp.outputs.mp-sub-id }}';
+            const initPoint = '${{ steps.create-mp.outputs.mp-init-point }}';
             const body = context.payload.issue.body;
-            const updatedBody = body + `\n\n**Link de pago:** ${url}\n<!-- bold-url:${url} -->`;
+            const updatedBody = body + `\nmp-sub-id: ${subId}\nmp-init-point: ${initPoint}`;
+
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.issue.number,
               body: updatedBody
             });
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.issue.number,
-              body: `🔗 **Pagá acá:** [${url}](${url})\n\nDespués del pago, procesamos automáticamente.`
+              body: `🔗 **Completá tu suscripción en Mercado Pago**\n\n[Hacé clic acá para pagar](${initPoint})\n\n📅 Primer mes gratis — después se cobra automáticamente cada mes.\n\n💳 Podés pagar con tarjeta crédito/débito, PSE, Nequi o Mercado Pago.`
             });
-
-      - name: Start payment polling
-        if: steps.bold-checkout.outputs.payment-url
-        uses: actions/github-script@v7
-        id: poll-payment
-        env:
-          BOLD_API_KEY: ${{ secrets.BOLD_API_KEY }}
-        with:
-          script: |
-            const boldRef = '${{ steps.bold-checkout.outputs.bold-reference }}' || context.payload.issue.body.match(/Referencia Bold: (.+)/)?.[1];
-            const apiKey = process.env.BOLD_API_KEY;
-            const issueNumber = context.payload.issue.number;
-
-            if (!boldRef || !apiKey) {
-              core.setFailed('No Bold reference or API key');
-              return;
-            }
-
-            // Poll for up to 30 minutes (60 attempts * 30 seconds)
-            for (let i = 0; i < 60; i++) {
-              try {
-                const resp = await fetch(`https://integrations.api.bold.co/online/link/v1/${boldRef}`, {
-                  headers: { 'x-api-key': apiKey }
-                });
-                const data = await resp.json();
-
-                if (data.status === 'PAID' || data.payload?.status === 'PAID') {
-                  const status = data.status || data.payload?.status;
-                  core.info(`Payment PAID for ${boldRef}`);
-
-                  // Update issue body
-                  const currentBody = context.payload.issue.body;
-                  const newBody = currentBody.replace('bold-status:pending', 'bold-status:paid');
-                  await github.rest.issues.update({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issueNumber,
-                    body: newBody,
-                    state: 'closed'
-                  });
-
-                  await github.rest.issues.createComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issueNumber,
-                    body: '✅ **Pago confirmado por Bold.** Procesando registro...'
-                  });
-
-                  // Trigger processing workflow
-                  await github.rest.actions.createWorkflowDispatch({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    workflow_id: 'process-payment.yml',
-                    ref: 'main',
-                    inputs: { issue_number: issueNumber.toString() }
-                  });
-
-                  core.setOutput('payment-status', 'paid');
-                  return;
-                }
-
-                if (data.status === 'EXPIRED' || data.payload?.status === 'EXPIRED') {
-                  const currentBody = context.payload.issue.body;
-                  const newBody = currentBody.replace('bold-status:pending', 'bold-status:failed');
-                  await github.rest.issues.update({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issueNumber,
-                    body: newBody
-                  });
-
-                  await github.rest.issues.createComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issueNumber,
-                    body: '❌ **El link de pago expiró.** Generá uno nuevo desde el formulario.'
-                  });
-
-                  core.setOutput('payment-status', 'expired');
-                  return;
-                }
-
-                core.info(`Payment status: ${data.status || 'PENDING'} - attempt ${i+1}/60`);
-              } catch (e) {
-                core.warning(`Poll error: ${e.message}`);
-              }
-
-              // Wait 30 seconds
-              await new Promise(resolve => setTimeout(resolve, 30000));
-            }
-
-            core.info('Polling timeout - payment not confirmed within 30 minutes');

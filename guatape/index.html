@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="es">
 <head>
 <!-- Google Tag Manager -->
@@ -248,7 +248,7 @@ body::before { display: none; }
 .saved-empty p { font-size: 13px; line-height: 1.6; }
 
 /* ----------------------------------
-   MODAL — todo en una pantalla
+   MODAL â€” todo en una pantalla
 ---------------------------------- */
 .overlay {
   position: fixed; inset: 0;
@@ -470,7 +470,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="header-top">
       <div class="logo">
         <h1>Guatape Local</h1>
-        <p>Lo que hacen los de aquí</p>
+        <p>Lo que hacen los de aquÃ­</p>
       </div>
     </div>
     <div class="search-box">
@@ -479,7 +479,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="cats-scroll">
       <div class="cat-pill active" onclick="setFilter('todos',this)">Todos</div>
       <div class="cat-pill" onclick="setFilter('bares',this)">?? Bares</div>
-      <div class="cat-pill" onclick="setFilter('cafe',this)">? Cafés</div>
+      <div class="cat-pill" onclick="setFilter('cafe',this)">? CafÃ©s</div>
       <div class="cat-pill" onclick="setFilter('comida',this)">?? Comida</div>
       <div class="cat-pill" onclick="setFilter('plan',this)">?? Planes</div>
       <div class="cat-pill" onclick="setFilter('arte',this)">?? Arte</div>
@@ -493,7 +493,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="banner-header" onclick="toggleBanner()">
         <div class="banner-flame">??</div>
         <div class="banner-texto">
-          <h3>¿Qué hacer esta noche?</h3>
+          <h3>Â¿QuÃ© hacer esta noche?</h3>
           <p>Eventos programados para el mes</p>
         </div>
         <div class="banner-arrow">?</div>
@@ -501,7 +501,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="banner-body">
         <div id="banner-events-list"></div>
         <div class="banner-cta">
-          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año ?</button>
+          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del aÃ±o ?</button>
         </div>
       </div>
     </div>
@@ -513,7 +513,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="screen" id="screen-eventos">
     <div class="events-screen-header">
       <h2>Agenda</h2>
-      <p>Próximos eventos en Cartagena</p>
+      <p>PrÃ³ximos eventos en Cartagena</p>
     </div>
       <div class="events-feed" id="events-feed"></div>
   </div>
@@ -541,7 +541,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- BOTON REGISTRO -->
 <div class="wa-float">
-  <a class="wa-btn" href="https://elpracheadmin.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
+  <a class="wa-btn" href="https://hablemosdeparche.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
     <span class="wa-btn-icon">??</span>
     <span class="wa-btn-text">Registra tu local</span>
   </a>
@@ -569,7 +569,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div id="modal-info"></div>
       <div id="modal-menu"></div>
       <div class="modal-cta">
-        <button class="btn-primary" id="btn-como-llegar"><i class="fa-solid fa-location-dot"></i> Cómo llegar</button>
+        <button class="btn-primary" id="btn-como-llegar"><i class="fa-solid fa-location-dot"></i> CÃ³mo llegar</button>
         <button class="btn-icon" id="btn-modal-heart" onclick="toggleSaveFromModal()"><i class="fa-regular fa-heart"></i></button>
         <button class="btn-icon" onclick="sharePlace()"><i class="fa-solid fa-share-from-square"></i></button>
       </div>
@@ -715,7 +715,7 @@ function renderEventsList(list) {
     feed.appendChild(card);
   });
   if (list.length === 0) {
-    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No hay eventos próximos.</div>';
+    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No hay eventos prÃ³ximos.</div>';
   }
 }
 
@@ -728,7 +728,7 @@ function renderBannerEvents() {
     const item = document.createElement('div');
     item.className = 'banner-event-item';
     item.dataset.cat = e.cat;
-    item.innerHTML = `<div class="bev-icon">${e.icon}</div><div class="bev-info"><h5>${e.name}</h5><p>${e.short} · ${e.price}</p></div>`;
+    item.innerHTML = `<div class="bev-icon">${e.icon}</div><div class="bev-info"><h5>${e.name}</h5><p>${e.short} Â· ${e.price}</p></div>`;
     container.appendChild(item);
   });
 }
@@ -746,7 +746,7 @@ let mapInitialized = false;
 let mapFocusPlace = null;
 
 // --------------------------------------
-// NAVEGACIÓN
+// NAVEGACIÃ“N
 // --------------------------------------
 function goScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -912,14 +912,14 @@ function openModal(p) {
     <div class="detail-box"><div class="d-label">Precio</div><div class="d-val">${p.precio}</div></div>`;
 
   let infoHtml = '';
-  if (p.telefono) infoHtml += `<div class="info-line"><span>??</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
+  if (p.telefono) infoHtml += `<div class="info-line"><span>??</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='Â¡Copiado!';">${p.telefono}</span></div>`;
   if (p.instagram) infoHtml += `<div class="info-line"><span>??</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
   document.getElementById('modal-info').innerHTML = infoHtml;
 
   if (p.menu && p.menu.some(it => it)) {
     document.getElementById('modal-menu').innerHTML = `
       <div class="menu-box">
-        <div class="mb-title">Menú destacado</div>
+        <div class="mb-title">MenÃº destacado</div>
         <ul>${p.menu.filter(it=>it).map(it=>`<li><i class="fa-regular fa-circle" style="font-size:6px;color:var(--gold);vertical-align:middle;margin-right:6px"></i>${it}</li>`).join('')}</ul>
       </div>`;
   } else {
@@ -977,7 +977,7 @@ function renderSaved() {
   const c = document.getElementById('saved-container');
   const sp = places.filter(p => saved.includes(p.id)).sort((a,b)=>(a.orden||999)-(b.orden||999));
   if(sp.length === 0) {
-    c.innerHTML = `<div class="saved-empty"><div class="saved-empty-icon"><i class="fa-regular fa-heart"></i></div><h3>Aún no tienes guardados</h3><p>Toca el corazón en cualquier lugar para guardarlo aquí.</p></div>`;
+    c.innerHTML = `<div class="saved-empty"><div class="saved-empty-icon"><i class="fa-regular fa-heart"></i></div><h3>AÃºn no tienes guardados</h3><p>Toca el corazÃ³n en cualquier lugar para guardarlo aquÃ­.</p></div>`;
     return;
   }
   c.innerHTML = '';
@@ -991,9 +991,9 @@ function sharePlace() {
   if(!currentModal) return;
   const p = currentModal;
   if(navigator.share) {
-    navigator.share({title:p.name, text:`Mira este parche en Cartagena Local: ${p.name} — ${p.barrio}`, url:window.location.href});
+    navigator.share({title:p.name, text:`Mira este parche en Cartagena Local: ${p.name} â€” ${p.barrio}`, url:window.location.href});
   } else {
-    navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Enlace copiado!'));
+    navigator.clipboard.writeText(window.location.href).then(()=>alert('Â¡Enlace copiado!'));
   }
 }
 
@@ -1007,5 +1007,6 @@ renderBannerEvents();
 </script>
 </body>
 </html>
+
 
 

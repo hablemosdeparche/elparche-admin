@@ -366,7 +366,7 @@ body::before {
     <h2>Tres pasos</h2>
     <div class="steps">
       <div class="step"><span class="num">1</span><div class="text"><strong>Elegí tu plan</strong> y completá el formulario</div></div>
-      <div class="step"><span class="num">2</span><div class="text"><strong>Pagá con Bold</strong> — Nequi, PSE, tarjeta o Bancolombia</div></div>
+      <div class="step"><span class="num">2</span><div class="text"><strong>Pagá con Mercado Pago</strong> — Tarjeta, PSE, Nequi o Bancolombia</div></div>
       <div class="step"><span class="num">3</span><div class="text"><strong>Tu ficha se activa</strong> automáticamente en la guía de tu ciudad</div></div>
     </div>
   </section>
@@ -443,9 +443,9 @@ body::before {
     </div>
 
     <div class="billing-info">
-      <strong><i class="fas fa-info-circle"></i> Facturación</strong><br>
-      Primer mes <strong>gratis</strong>. Luego se cobra cada 30 días vía Bold.
-      Si no renovás, tu ficha se <strong>oculta automáticamente</strong> (no se borra).
+      <strong><i class="fas fa-info-circle"></i> Suscripción mensual</strong><br>
+      Primer mes <strong>gratis</strong>. Luego se cobra cada 30 días automáticamente.
+      Si cancelás, tu ficha se <strong>oculta automáticamente</strong> (no se borra).
     </div>
   </section>
 
@@ -556,9 +556,15 @@ body::before {
 
       <div class="form-row">
         <div class="form-group">
+          <label>Email (para la suscripción)</label>
+          <input type="email" id="venueEmail" placeholder="tulocal@email.com" required>
+        </div>
+        <div class="form-group">
           <label>Teléfono / WhatsApp</label>
           <input type="tel" id="venuePhone" placeholder="+57 300 123 4567" required>
         </div>
+      </div>
+      <div class="form-row">
         <div class="form-group">
           <label>Instagram</label>
           <input type="text" id="venueIg" placeholder="@tulocal">
@@ -610,57 +616,93 @@ body::before {
 
   <!-- PAYMENT FLOW -->
   <section class="payment-flow" id="paymentFlow">
-    <span class="section-badge">Pago</span>
-    <h2>Completá el pago</h2>
-    <p>Tu solicitud se procesará automáticamente cuando el pago se confirme.</p>
+    <span class="section-badge">Suscripción</span>
+    <h2>Completá tu suscripción</h2>
+    <p>Te redirigimos a Mercado Pago para que ingreses tu tarjeta. Después el cobro es automático cada mes.</p>
 
     <div class="payment-step active" id="paymentStep1">
       <div class="step-icon"><i class="fas fa-file-invoice"></i></div>
       <div class="step-info">
         <div class="title">Solicitud creada</div>
-        <div class="desc">Referencia: <strong id="paymentRef">—</strong></div>
+        <div class="desc">Estamos generando tu suscripción...</div>
       </div>
     </div>
 
     <div class="payment-step pending" id="paymentStep2">
       <div class="step-icon"><i class="fas fa-credit-card"></i></div>
       <div class="step-info">
-        <div class="title">Esperando pago</div>
-        <div class="desc" id="paymentStep2Desc">Hacé clic en "Pagar con Bold" para completar</div>
+        <div class="title">Completá en Mercado Pago</div>
+        <div class="desc" id="paymentStep2Desc">Esperando link de pago...</div>
       </div>
     </div>
 
     <div class="payment-step pending" id="paymentStep3">
       <div class="step-icon"><i class="fas fa-cog"></i></div>
       <div class="step-info">
-        <div class="title">Procesando</div>
-        <div class="desc">Cuando el pago se confirme, procesamos automáticamente</div>
+        <div class="title">Verificando pago</div>
+        <div class="desc">Mercado Pago está procesando tu suscripción</div>
       </div>
     </div>
 
     <div class="payment-step pending" id="paymentStep4">
       <div class="step-icon"><i class="fas fa-check"></i></div>
       <div class="step-info">
-        <div class="title">Listo</div>
-        <div class="desc">Tu local aparece en la guía</div>
+        <div class="title">Suscripción activa</div>
+        <div class="desc">Tu local aparece en la guía. Primer mes gratis.</div>
       </div>
     </div>
 
-    <a class="bold-pay-btn" id="boldPayBtn" href="#" target="_blank">
-      <i class="fas fa-bolt"></i> Pagar con Bold
+    <a class="bold-pay-btn" id="mpPayBtn" href="#" target="_blank" style="display:none;">
+      <i class="fas fa-lock"></i> Ir a Mercado Pago
     </a>
     <p style="font-size:11px;color:var(--muted);margin-top:8px;">
-      Aceptamos Nequi, PSE, tarjetas y Botón Bancolombia
+      Aceptamos tarjetas crédito/débito, PSE, Nequi y Mercado Pago
     </p>
   </section>
 
   <!-- WHATSAPP FALLBACK -->
   <section style="margin-top:20px;">
     <div class="whatsapp-fallback">
-      <p><i class="fas fa-shield-alt"></i> Si preferís, también podés enviarnos los datos por WhatsApp y te enviamos el link de pago</p>
+      <p><i class="fas fa-shield-alt"></i> Si preferís, también podés enviarnos los datos por WhatsApp y te enviamos el link de suscripción</p>
       <a class="whatsapp-btn" id="whatsappFallbackBtn" href="#" target="_blank">
         <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
       </a>
+    </div>
+  </section>
+
+  <!-- CANCEL SUBSCRIPTION -->
+  <section class="section" id="cancel-section">
+    <span class="section-badge">Cancelar suscripción</span>
+    <h2>¿Querés cancelar?</h2>
+    <p>Si cancelás, tu ficha se oculta al final del período facturado. No se borra.</p>
+    <div class="form-card" style="margin-top:12px;">
+      <form id="cancelForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre del local</label>
+            <input type="text" id="cancelVenueName" placeholder="Ej: Café Havana" required>
+          </div>
+          <div class="form-group">
+            <label>Ciudad</label>
+            <select id="cancelCitySelect" required>
+              <option value="">Seleccioná una ciudad</option>
+              <option>Bogotá</option><option>Medellín</option><option>Cali</option>
+              <option>Cartagena</option><option>Santa Marta</option><option>Barranquilla</option>
+              <option>Bucaramanga</option><option>Pereira</option><option>Manizales</option>
+              <option>Cúcuta</option><option>Ibagué</option><option>Villavicencio</option>
+              <option>Armenia</option><option>Neiva</option><option>Sincelejo</option>
+              <option>Pasto</option><option>Montería</option><option>Valledupar</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email de la suscripción</label>
+          <input type="email" id="cancelEmail" placeholder="El email que usaste al registrarte" required>
+        </div>
+        <button type="submit" class="submit-btn" id="cancelSubmitBtn" style="background:var(--danger);">
+          <i class="fas fa-ban"></i> Cancelar suscripción
+        </button>
+      </form>
     </div>
   </section>
 
@@ -678,7 +720,7 @@ body::before {
       <div class="edit-sub-info">Pago único de <strong>$10.000</strong></div>
       <ul class="steps" style="margin:10px 0;">
         <li class="step"><span class="num">1</span><div class="text">Completá el formulario indicando qué querés cambiar</div></li>
-        <li class="step"><span class="num">2</span><div class="text">Pagá <strong>$10.000</strong> por la edición vía Bold o WhatsApp</div></li>
+        <li class="step"><span class="num">2</span><div class="text">Pagá <strong>$10.000</strong> por la edición vía Mercado Pago o WhatsApp</div></li>
         <li class="step"><span class="num">3</span><div class="text">Recibí confirmación y tu ficha se actualiza</div></li>
       </ul>
     </div>
@@ -731,24 +773,24 @@ body::before {
   <!-- PAYMENT METHODS -->
   <section class="section">
     <span class="section-badge">Medios de pago</span>
-    <h2>Pagá con Bold</h2>
-    <p>Bold procesa todos los pagos de forma segura. Aceptamos:</p>
+    <h2>Pagá con Mercado Pago</h2>
+    <p>Mercado Pago procesa los pagos de forma segura. Aceptamos:</p>
     <div class="form-card" style="margin-top:12px;">
       <div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--card-border);">
-        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-mobile-alt"></i></div>
-        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Nequi</div><div style="font-size:11px;color:var(--muted);">A través de Bold</div></div>
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-credit-card"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Tarjetas crédito/débito</div><div style="font-size:11px;color:var(--muted);">Visa, Mastercard, Amex, Diners</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--card-border);">
         <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-university"></i></div>
-        <div><div style="font-size:14px;font-weight:600;color:var(--text);">PSE / Bancolombia</div><div style="font-size:11px;color:var(--muted);">Transferencia bancaria</div></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">PSE / Bancolombia</div><div style="font-size:11px;color:var(--muted);">Débito desde tu banco</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:14px;padding:8px 0;border-bottom:1px solid var(--card-border);">
-        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-credit-card"></i></div>
-        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Tarjetas crédito/débito</div><div style="font-size:11px;color:var(--muted);">Visa, Mastercard, Amex</div></div>
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-mobile-alt"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Nequi / Daviplata</div><div style="font-size:11px;color:var(--muted);">Desde tu app</div></div>
       </div>
       <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
-        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-hand-holding-usd"></i></div>
-        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Efectivo</div><div style="font-size:11px;color:var(--muted);">Corresponsales bancarios</div></div>
+        <div style="width:40px;height:40px;background:var(--tag-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:18px;"><i class="fas fa-wallet"></i></div>
+        <div><div style="font-size:14px;font-weight:600;color:var(--text);">Cuenta Mercado Pago</div><div style="font-size:11px;color:var(--muted);">Saldo disponible</div></div>
       </div>
     </div>
   </section>
@@ -764,7 +806,7 @@ body::before {
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
         <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Cómo sé que mi pago se procesó?</div>
-        <div style="font-size:12px;color:var(--muted2);">Bold te envía un comprobante. Nosotros verificamos automáticamente y activamos tu ficha.</div>
+        <div style="font-size:12px;color:var(--muted2);">Mercado Pago te envía un comprobante. Nosotros verificamos automáticamente y activamos tu ficha.</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
         <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Puedo cambiar de plan?</div>
@@ -799,9 +841,7 @@ const CONFIG = {
   whatsapp: '573218879876',
   githubToken: '{{GITHUB_PAT}}',
   githubOwner: '{{GITHUB_OWNER}}',
-  githubRepo: '{{GITHUB_REPO}}',
-  boldApiKey: '{{BOLD_API_KEY}}',
-  boldBaseUrl: 'https://integrations.api.bold.co'
+  githubRepo: '{{GITHUB_REPO}}'
 };
 
 const PLAN_PRICES = {
@@ -877,35 +917,7 @@ function showToast(msg, type) {
   setTimeout(() => t.className = 'toast', 4000);
 }
 
-// ═══════════════════════════════════════
-// BOLD API - CREATE CHECKOUT
-// ═══════════════════════════════════════
-async function createBoldCheckout(amount, reference, description) {
-  const body = {
-    amount_type: 'CLOSE',
-    amount: {
-      currency: 'COP',
-      total_amount: amount
-    },
-    description: description.substring(0, 100),
-    payment_methods: ['NEQUI', 'PSE', 'BOTON_BANCOLOMBIA', 'CREDIT_CARD']
-  };
 
-  const resp = await fetch(`${CONFIG.boldBaseUrl}/online/link/v1`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': CONFIG.boldApiKey
-    },
-    body: JSON.stringify(body)
-  });
-
-  const data = await resp.json();
-  if (data.errors && data.errors.length > 0) {
-    throw new Error(data.errors[0].message || 'Error Bold');
-  }
-  return data.payload;
-}
 
 // ═══════════════════════════════════════
 // GITHUB API - CREATE ISSUE
@@ -940,14 +952,7 @@ async function updateGitHubIssue(issueNumber, body) {
   });
 }
 
-// ═══════════════════════════════════════
-// GENERATE REFERENCE
-// ═══════════════════════════════════════
-function generateReference() {
-  const timestamp = Date.now().toString(36).toUpperCase();
-  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `ELPARCHE-${timestamp}-${rand}`;
-}
+
 
 // ═══════════════════════════════════════
 // UPLOAD IMAGE TO IMGBB
@@ -974,7 +979,7 @@ function buildWhatsAppMsg(data) {
     `📂 *Categoría:* ${data.categoria}\n` +
     `💎 *Plan:* ${data.plan}\n` +
     `💰 *Valor:* $${data.precio.toLocaleString('es-CO')}/mes\n` +
-    `🔗 *Link pago Bold:* ${data.boldUrl || 'Pendiente'}\n` +
+    `📅 *Primer mes gratis*\n` +
     `${data.descripcion ? `📝 *Desc:* ${data.descripcion}\n` : ''}` +
     `${data.horario ? `🕐 *Horario:* ${data.horario}\n` : ''}` +
     `${data.telefono ? `📱 *Tel:* ${data.telefono}\n` : ''}` +
@@ -1010,6 +1015,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     barrio: document.getElementById('venueBarrio').value,
     plan: plan,
     precio: precio,
+    email: document.getElementById('venueEmail').value,
     descripcion: document.getElementById('venueDesc').value,
     horario: document.getElementById('venueHours').value,
     telefono: document.getElementById('venuePhone').value,
@@ -1019,7 +1025,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   };
 
   // Validate
-  if (!data.ciudad || !data.nombre || !data.nit || !data.categoria || !data.barrio || !data.telefono) {
+  if (!data.ciudad || !data.nombre || !data.nit || !data.categoria || !data.barrio || !data.telefono || !data.email) {
     showToast('Completá todos los campos obligatorios', 'error');
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-lock"></i> Continuar al pago';
@@ -1072,24 +1078,14 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     } catch (e) { console.error('Photo upload error:', e); }
   }
 
-  // Generate reference
-  const reference = generateReference();
-
   try {
-    // Step 1: Create Bold checkout
-    const boldDesc = `${data.nombre} - ${plan} - ${data.ciudad}`;
-    const boldData = await createBoldCheckout(precio, reference, boldDesc);
-
-    document.getElementById('paymentRef').textContent = reference;
-
-    // Step 2: Create GitHub Issue
+    // Step 1: Create GitHub Issue (without Bold - mp-status:pending)
     const issueBody =
       `## Nuevo registro: ${data.nombre}\n\n` +
       `**Ciudad:** ${data.ciudad}\n` +
       `**NIT:** ${data.nit}\n` +
       `**Plan:** ${plan} ($${precio.toLocaleString('es-CO')}/mes)\n` +
-      `**Referencia Bold:** ${reference}\n` +
-      `**Link de pago:** ${boldData.url}\n\n` +
+      `**Email:** ${data.email}\n\n` +
       `---\n\n` +
       `**Barrio:** ${data.barrio}\n` +
       `**Categoría:** ${data.categoria}\n` +
@@ -1100,44 +1096,51 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       `**Menú:** ${data.menu || '—'}\n` +
       `**Etiquetas:** ${data.etiquetas || '—'}\n` +
       `**Foto URL:** ${fotoUrl || '—'}\n\n` +
-      `<!-- bold-status:pending -->`;
+      `mp-status:pending`;
 
     const issue = await createGitHubIssue(
       `[${data.ciudad}] ${data.nombre} — ${plan}`,
       issueBody
     );
 
-    // Step 3: Update payment flow UI
+    // Step 2: Show "creating subscription" state
     document.getElementById('paymentStep1').className = 'payment-step done';
     document.getElementById('paymentStep1').querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-
     document.getElementById('paymentStep2').className = 'payment-step active';
-    document.getElementById('paymentStep2Desc').innerHTML =
-      `<a href="${boldData.url}" target="_blank" style="color:var(--gold);">Hacé clic acá para pagar</a> — Te redirigimos a Bold`;
 
-    // Update Bold button
-    document.getElementById('boldPayBtn').href = boldData.url;
-
-    // WhatsApp fallback
-    data.boldUrl = boldData.url;
-    const waMsg = buildWhatsAppMsg(data);
-    document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
-
-    // Show payment flow
     flow.classList.add('active');
     flow.scrollIntoView({ behavior: 'smooth' });
 
-    showToast('Solicitud creada. Ahora pagá con Bold.', 'success');
+    showToast('Creando tu suscripción...', 'success');
 
-    // Step 4: Poll GitHub for status updates
-    pollPaymentStatus(issue.number, reference);
+    // Step 3: Poll issue for mp-init-point (created by GHA)
+    const initPoint = await pollForInitPoint(issue.number);
+    if (initPoint) {
+      document.getElementById('paymentStep2').className = 'payment-step done';
+      document.getElementById('paymentStep2').querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+      document.getElementById('mpPayBtn').href = initPoint;
+      document.getElementById('mpPayBtn').style.display = 'inline-flex';
+      document.getElementById('paymentStep2Desc').innerHTML =
+        `Hacé clic en "Ir a Mercado Pago" para ingresar tu tarjeta`;
+
+      // WhatsApp fallback
+      data.mpUrl = initPoint;
+      const waMsg = buildWhatsAppMsg(data);
+      document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
+
+      document.getElementById('paymentStep3').className = 'payment-step active';
+
+      showToast('Suscripción creada. Ingresá tu tarjeta en Mercado Pago.', 'success');
+
+      // Step 4: Poll for mp-status:authorized
+      pollForAuthorization(issue.number);
+    }
 
   } catch (e) {
     console.error('Error:', e);
     showToast('Error al procesar. Usá WhatsApp como respaldo.', 'error');
 
-    // WhatsApp fallback
-    data.boldUrl = 'Pendiente';
+    data.mpUrl = 'Pendiente';
     const waMsg = buildWhatsAppMsg(data);
     document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
   }
@@ -1146,10 +1149,57 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 });
 
 // ═══════════════════════════════════════
-// POLL PAYMENT STATUS
+// POLL FOR MP INIT POINT
 // ═══════════════════════════════════════
-function pollPaymentStatus(issueNumber, reference) {
-  const step2 = document.getElementById('paymentStep2');
+function pollForInitPoint(issueNumber) {
+  return new Promise((resolve) => {
+    let attempts = 0;
+    const maxAttempts = 30;
+
+    const check = async () => {
+      try {
+        const resp = await fetch(
+          `https://api.github.com/repos/${CONFIG.githubOwner}/${CONFIG.githubRepo}/issues/${issueNumber}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${CONFIG.githubToken}`,
+              'Accept': 'application/vnd.github+json'
+            }
+          }
+        );
+        const issue = await resp.json();
+
+        const match = issue.body && issue.body.match(/mp-init-point:\s*(\S+)/);
+        if (match) {
+          resolve(match[1]);
+          return;
+        }
+
+        attempts++;
+        if (attempts < maxAttempts) {
+          setTimeout(check, 3000);
+        } else {
+          resolve(null);
+        }
+      } catch (e) {
+        console.error('Poll error:', e);
+        attempts++;
+        if (attempts < maxAttempts) {
+          setTimeout(check, 5000);
+        } else {
+          resolve(null);
+        }
+      }
+    };
+
+    setTimeout(check, 5000);
+  });
+}
+
+// ═══════════════════════════════════════
+// POLL FOR MP AUTHORIZATION
+// ═══════════════════════════════════════
+function pollForAuthorization(issueNumber) {
   const step3 = document.getElementById('paymentStep3');
   const step4 = document.getElementById('paymentStep4');
 
@@ -1166,41 +1216,34 @@ function pollPaymentStatus(issueNumber, reference) {
       );
       const issue = await resp.json();
 
-      // Check if issue has been updated with payment status
-      if (issue.body && issue.body.includes('bold-status:paid')) {
-        step2.className = 'payment-step done';
-        step2.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+      if (issue.body && issue.body.includes('mp-status:authorized')) {
         step3.className = 'payment-step done';
         step3.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
         step4.className = 'payment-step active';
         step4.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-        showToast('¡Pago confirmado! Tu local se está activando.', 'success');
+        document.getElementById('mpPayBtn').style.display = 'none';
+        showToast('¡Suscripción activa! Primer mes gratis.', 'success');
         return;
       }
 
-      if (issue.body && issue.body.includes('bold-status:failed')) {
-        step2.className = 'payment-step pending';
-        showToast('El pago no se completó. Intentá de nuevo.', 'error');
+      if (issue.body && (issue.body.includes('mp-status:cancelled') || issue.body.includes('mp-status:rejected'))) {
+        step3.className = 'payment-step pending';
+        showToast('La suscripción no se completó. Intentá de nuevo.', 'error');
         return;
       }
 
-      // Still pending - poll again
       if (issue.state === 'open') {
-        setTimeout(checkStatus, 5000);
+        setTimeout(checkStatus, 10000);
       }
     } catch (e) {
       console.error('Poll error:', e);
-      setTimeout(checkStatus, 10000);
+      setTimeout(checkStatus, 15000);
     }
   };
 
-  // Start polling after 10 seconds (to give workflow time to start)
-  // Then poll every 5 seconds
-  setTimeout(() => {
-    checkStatus();
-    // Also poll every 30 seconds as backup
-    setInterval(checkStatus, 30000);
-  }, 10000);
+  // Check every 10 seconds
+  setTimeout(checkStatus, 5000);
+  setInterval(checkStatus, 15000);
 }
 
 // ═══════════════════════════════════════
@@ -1226,6 +1269,43 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
   window.open(`https://wa.me/${CONFIG.whatsapp}?text=${msg}`, '_blank');
   showToast('Solicitud de edición enviada por WhatsApp', 'success');
   this.reset();
+});
+
+// ═══════════════════════════════════════
+// CANCEL SUBSCRIPTION
+// ═══════════════════════════════════════
+document.getElementById('cancelForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('cancelSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
+
+  const nombre = document.getElementById('cancelVenueName').value;
+  const ciudad = document.getElementById('cancelCitySelect').value;
+  const email = document.getElementById('cancelEmail').value;
+
+  try {
+    const issueBody =
+      `## Cancelación de suscripción\n\n` +
+      `**Local:** ${nombre}\n` +
+      `**Ciudad:** ${ciudad}\n` +
+      `**Email:** ${email}\n\n` +
+      `mp-cancel:solicitado`;
+
+    await createGitHubIssue(
+      `[CANCEL] ${ciudad} — ${nombre}`,
+      issueBody
+    );
+
+    showToast('Solicitud de cancelación enviada. Te contactamos.', 'success');
+    btn.innerHTML = '<i class="fas fa-check"></i> Solicitado';
+    this.reset();
+  } catch (e) {
+    console.error('Cancel error:', e);
+    showToast('Error al enviar. Usá WhatsApp.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-ban"></i> Cancelar suscripción';
+  }
 });
 
 // ═══════════════════════════════════════

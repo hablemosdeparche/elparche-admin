@@ -119,7 +119,7 @@ $CONFIG = @{
     BOLD_BASE_URL    = "https://integrations.api.bold.co"
 
     # ─── GITHUB CENTRAL ───
-    CENTRAL_OWNER    = "elpracheadmin"      # Tu usuario de GitHub
+    CENTRAL_OWNER    = "hablemosdeparche"      # Tu usuario de GitHub
     CENTRAL_REPO     = "elparche-admin"     # Nombre del repo central
     CENTRAL_PAT      = "{{GITHUB_PAT}}"     # Token con permisos de issues y actions
 

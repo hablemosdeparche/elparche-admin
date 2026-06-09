@@ -1,0 +1,287 @@
+name: MP Monitor - Subscription Status
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check pending Issues and update subscription status
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
+        shell: pwsh
+        run: |
+          $headers = @{ Authorization = "Bearer $env:MP_ACCESS_TOKEN"; "Content-Type" = "application/json" }
+
+          # ─── PART 1: Check open Issues with nuevo-local label ───
+          $issues = gh issue list --label "nuevo-local" --state open --json number,body --jq '.[]'
+          if ($issues) {
+            $issues = $issues | ConvertFrom-Json
+            foreach ($issue in $issues) {
+              $num = $issue.number
+              $body = $issue.body
+
+              if ($body -match 'mp-sub-id:\s*(\S+)') {
+                $subId = $matches[1]
+                Write-Output "Issue #$num has MP subscription: $subId"
+
+                try {
+                  $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval/$subId" -Headers $headers -Method Get
+                  $mpStatus = $resp.status
+                  Write-Output "  MP status: $mpStatus"
+
+                  if ($mpStatus -eq "authorized" -or $mpStatus -eq "active") {
+                    if ($body -match 'mp-status:authorized') {
+                      Write-Output "  Already processed"
+                      continue
+                    }
+                    $newBody = $body -replace 'mp-status:pending', 'mp-status:authorized'
+                    gh issue edit $num --body "$newBody"
+                    gh issue comment $num --body "✅ Pago confirmado por Mercado Pago. Activando tu local..."
+                    gh workflow run process-payment.yml --ref main -f issue_number=$num
+                    Write-Output "  -> Process-payment triggered for issue #$num"
+                  }
+                  elseif ($mpStatus -eq "cancelled" -or $mpStatus -eq "rejected") {
+                    if ($body -notmatch 'mp-status:cancelled') {
+                      $newBody = $body -replace 'mp-status:pending', "mp-status:$mpStatus"
+                      gh issue edit $num --body "$newBody"
+                      gh issue comment $num --body "❌ La suscripción fue cancelada."
+                      Write-Output "  -> Issue #$num marked as $mpStatus"
+                    }
+                  }
+                  elseif ($mpStatus -eq "pending") {
+                    if ($body -notmatch 'mp-init-point:') {
+                      $initPoint = $resp.init_point
+                      if ($initPoint) {
+                        $newBody = "$body`nmp-init-point: $initPoint"
+                        gh issue edit $num --body "$newBody"
+                        Write-Output "  -> Added init_point to issue #$num"
+                      }
+                    }
+                  }
+                } catch {
+                  Write-Output "  Error checking subscription $subId : $_"
+                }
+              }
+              else {
+                if ($body -match 'mp-status:pending') {
+                  Write-Output "Issue #$num has no MP subscription yet. Creating..."
+                  $nombre = if ($body -match '^## Nuevo registro: (.+)') { $matches[1].Trim() } else { "Venue" }
+                  $ciudad = if ($body -match '\*\*Ciudad:\*\* (.+)') { $matches[1].Trim() } else { "" }
+                  $plan = if ($body -match '\*\*Plan:\*\* (.+) \(\$') { $matches[1].Trim() } else { "Presencia Basica" }
+                  $email = if ($body -match '\*\*Email:\*\* (.+)') { $matches[1].Trim() } else { "" }
+
+                  $prices = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
+                  $amount = if ($prices.ContainsKey($plan)) { $prices[$plan] } else { 30000 }
+                  $externalRef = "elparche-$num"
+
+                  $subBody = @{
+                    reason = "$nombre - $plan - $ciudad"
+                    external_reference = $externalRef
+                    payer_email = $email
+                    auto_recurring = @{
+                      frequency = 1; frequency_type = "months"
+                      transaction_amount = $amount; currency_id = "COP"
+                      free_trial = @{ frequency = 1; frequency_type = "months" }
+                    }
+                    back_url = "https://hablemosdeparche.github.io/admintaller/mp-success.html"
+                    status = "pending"
+                  } | ConvertTo-Json -Depth 10
+
+                  try {
+                    $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval" -Headers $headers -Method Post -Body $subBody -ContentType "application/json"
+                    $newBody = "$body`nmp-sub-id: $($resp.id)`nmp-init-point: $($resp.init_point)"
+                    gh issue edit $num --body "$newBody"
+                    gh issue comment $num --body "🔗 Completá tu suscripción en Mercado Pago: [$($resp.init_point)]($($resp.init_point))"
+                    Write-Output "  MP subscription created: $($resp.id)"
+                  } catch { Write-Output "  ERROR creating MP subscription: $_" }
+                }
+              }
+            }
+          }
+          else { Write-Output "No pending issues found" }
+
+      - name: Check active subscriptions in billing-db.json
+        env:
+          MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
+        shell: pwsh
+        run: |
+          $headers = @{ Authorization = "Bearer $env:MP_ACCESS_TOKEN"; "Content-Type" = "application/json" }
+          $dbPath = "billing-db.json"
+          $changed = $false
+          $afectadas = @{}
+
+          if (!(Test-Path $dbPath)) { Write-Output "No billing-db.json found"; exit 0 }
+
+          $raw = Get-Content $dbPath -Raw -Encoding UTF8
+          $db = $raw | ConvertFrom-Json
+
+          foreach ($v in $db.venues) {
+            $subId = $v.mp_subscription_id
+            if ([string]::IsNullOrWhiteSpace($subId)) { continue }
+            $nombre = $v.Nombre; $ciudad = $v.Ciudad
+
+            try {
+              $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval/$subId" -Headers $headers -Method Get
+              $mpStatus = $resp.status
+              Write-Output "$nombre ($ciudad): MP = $mpStatus"
+
+              if ($mpStatus -eq "authorized" -or $mpStatus -eq "active") {
+                if ($v.mp_status -ne "authorized") {
+                  $v.mp_status = "authorized"; $v.mp_next_payment = $resp.next_payment_date
+                  $v.activo = $true; $v.Estado = "Activo"; $changed = $true
+                  Write-Output "  -> Activated"
+                }
+              }
+              elseif ($mpStatus -in @("cancelled","rejected","past_due")) {
+                if ($v.activo -ne $false) {
+                  $v.mp_status = $mpStatus; $v.activo = $false; $v.Estado = "Vencido"
+                  $v.Notas = "Suscripcion $mpStatus - $(Get-Date -Format 'dd/MM/yyyy')"
+                  $changed = $true
+                  $slug = $ciudad.ToLower().Replace(' ','-').Replace('á','a').Replace('é','e').Replace('í','i').Replace('ó','o').Replace('ú','u').Replace('ñ','n')
+                  $afectadas[$slug] = $true
+                  Write-Output "  -> Marked as expired (MP: $mpStatus) — necesita ocultar en $slug"
+                }
+              }
+            } catch { Write-Output "  Error: $_" }
+          }
+
+          if ($changed) {
+            $db | ConvertTo-Json -Depth 10 | Set-Content $dbPath -Encoding UTF8
+            Write-Output "billing-db.json updated"
+            # Save affected cities for next job
+            $afectadas.Keys | Set-Content "ciudades-afectadas.txt"
+          }
+          else { Write-Output "No changes to billing-db.json"; "" | Set-Content "ciudades-afectadas.txt" }
+
+      - name: Commit billing-db.json to central repo
+        shell: pwsh
+        run: |
+          git config user.name "El Parche Bot"
+          git config user.email "bot@elparche.co"
+          git add billing-db.json ciudades-afectadas.txt
+          git diff --staged --quiet || git commit -m "MP monitor: actualizacion suscripciones - $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
+          git push || Write-Output "Nothing to push"
+
+      - name: Upload affected cities list for next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: ciudades-afectadas
+          path: ciudades-afectadas.txt
+
+  hide-venues:
+    needs: [monitor]
+    strategy:
+      matrix:
+        city:
+          - cartagena
+          - medellin
+          - bogota
+          - cali
+          - santa-marta
+          - barranquilla
+          - bucaramanga
+          - pereira
+          - manizales
+          - villavicencio
+          - ibague
+          - pasto
+          - monteria
+          - valledupar
+          - cucuta
+          - neiva
+          - armenia
+          - sincelejo
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download affected cities list
+        uses: actions/download-artifact@v4
+        with:
+          name: ciudades-afectadas
+
+      - name: Read affected cities file
+        id: check-affected
+        shell: pwsh
+        run: |
+          $afectadas = Get-Content "ciudades-afectadas.txt" -ErrorAction SilentlyContinue
+          $isAffected = $afectadas -contains "${{ matrix.city }}"
+          echo "affected=$isAffected" >> $env:GITHUB_OUTPUT
+          Write-Output "City ${{ matrix.city }} affected: $isAffected"
+
+      - name: Checkout city repo and hide expired venues
+        if: steps.check-affected.outputs.affected == 'True'
+        uses: actions/checkout@v4
+        with:
+          repository: cartagenalocal/${{ matrix.city }}
+          token: ${{ secrets[format('{0}_PAT', matrix.city)] }}
+          path: city-repo
+
+      - name: Hide expired venues in city HTML
+        if: steps.check-affected.outputs.affected == 'True'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          $db = Get-Content "billing-db.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          $citySlug = "${{ matrix.city }}"
+          $repoPath = "city-repo"
+          $indexFile = Join-Path $repoPath "index.html"
+          $modified = $false
+
+          if (!(Test-Path $indexFile)) { Write-Output "No index.html for $citySlug"; exit 0 }
+
+          $html = Get-Content $indexFile -Raw -Encoding UTF8
+          $toHide = $db.venues | Where-Object {
+            $_.Ciudad.ToLower().Replace(' ','-').Replace('á','a').Replace('é','e').Replace('í','i').Replace('ó','o').Replace('ú','u').Replace('ñ','n') -eq $citySlug -and
+            $_.activo -eq $false -and
+            $_.mp_status -in @("cancelled","rejected","past_due")
+          }
+
+          foreach ($v in $toHide) {
+            $normBusqueda = $v.Nombre.ToLower().Trim()
+            $prefix = "name:'"
+            $pos = 0
+            while ($true) {
+              $startName = $html.IndexOf($prefix, $pos)
+              if ($startName -lt 0) { break }
+              $startName += $prefix.Length
+              $endName = $html.IndexOf("'", $startName)
+              if ($endName -lt 0) { break }
+              $htmlName = $html.Substring($startName, $endName - $startName)
+              if ($htmlName.ToLower().Trim() -eq $normBusqueda) {
+                $objStart = $html.LastIndexOf('{', $startName)
+                $objEnd = $html.IndexOf('}', $endName) + 1
+                if ($objStart -ge 0 -and $objEnd -gt $objStart) {
+                  $oldObj = $html.Substring($objStart, $objEnd - $objStart)
+                  $newObj = $oldObj -replace "orden:\d+", "orden:99999"
+                  $html = $html.Replace($oldObj, $newObj)
+                  $modified = $true
+                  Write-Output "  -> Ocultado: $($v.Nombre) en $citySlug"
+                }
+                break
+              }
+              $pos = $endName + 1
+            }
+          }
+
+          if ($modified) {
+            Set-Content $indexFile $html -Encoding UTF8
+            Push-Location $repoPath
+            git config user.name "El Parche Bot"
+            git config user.email "bot@elparche.co"
+            git add index.html
+            git commit -m "MP: ocultados venues expirados - $(Get-Date -Format 'dd/MM/yyyy')"
+            git push
+            Pop-Location
+            Write-Output "  -> $citySlug actualizado y pusheado"
+          }
+          else { Write-Output "  -> No venues to hide in $citySlug" }

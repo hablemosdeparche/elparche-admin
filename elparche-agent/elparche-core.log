@@ -180,3 +180,5 @@
 [2026-06-08 23:25:01] billing-db.json actualizado: 1 vencido(s)
 [2026-06-08 23:25:01] --- RESUMEN POR CIUDAD ---
 [2026-06-08 23:25:02] cartagena            0 activos / 1 totales < 35 -- necesita rotacion
+[2026-06-08 23:25:05] Git push OK
+[2026-06-08 23:25:05] === CYCLE END: 1 expirados, 0 errores ===

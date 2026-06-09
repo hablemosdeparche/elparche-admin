@@ -18,7 +18,6 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
           GH_OWNER: ${{ secrets.GH_OWNER }}
           GH_REPO: ${{ vars.GH_REPO }}
-          BOLD_API_KEY: ${{ secrets.BOLD_API_KEY }}
         run: |
           $file = "admintaller/index.html"
           if (Test-Path $file) {
@@ -26,7 +25,6 @@ jobs:
             if ($env:GH_PAT) { $content = $content -replace '{{GITHUB_PAT}}', $env:GH_PAT }
             if ($env:GH_OWNER) { $content = $content -replace '{{GITHUB_OWNER}}', $env:GH_OWNER }
             if ($env:GH_REPO) { $content = $content -replace '{{GITHUB_REPO}}', $env:GH_REPO }
-            if ($env:BOLD_API_KEY) { $content = $content -replace '{{BOLD_API_KEY}}', $env:BOLD_API_KEY }
             Set-Content $file $content -Encoding UTF8 -NoNewline
             Write-Output "Placeholders reemplazados en admintaller/index.html"
           }
