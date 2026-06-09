@@ -17,13 +17,13 @@ function Normalize-Name($s) {
 }
 
 function Find-VenueInHtml($content, $nombre) {
-    $clean = $nombre.ToLower().Trim() -replace '[^a-z0-9\s]', ''
+    $clean = Normalize-Name $nombre
     $pattern = "name\s*:\s*'([^']+)'"
     $regex = [regex]::new($pattern)
     $matches = $regex.Matches($content)
     foreach ($m in $matches) {
         $htmlName = $m.Groups[1].Value
-        $htmlClean = $htmlName.ToLower().Trim() -replace '[^a-z0-9\s]', ''
+        $htmlClean = Normalize-Name $htmlName
         if ($htmlClean -eq $clean) {
             $fullObjStart = $content.LastIndexOf('{', $m.Index)
             $fullObjEnd = $content.IndexOf('}', $m.Index) + 1
@@ -83,7 +83,8 @@ foreach ($v in $db.venues) {
 }
 
 if ($vencidos -gt 0 -and !$ReportOnly) {
-    [System.IO.File]::WriteAllText($DB, ($db | ConvertTo-Json -Depth 10), [System.Text.Encoding]::UTF8)
+    $jsonOut = $db | ConvertTo-Json -Depth 10
+    [System.IO.File]::WriteAllText($DB, $jsonOut, [System.Text.Encoding]::UTF8)
     Log "billing-db.json actualizado: $vencidos vencido(s)"
 }
 
