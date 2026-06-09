@@ -109,17 +109,7 @@ if ($vencidos -gt 0 -and !$ReportOnly) {
     try {
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($jsonOut)
         [System.IO.File]::WriteAllBytes($DB_PATH, $bytes)
-        Start-Sleep -Milliseconds 200
-        $v1 = [System.IO.File]::ReadAllBytes($DB_PATH)
-        $v1Text = [System.Text.Encoding]::UTF8.GetString($v1).TrimStart([char]0xFEFF)
-        $estado = "?"
-        if ($v1Text -match '"Estado":\s+"(\w+)"') { $estado = $matches[1] }
-        Log "  DB escrito: $($v1.Length) bytes, Estado=$estado"
-        $hash = & git -C $BASE hash-object "billing-db.json" 2>&1
-        $diff = & git -C $BASE diff --name-only -- "billing-db.json" 2>&1
-        if ($hash.Length -gt 0) { Log "  git hash: $hash" }
-        if ($diff -match "billing-db") { Log "  git detecta cambio" }
-        else { Log "  git NO detecta cambio" }
+        Log "billing-db.json actualizado: $vencidos vencido(s)"
     } catch { Log "ERROR al guardar billing-db.json: $_" }
 }
 
