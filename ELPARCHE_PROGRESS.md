@@ -22,7 +22,7 @@ Web de guía turística con **suscripciones automáticas** via Mercado Pago para
 #### 1. GitHub Actions — `mp-monitor.yml`
 - Corre **cada 30 minutos** en los servidores de GitHub (no depende del PC local)
 - **Job 1 (monitor):** Procesa Issues nuevos y actualiza `billing-db.json` en el repo central
-- **Job 2 (hide-venues):** Matrix de 18 ciudades. Por cada ciudad afectada, checkout del repo de esa ciudad (`cartagenalocal/{ciudad}`), oculta venues expirados con `orden: 99999`, pushea al repo de la ciudad
+- **Job 2 (hide-venues):** Matrix de 18 ciudades. Por cada ciudad afectada, checkout del repo de esa ciudad (`hablemosdeparche/{ciudad}`), oculta venues expirados con `orden: 99999`, pushea al repo de la ciudad
 - Si MP dice `authorized` → activa el local y dispara `process-payment.yml`
 - **No necesita que el PC esté encendido**
 - **Nota:** Las ciudades que no tengan `{ciudad}_PAT` configurado en GitHub Secrets no podrán ocultar venues automáticamente (fallará el checkout)
@@ -114,7 +114,7 @@ Web de guía turística con **suscripciones automáticas** via Mercado Pago para
 
 ### Arquitectura de Repos
 - **Repo central:** `hablemosdeparche/elparche-admin` — billing-db.json, venues.json, panel admin, workflows GHA
-- **Repos por ciudad:** `cartagenalocal/{slug}` — index.html de cada guía (serve via GitHub Pages)
+- **Repos por ciudad:** `hablemosdeparche/{slug}` — index.html de cada guía (serve via GitHub Pages)
 - **Conexión:** `mp-monitor.yml` job2 usa per-city PATs (`{slug}_PAT`) para pushear cambios a city repos
 - **Local:** Las carpetas de ciudades en el repo central son solo copias de desarrollo
 

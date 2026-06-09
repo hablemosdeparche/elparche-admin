@@ -117,7 +117,7 @@ jobs:
       - name: Checkout city repo
         uses: actions/checkout@v4
         with:
-          repository: cartagenalocal/${{ steps.city-slug.outputs.city-slug }}
+          repository: hablemosdeparche/${{ steps.city-slug.outputs.city-slug }}
           token: ${{ secrets[format('{0}_PAT', steps.city-slug.outputs.city-slug)] }}
           path: city-repo
 

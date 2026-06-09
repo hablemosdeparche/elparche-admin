@@ -62,7 +62,7 @@ En tu repo central: **Settings > Secrets and variables > Actions**
 | Secret | Valor |
 |--------|-------|
 | `BOLD_API_KEY` | Tu llave de identidad de Bold |
-| `CARTAGENA_PAT` | Token de GitHub para cartagenalocal/cartagena |
+| `CARTAGENA_PAT` | Token de GitHub para hablemosdeparche/cartagena-local |
 | `BOGOTA_PAT` | Token para bogotalocal/bogota |
 | `MEDELLIN_PAT` | Token para medellinlocal/medellin |
 | ... | (por cada ciudad que tengas) |

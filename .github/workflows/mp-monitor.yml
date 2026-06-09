@@ -221,7 +221,7 @@ jobs:
         if: steps.check-affected.outputs.affected == 'True'
         uses: actions/checkout@v4
         with:
-          repository: cartagenalocal/${{ matrix.city }}
+          repository: hablemosdeparche/${{ matrix.city }}
           token: ${{ secrets[format('{0}_PAT', matrix.city)] }}
           path: city-repo
 
