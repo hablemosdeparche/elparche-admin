@@ -1,4 +1,4 @@
-﻿{
+{
     "payments":  [
 
                  ],
@@ -14,13 +14,13 @@
                        "FechaReg":  "6/01/2026",
                        "FechaIni":  "6/05/2026",
                        "FechaVen":  "7/05/2026",
-                       "Estado":  "Activo",
+                       "Estado":  "Vencido",
                        "MetodoPago":  "Nequi",
                        "Comprobante":  "SI",
-                       "Notas":  "Cliente nuevo - mes gratis aplicado",
+                       "Notas":  "Vencido automaticamente - 08/06/2026",
                        "Ciudad":  "cartagena",
-                       "activo":  true,
-                       "updatedAt":  "2026-06-08 18:07:36"
+                       "activo":  false,
+                       "updatedAt":  "2026-06-08 23:24:33"
                    }
                ]
 }

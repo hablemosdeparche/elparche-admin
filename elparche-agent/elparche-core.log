@@ -156,3 +156,18 @@
 [2026-06-08 23:23:48]   git NO detecta cambio
 [2026-06-08 23:23:48] --- RESUMEN POR CIUDAD ---
 [2026-06-08 23:23:48] cartagena            0 activos / 1 totales < 35 -- necesita rotacion
+[2026-06-08 23:23:52] Git push OK
+[2026-06-08 23:23:52] === CYCLE END: 1 expirados, 0 errores ===
+[2026-06-08 23:24:07] === EL PARCHE BILLING CYCLE ===
+[2026-06-08 23:24:07] Git pull OK
+[2026-06-08 23:24:08] --- RESUMEN POR CIUDAD ---
+[2026-06-08 23:24:08] === CYCLE END: 0 expirados, 0 errores ===
+[2026-06-08 23:24:31] === EL PARCHE BILLING CYCLE ===
+[2026-06-08 23:24:32] Git pull OK
+[2026-06-08 23:24:32] EXPIRADO: Alquimico en cartagena (vencia 7/05/2026)
+[2026-06-08 23:24:32]   -> Ocultado en cartagena/index.html
+[2026-06-08 23:24:33]   DB escrito: 952 bytes, Estado=Vencido
+[2026-06-08 23:24:33]   git hash: c033e94d62d5082d4cf625c896b1b210b7fb2502
+[2026-06-08 23:24:33]   git detecta cambio
+[2026-06-08 23:24:33] --- RESUMEN POR CIUDAD ---
+[2026-06-08 23:24:33] cartagena            0 activos / 1 totales < 35 -- necesita rotacion
