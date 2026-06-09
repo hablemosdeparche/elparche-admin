@@ -6,9 +6,33 @@ jobs:
     permissions:
       pages: write
       id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Replace config placeholders
+        shell: pwsh
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_OWNER: ${{ secrets.GH_OWNER }}
+          GH_REPO: ${{ vars.GH_REPO }}
+          BOLD_API_KEY: ${{ secrets.BOLD_API_KEY }}
+        run: |
+          $file = "admintaller/index.html"
+          if (Test-Path $file) {
+            $content = Get-Content $file -Raw
+            if ($env:GH_PAT) { $content = $content -replace '{{GITHUB_PAT}}', $env:GH_PAT }
+            if ($env:GH_OWNER) { $content = $content -replace '{{GITHUB_OWNER}}', $env:GH_OWNER }
+            if ($env:GH_REPO) { $content = $content -replace '{{GITHUB_REPO}}', $env:GH_REPO }
+            if ($env:BOLD_API_KEY) { $content = $content -replace '{{BOLD_API_KEY}}', $env:BOLD_API_KEY }
+            Set-Content $file $content -Encoding UTF8 -NoNewline
+            Write-Output "Placeholders reemplazados en admintaller/index.html"
+          }
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
       - uses: actions/deploy-pages@v4
+        id: deployment
