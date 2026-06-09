@@ -110,11 +110,18 @@ if ($vencidos -gt 0 -and !$ReportOnly) {
     $jsonOut = $db | ConvertTo-Json -Depth 10
     try {
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($jsonOut)
-        $tmp = "$DB.tmp"
-        [System.IO.File]::WriteAllBytes($tmp, $bytes)
-        Copy-Item -Path $tmp -Destination $DB -Force
-        Remove-Item -Path $tmp -Force -ErrorAction SilentlyContinue
-        Log "billing-db.json actualizado ($($bytes.Length) bytes)"
+        [System.IO.File]::WriteAllBytes($DB, $bytes)
+        Start-Sleep -Milliseconds 200
+        $v1 = [System.IO.File]::ReadAllBytes($DB)
+        $v1Text = [System.Text.Encoding]::UTF8.GetString($v1).TrimStart([char]0xFEFF)
+        $estado = "?"
+        if ($v1Text -match '"Estado":\s+"(\w+)"') { $estado = $matches[1] }
+        Log "  DB escrito: $($v1.Length) bytes, Estado=$estado"
+        Push-Location $BASE
+        $diff = git diff --name-only -- billing-db.json 2>&1
+        Pop-Location
+        if ($diff -match "billing-db") { Log "  git detecta cambio" }
+        else { Log "  git NO detecta cambio" }
     } catch { Log "ERROR al guardar billing-db.json: $_" }
 }
 
