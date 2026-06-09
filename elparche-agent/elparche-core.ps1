@@ -118,10 +118,13 @@ if ($vencidos -gt 0 -and !$ReportOnly) {
         if ($v1Text -match '"Estado":\s+"(\w+)"') { $estado = $matches[1] }
         Log "  DB escrito: $($v1.Length) bytes, Estado=$estado"
         Push-Location $BASE
+        $pwd = Get-Location
+        $hash = git hash-object billing-db.json 2>&1
         $diff = git diff --name-only -- billing-db.json 2>&1
         Pop-Location
+        if ($hash.Length -gt 0) { Log "  git hash: $hash" }
         if ($diff -match "billing-db") { Log "  git detecta cambio" }
-        else { Log "  git NO detecta cambio" }
+        else { Log "  git NO detecta cambio (pwd=$pwd hash=$hash)" }
     } catch { Log "ERROR al guardar billing-db.json: $_" }
 }
 
