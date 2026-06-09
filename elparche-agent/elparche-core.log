@@ -1,0 +1,11 @@
+﻿[2026-06-08 22:56:26] === EL PARCHE BILLING CYCLE ===
+[2026-06-08 22:56:26] EXPIRADO: Alquimico en cartagena (vencia 7/05/2026)
+[2026-06-08 22:56:26] --- RESUMEN POR CIUDAD ---
+[2026-06-08 22:56:27]  0 activos / 1 totales < 35 -- necesita rotacion
+[2026-06-08 22:56:27] === CYCLE END: 1 expirados, 0 errores ===
+[2026-06-08 22:57:49] === EL PARCHE BILLING CYCLE ===
+[2026-06-08 22:57:50] EXPIRADO: Alquimico en cartagena (vencia 7/05/2026)
+[2026-06-08 22:57:50]   -> WARN: 'Alquimico' no encontrado en C:\Users\DIEGO\Desktop\moweb\cartagena\index.html
+[2026-06-08 22:57:51] billing-db.json actualizado: 1 vencido(s)
+[2026-06-08 22:57:51] --- RESUMEN POR CIUDAD ---
+[2026-06-08 22:57:51]  0 activos / 1 totales < 35 -- necesita rotacion
