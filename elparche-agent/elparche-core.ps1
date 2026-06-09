@@ -29,6 +29,16 @@ Log "=== EL PARCHE BILLING CYCLE ==="
 
 if (!(Test-Path $DB)) { Log "ERROR: billing-db.json not found"; exit 1 }
 
+# Pull latest changes first to avoid conflicts
+try {
+    Push-Location $BASE
+    git config user.name "El Parche Bot"
+    git config user.email "bot@elparche.co" 2>$null
+    git pull --rebase origin main 2>&1 | Out-Null
+    Pop-Location
+    Log "Git pull OK"
+} catch { Log "Git pull skipped: $_" }
+
 $jsonRaw = Get-Content $DB -Raw -Encoding UTF8
 $db = $jsonRaw | ConvertFrom-Json
 $hoy = Get-Date
@@ -114,11 +124,8 @@ foreach ($kv in $reporte.GetEnumerator() | Sort-Object Name) {
 if (!$ReportOnly -and ($vencidos -gt 0 -or $modifiedHtml)) {
     try {
         Push-Location $BASE
-        git config user.name "El Parche Bot"
-        git config user.email "bot@elparche.co" 2>$null
         git add -A 2>&1 | Out-Null
         git commit -m "Billing cycle: $vencidos expirados - $hoyStr" 2>&1 | Out-Null
-        git pull --rebase origin main 2>&1 | Out-Null
         git push origin main 2>&1 | Out-Null
         Log "Git push OK"
         Pop-Location
