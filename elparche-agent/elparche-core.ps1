@@ -7,38 +7,22 @@ $LOG    = Join-Path (Join-Path $BASE "elparche-agent") "elparche-core.log"
 function Log($m) {
     $l = "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] $m"
     Write-Output $l
-    Add-Content $LOG "$l" -Encoding UTF8
+    Add-Content $LOG $l -Encoding UTF8
 }
 
 function Normalize-Name($s) {
     $norm = $s.ToLower().Trim()
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xE0\xE1\xE2\xE3\xE4\xE5]', 'a')
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xE8\xE9\xEA\xEB]', 'e')
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xEC\xED\xEE\xEF]', 'i')
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xF2\xF3\xF4\xF5\xF6]', 'o')
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xF9\xFA\xFB\xFC]', 'u')
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '\xF1', 'n')
-    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[^a-z0-9\s]', '')
-    return $norm
-}
-
-function Find-VenueInHtml($content, $nombre) {
-    $clean = Normalize-Name $nombre
-    $pattern = "name\s*:\s*'([^']+)'"
-    $regex = [regex]::new($pattern)
-    $matches = $regex.Matches($content)
-    foreach ($m in $matches) {
-        $htmlName = $m.Groups[1].Value
-        $htmlClean = Normalize-Name $htmlName
-        if ($htmlClean -eq $clean) {
-            $fullObjStart = $content.LastIndexOf('{', $m.Index)
-            $fullObjEnd = $content.IndexOf('}', $m.Index) + 1
-            if ($fullObjStart -ge 0 -and $fullObjEnd -gt $fullObjStart) {
-                return $content.Substring($fullObjStart, $fullObjEnd - $fullObjStart)
-            }
-        }
+    for ($i = 0xE0; $i -le 0xE5; $i++) { $norm = $norm.Replace([char]$i, 'a') }
+    for ($i = 0xE8; $i -le 0xEB; $i++) { $norm = $norm.Replace([char]$i, 'e') }
+    for ($i = 0xEC; $i -le 0xEF; $i++) { $norm = $norm.Replace([char]$i, 'i') }
+    for ($i = 0xF2; $i -le 0xF6; $i++) { $norm = $norm.Replace([char]$i, 'o') }
+    for ($i = 0xF9; $i -le 0xFC; $i++) { $norm = $norm.Replace([char]$i, 'u') }
+    $norm = $norm.Replace([char]0xF1, 'n')
+    $result = ""
+    foreach ($c in $norm.ToCharArray()) {
+        if (($c -ge 'a' -and $c -le 'z') -or ($c -ge '0' -and $c -le '9') -or $c -eq ' ') { $result += $c }
     }
-    return $null
+    return $result
 }
 
 Log "=== EL PARCHE BILLING CYCLE ==="
@@ -63,21 +47,39 @@ foreach ($v in $db.venues) {
     $nombre  = $v.Nombre
     $ciudad  = $v.Ciudad
     $html    = Join-Path (Join-Path $BASE $ciudad) "index.html"
+    $normBusqueda = Normalize-Name $nombre
     Log "EXPIRADO: $nombre en $ciudad (vencia $($v.FechaVen))"
 
     if (!$ReportOnly -and (Test-Path $html)) {
         try {
-            $content = Get-Content $html -Raw -Encoding UTF8
-            $objStr = Find-VenueInHtml $content $nombre
-            if ($objStr) {
-                $newStr = $objStr -replace "orden:\d+", "orden:99999"
-                $content = $content.Replace($objStr, $newStr)
-                [System.IO.File]::WriteAllText($html, $content, [System.Text.Encoding]::UTF8)
-                $modifiedHtml = $true
-                Log "  -> Ocultado en $ciudad/index.html"
-            } else {
-                Log "  -> WARN: '$nombre' no encontrado en $html (buscando normalizado)"
+            $content = [System.IO.File]::ReadAllText($html)
+            $prefix = "name:'"
+            $pos = 0
+            $found = $false
+            while ($true) {
+                $startName = $content.IndexOf($prefix, $pos)
+                if ($startName -lt 0) { break }
+                $startName += $prefix.Length
+                $endName = $content.IndexOf("'", $startName)
+                if ($endName -lt 0) { break }
+                $htmlName = $content.Substring($startName, $endName - $startName)
+                if ((Normalize-Name $htmlName) -eq $normBusqueda) {
+                    $objStart = $content.LastIndexOf('{', $startName)
+                    $objEnd = $content.IndexOf('}', $endName) + 1
+                    if ($objStart -ge 0 -and $objEnd -gt $objStart) {
+                        $oldObj = $content.Substring($objStart, $objEnd - $objStart)
+                        $newObj = $oldObj -replace "orden:\d+", "orden:99999"
+                        $content = $content.Replace($oldObj, $newObj)
+                        [System.IO.File]::WriteAllText($html, $content)
+                        $modifiedHtml = $true
+                        Log "  -> Ocultado en $ciudad/index.html"
+                        $found = $true
+                    }
+                    break
+                }
+                $pos = $endName + 1
             }
+            if (!$found) { Log "  -> WARN: '$nombre' no encontrado en $html" }
         } catch { Log "  -> ERROR: $_"; $errores++ }
     }
 
@@ -90,7 +92,8 @@ foreach ($v in $db.venues) {
 
 if ($vencidos -gt 0 -and !$ReportOnly) {
     $jsonOut = $db | ConvertTo-Json -Depth 10
-    [System.IO.File]::WriteAllText($DB, $jsonOut, [System.Text.Encoding]::UTF8)
+    $utf8 = [System.Text.Encoding]::UTF8
+    [System.IO.File]::WriteAllText($DB, $utf8.GetString($utf8.GetBytes($jsonOut)))
     Log "billing-db.json actualizado: $vencidos vencido(s)"
 }
 
