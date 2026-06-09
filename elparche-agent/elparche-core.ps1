@@ -63,7 +63,10 @@ foreach ($v in $db.venues) {
     if (!$ReportOnly -and (Test-Path $html)) {
         try {
             $rawBytes = [System.IO.File]::ReadAllBytes($html)
-            $content = [System.Text.Encoding]::GetEncoding(1252).GetString($rawBytes)
+            $content = [System.Text.Encoding]::UTF8.GetString($rawBytes)
+            if ($content.Contains([char]0xFFFD)) {
+                $content = [System.Text.Encoding]::GetEncoding(1252).GetString($rawBytes)
+            }
             $prefix = "name:'"
             $pos = 0
             $found = $false
