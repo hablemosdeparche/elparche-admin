@@ -12,7 +12,13 @@ function Log($m) {
 
 function Normalize-Name($s) {
     $norm = $s.ToLower().Trim()
-    $norm = $norm -replace '[áàâãä]', 'a' -replace '[éèêë]', 'e' -replace '[íìîï]', 'i' -replace '[óòôõö]', 'o' -replace '[úùûü]', 'u' -replace 'ñ', 'n' -replace '[^a-z0-9\s]', ''
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xE0\xE1\xE2\xE3\xE4\xE5]', 'a')
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xE8\xE9\xEA\xEB]', 'e')
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xEC\xED\xEE\xEF]', 'i')
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xF2\xF3\xF4\xF5\xF6]', 'o')
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[\xF9\xFA\xFB\xFC]', 'u')
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '\xF1', 'n')
+    $norm = [Text.RegularExpressions.Regex]::Replace($norm, '[^a-z0-9\s]', '')
     return $norm
 }
 
