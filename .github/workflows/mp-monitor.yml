@@ -9,13 +9,21 @@ jobs:
   monitor:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          installation-id: ${{ secrets.GH_APP_INSTALLATION_ID }}
+
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Check stale Issues and process authorized payments
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
         shell: pwsh
         run: |
@@ -163,6 +171,14 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          installation-id: ${{ secrets.GH_APP_INSTALLATION_ID }}
+
       - uses: actions/checkout@v4
 
       - name: Download affected cities list
@@ -184,14 +200,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: hablemosdeparche/${{ matrix.city }}
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
           path: city-repo
 
       - name: Hide expired venues in city HTML
         if: steps.check-affected.outputs.affected == 'True'
         shell: pwsh
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           $db = Get-Content "billing-db.json" -Raw -Encoding UTF8 | ConvertFrom-Json
           $citySlug = "${{ matrix.city }}"

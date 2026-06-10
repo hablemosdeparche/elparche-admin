@@ -10,12 +10,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          installation-id: ${{ secrets.GH_APP_INSTALLATION_ID }}
+
       - uses: actions/checkout@v4
 
       - name: Replace config placeholders
         shell: pwsh
         env:
-          GH_PAT: ${{ secrets.GH_PAT }}
+          GH_PAT: ${{ steps.app-token.outputs.token }}
           GH_OWNER: ${{ secrets.GH_OWNER }}
           GH_REPO: ${{ vars.GH_REPO }}
         run: |

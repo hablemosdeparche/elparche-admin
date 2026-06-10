@@ -32,11 +32,19 @@ jobs:
       fail-fast: false
 
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.GH_APP_ID }}
+          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
+          installation-id: ${{ secrets.GH_APP_INSTALLATION_ID }}
+
       - name: Checkout city repo
         uses: actions/checkout@v4
         with:
           repository: hablemosdeparche/${{ matrix.city }}
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ steps.app-token.outputs.token }}
           path: city-${{ matrix.city }}
 
       - name: Check billing DB
