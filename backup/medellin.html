@@ -10,7 +10,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Popayan Local - El Parche</title>
+<title>Medellin Local - El Parche</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -18,18 +18,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root {
-  --gold: #D4AC0D;
-  --gold-light: #F1C40F;
-  --coral: #B7950B;
-  --dark: #0E0E0A;
-  --dark2: #16160C;
-  --card-bg: #1E1E12;
-  --card-border: #30301E;
+  --gold: #27AE60;
+  --gold-light: #58D68D;
+  --coral: #1E8449;
+  --dark: #0A0F0C;
+  --dark2: #101812;
+  --card-bg: #162018;
+  --card-border: #203828;
   --text: #EAEAEA;
-  --muted: #6A6A4A;
-  --muted2: #8A8A6A;
-  --tag-bg: #262618;
-  --nav-bg: #0E0E0A;
+  --muted: #5A7A6A;
+  --muted2: #7A9A8A;
+  --tag-bg: #1A2E1E;
+  --nav-bg: #0A0F0C;
   --radius: 18px;
   --radius-sm: 10px;
   --whatsapp: #25D366;
@@ -46,15 +46,7 @@ body {
   flex-direction: column;
   align-items: center;
 }
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
+body::before { display: none; }
 .app {
   width: 100%;
   max-width: 480px;
@@ -63,7 +55,7 @@ body::before {
   padding-bottom: 90px;
 }
 
-/* ── HEADER ── */
+/* -- HEADER -- */
 .app-header {
   padding: 22px 20px 14px;
   position: sticky;
@@ -71,7 +63,7 @@ body::before {
   z-index: 200;
   background: rgba(15,12,8,0.93);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(212,172,13,0.15);
+  border-bottom: 1px solid rgba(39,174,96,0.15);
 }
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
 .logo h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: var(--gold); letter-spacing: -0.5px; line-height: 1; }
@@ -84,7 +76,7 @@ body::before {
 }
 .search-box input::placeholder { color: var(--muted); }
 .search-box input:focus { border-color: var(--gold); }
-.search-box::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
+.search-box::before { content: '??'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
 .cats-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .cats-scroll::-webkit-scrollbar { display: none; }
 .cat-pill {
@@ -95,15 +87,15 @@ body::before {
 }
 .cat-pill.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
 
-/* ── SCREENS ── */
+/* -- SCREENS -- */
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ── BANNER ── */
+/* -- BANNER -- */
 .banner {
   margin: 16px 16px 0;
-  background: linear-gradient(135deg, #1A1A08, #0F0F04);
-  border: 1px solid #303018; border-radius: var(--radius);
+  background: linear-gradient(135deg, #0A1A0A, #050F05);
+  border: 1px solid #102E10; border-radius: var(--radius);
   overflow: hidden; transition: border-color 0.2s;
 }
 .banner:hover { border-color: var(--gold); }
@@ -129,11 +121,11 @@ body::before {
 .btn-ver-eventos:hover { background: var(--gold-light); }
 .btn-ver-eventos:active { transform: scale(0.98); }
 
-/* ── SEC HEADER ── */
+/* -- SEC HEADER -- */
 .sec-header { display: flex; justify-content: space-between; align-items: center; padding: 22px 16px 12px; }
 .sec-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; font-style: italic; color: var(--text); }
 
-/* ── PLACES FEED ── */
+/* -- PLACES FEED -- */
 .places-feed { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
 .place-card {
   background: var(--card-bg); border: 1px solid var(--card-border);
@@ -209,7 +201,7 @@ body::before {
 .place-barrio { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
 .place-barrio i { color: var(--muted2); font-size: 11px; }
 
-/* ── EVENTOS SCREEN ── */
+/* -- EVENTOS SCREEN -- */
 .events-screen-header { padding: 20px 16px 0; }
 .events-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--gold); font-style: italic; }
 .events-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; margin-bottom: 14px; }
@@ -238,7 +230,7 @@ body::before {
 .ev-info-full h3 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
 .ev-detail-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted2); margin-bottom: 6px; }
 
-/* ── MAPA ── */
+/* -- MAPA -- */
 .map-screen { display: flex; flex-direction: column; height: calc(100vh - 140px); }
 #map { flex: 1; width: 100%; min-height: 400px; }
 .leaflet-popup-content-wrapper { background: var(--card-bg) !important; color: var(--text) !important; border: 1px solid var(--gold) !important; border-radius: 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important; }
@@ -246,7 +238,7 @@ body::before {
 .popup-name { font-weight: 600; font-size: 14px; color: var(--gold); margin-bottom: 4px; }
 .popup-barrio { font-size: 12px; color: var(--muted2); }
 
-/* ── GUARDADOS ── */
+/* -- GUARDADOS -- */
 .saved-screen-header { padding: 20px 16px 16px; }
 .saved-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; font-style: italic; color: var(--gold); }
 .saved-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; }
@@ -255,9 +247,9 @@ body::before {
 .saved-empty h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--muted2); margin-bottom: 8px; }
 .saved-empty p { font-size: 13px; line-height: 1.6; }
 
-/* ══════════════════════════════════
+/* ----------------------------------
    MODAL — todo en una pantalla
-══════════════════════════════════ */
+---------------------------------- */
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.9);
@@ -283,7 +275,7 @@ body::before {
 }
 .overlay.open .modal-sheet { transform: translateY(0); }
 
-/* Hero compacto con imagen de Popayan */
+/* Hero compacto con imagen de Cartagena */
 .modal-hero {
   width: calc(100% - 32px);
   margin: 14px 16px 0;
@@ -436,7 +428,7 @@ body::before {
 }
 .btn-icon:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ── BOTTOM NAV ── */
+/* -- BOTTOM NAV -- */
 .bottom-nav {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
   width: 100%; max-width: 480px;
@@ -451,7 +443,7 @@ body::before {
 .nav-it.active .nav-icon { transform: scale(1.15); }
 .nav-it.active .nav-icon i { color: var(--gold); }
 
-/* ── WHATSAPP FLOTANTE ── */
+/* -- WHATSAPP FLOTANTE -- */
 .wa-float { position: fixed; bottom: 88px; right: calc(50% - 228px); z-index: 400; }
 .wa-btn {
   background: var(--whatsapp); border: none; border-radius: 50px;
@@ -477,7 +469,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="app-header">
     <div class="header-top">
       <div class="logo">
-        <h1>Popayan Local</h1>
+        <h1>Medellin Local</h1>
         <p>Lo que hacen los de aquí</p>
       </div>
     </div>
@@ -486,12 +478,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="cats-scroll">
       <div class="cat-pill active" onclick="setFilter('todos',this)">Todos</div>
-      <div class="cat-pill" onclick="setFilter('bares',this)">🍺 Bares</div>
-      <div class="cat-pill" onclick="setFilter('cafe',this)">☕ Cafés</div>
-      <div class="cat-pill" onclick="setFilter('comida',this)">🍽 Comida</div>
-      <div class="cat-pill" onclick="setFilter('plan',this)">🌅 Planes</div>
-      <div class="cat-pill" onclick="setFilter('arte',this)">🎨 Arte</div>
-      <div class="cat-pill" onclick="setFilter('noche',this)">🌙 Noche</div>
+      <div class="cat-pill" onclick="setFilter('bares',this)">?? Bares</div>
+      <div class="cat-pill" onclick="setFilter('cafe',this)">? Cafés</div>
+      <div class="cat-pill" onclick="setFilter('comida',this)">?? Comida</div>
+      <div class="cat-pill" onclick="setFilter('plan',this)">?? Planes</div>
+      <div class="cat-pill" onclick="setFilter('arte',this)">?? Arte</div>
+      <div class="cat-pill" onclick="setFilter('noche',this)">?? Noche</div>
     </div>
   </div>
 
@@ -499,17 +491,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="screen active" id="screen-inicio">
     <div class="banner" id="banner-eventos">
       <div class="banner-header" onclick="toggleBanner()">
-        <div class="banner-flame">🔥</div>
+        <div class="banner-flame">??</div>
         <div class="banner-texto">
           <h3>¿Qué hacer esta noche?</h3>
           <p>Eventos programados para el mes</p>
         </div>
-        <div class="banner-arrow">❯</div>
+        <div class="banner-arrow">?</div>
       </div>
       <div class="banner-body">
         <div id="banner-events-list"></div>
         <div class="banner-cta">
-          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año →</button>
+          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año ?</button>
         </div>
       </div>
     </div>
@@ -521,7 +513,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="screen" id="screen-eventos">
     <div class="events-screen-header">
       <h2>Agenda</h2>
-      <p>Próximos eventos en Popayan</p>
+      <p>Próximos eventos en Cartagena</p>
     </div>
       <div class="events-feed" id="events-feed"></div>
   </div>
@@ -550,7 +542,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- BOTON REGISTRO -->
 <div class="wa-float">
   <a class="wa-btn" href="https://hablemosdeparche.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
-    <span class="wa-btn-icon">📋</span>
+    <span class="wa-btn-icon">??</span>
     <span class="wa-btn-text">Registra tu local</span>
   </a>
 </div>
@@ -560,7 +552,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="modal-sheet" id="modal-sheet">
     <div class="modal-hero" id="modal-hero">
       <div class="modal-handle"></div>
-      <div class="modal-close" onclick="closeModal()">✕</div>
+      <div class="modal-close" onclick="closeModal()">?</div>
       <svg class="modal-hero-icon" id="modal-hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <div class="modal-body">
@@ -586,46 +578,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-// ══════════════════════════════════════
+// --------------------------------------
 // SVG ICONS
-// ══════════════════════════════════════
+// --------------------------------------
 const svgIcons = {
-  bares: `<circle cx="40" cy="28" r="18" stroke="#D4AC0D" stroke-width="2.5" fill="none"/>
-    <path d="M28 28 Q28 52 40 52 Q52 52 52 28" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M52 20 L58 16 L58 32 L52 28" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
-    <path d="M34 52 L46 52" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M37 56 L43 56" stroke="#D4AC0D" stroke-width="2" stroke-linecap="round"/>`,
+  bares: `<circle cx="40" cy="28" r="18" stroke="#27AE60" stroke-width="2.5" fill="none"/>
+    <path d="M28 28 Q28 52 40 52 Q52 52 52 28" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M52 20 L58 16 L58 32 L52 28" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    <path d="M34 52 L46 52" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M37 56 L43 56" stroke="#27AE60" stroke-width="2" stroke-linecap="round"/>`,
 
-  cafe: `<path d="M24 30 Q24 54 40 54 Q56 54 56 30" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M24 30 L56 30" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M56 34 Q64 34 64 42 Q64 50 56 50" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M32 54 L48 54" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M36 22 Q36 16 40 18 Q44 20 44 14" stroke="#D4AC0D" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+  cafe: `<path d="M24 30 Q24 54 40 54 Q56 54 56 30" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M24 30 L56 30" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M56 34 Q64 34 64 42 Q64 50 56 50" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M32 54 L48 54" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M36 22 Q36 16 40 18 Q44 20 44 14" stroke="#27AE60" stroke-width="2" fill="none" stroke-linecap="round"/>`,
 
-  comida: `<path d="M28 18 L28 40" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M28 18 Q20 26 20 32 Q20 40 28 40" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    <path d="M28 40 L28 62" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M50 18 L50 28 Q50 36 42 36 Q50 36 50 44 L50 62" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+  comida: `<path d="M28 18 L28 40" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M28 18 Q20 26 20 32 Q20 40 28 40" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M28 40 L28 62" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M50 18 L50 28 Q50 36 42 36 Q50 36 50 44 L50 62" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
 
-  plan: `<circle cx="40" cy="40" r="22" stroke="#D4AC0D" stroke-width="2.5" fill="none"/>
-    <path d="M40 18 L40 24" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M40 56 L40 62" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M18 40 L24 40" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M56 40 L62 40" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M40 40 L50 30" stroke="#D4AC0D" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="40" cy="40" r="3" fill="#D4AC0D"/>`,
+  plan: `<circle cx="40" cy="40" r="22" stroke="#27AE60" stroke-width="2.5" fill="none"/>
+    <path d="M40 18 L40 24" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M40 56 L40 62" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M18 40 L24 40" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M56 40 L62 40" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M40 40 L50 30" stroke="#27AE60" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="40" cy="40" r="3" fill="#27AE60"/>`,
 
-  arte: `<rect x="18" y="22" width="44" height="36" rx="4" stroke="#D4AC0D" stroke-width="2.5" fill="none"/>
-    <circle cx="30" cy="33" r="4" stroke="#D4AC0D" stroke-width="2" fill="none"/>
-    <path d="M18 46 L30 36 L40 44 L50 32 L62 46" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+  arte: `<rect x="18" y="22" width="44" height="36" rx="4" stroke="#27AE60" stroke-width="2.5" fill="none"/>
+    <circle cx="30" cy="33" r="4" stroke="#27AE60" stroke-width="2" fill="none"/>
+    <path d="M18 46 L30 36 L40 44 L50 32 L62 46" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
 
-  noche: `<path d="M44 18 Q32 20 28 32 Q24 44 34 52 Q44 60 56 54 Q44 56 40 46 Q36 36 44 28 Q48 22 44 18Z" stroke="#D4AC0D" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="56" cy="28" r="2.5" fill="#D4AC0D"/>
-    <circle cx="62" cy="38" r="1.5" fill="#D4AC0D"/>
-    <circle cx="52" cy="20" r="1.5" fill="#D4AC0D"/>`,
+  noche: `<path d="M44 18 Q32 20 28 32 Q24 44 34 52 Q44 60 56 54 Q44 56 40 46 Q36 36 44 28 Q48 22 44 18Z" stroke="#27AE60" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="56" cy="28" r="2.5" fill="#27AE60"/>
+    <circle cx="62" cy="38" r="1.5" fill="#27AE60"/>
+    <circle cx="52" cy="20" r="1.5" fill="#27AE60"/>`,
 
-  default: `<circle cx="40" cy="40" r="22" stroke="#D4AC0D" stroke-width="2.5" fill="none"/>
-    <circle cx="40" cy="40" r="6" fill="#D4AC0D"/>`
+  default: `<circle cx="40" cy="40" r="22" stroke="#27AE60" stroke-width="2.5" fill="none"/>
+    <circle cx="40" cy="40" r="6" fill="#27AE60"/>`
 };
 
 function getSVG(cat) {
@@ -636,62 +628,63 @@ function getSVG(cat) {
   return svgIcons[map[cat]] || svgIcons.default;
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // DATOS
-// ══════════════════════════════════════
+// --------------------------------------
 const places = [
   // === BARES ===
-  { id:1, orden:999, bg:'pt1', cat:'bares', name:'Bar de la Catedral', nit:'', barrio:'Centro', tags:['Catedral', 'Colonial', 'Vino'], rating:4.4, horario:'Mar-Dom 5pm-12am', precio:'$$ Promedio', desc:'Bar con vista a la catedral y vinos de la region.', img:'https://images.pexels.com/photos/2741312/pexels-photo-2741312.jpeg?w=1920', telefono:'+57 602 234 5678', instagram:'', menu:['Vino', 'Cerveza', 'Coctel', 'Quesos'], coords:[2.44, -76.61] },
-  { id:2, orden:999, bg:'pt2', cat:'bares', name:'Bar Colonial Popayan', nit:'', barrio:'Centro', tags:['Colonial', 'Patio', 'Tradicional'], rating:4.4, horario:'Lun-Dom 5pm-11pm', precio:'$$ Promedio', desc:'Bar en casona colonial con patio y musica.', img:'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?w=1920', telefono:'+57 602 345 6789', instagram:'', menu:['Cerveza', 'Ron', 'Coctel', 'Empanada'], coords:[2.441, -76.609] },
-  { id:3, orden:999, bg:'pt3', cat:'bares', name:'Bar de la Plaza', nit:'', barrio:'Centro', tags:['Plaza', 'Bohemio', 'Poesia'], rating:4.3, horario:'Mar-Dom 5pm-11pm', precio:'$ Economico', desc:'Bar bohemio en la plaza con poesia y cafe.', img:'https://images.pexels.com/photos/7573895/pexels-photo-7573895.jpeg?w=1920', telefono:'+57 602 456 7890', instagram:'', menu:['Cafe', 'Cerveza', 'Ron', 'Te'], coords:[2.44, -76.61] },
-  { id:4, orden:999, bg:'pt2', cat:'bares', name:'La Iguana', nit:'', barrio:'Centro', tags:['Tradicional', 'Cerveza', 'Local'], rating:4.4, horario:'Lun-Dom 10am-10pm', precio:'$ Economico', desc:'Bar tradicional payanes con cerveza y musica local.', img:'https://images.pexels.com/photos/2741312/pexels-photo-2741312.jpeg?w=1920', telefono:'+57 602 234 5678', instagram:'', menu:['Cerveza', 'Ron', 'Aguardiente', 'Gaseosa'], coords:[2.441, -76.609] },
-  { id:5, orden:999, bg:'pt1', cat:'bares', name:'Bar Blanco', nit:'', barrio:'Centro', tags:['Colonial', 'Elegante', 'Cocteles'], rating:4.6, horario:'Mar-Dom 5pm-12am', precio:'$$ Promedio', desc:'Bar en casona colonial de Popayan. Cocteles de autor y ambiente cultural.', img:'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?w=1920', telefono:'+57 602 123 4567', instagram:'barblancopopayan', menu:['Coctel', 'Vino', 'Ceviche', 'Tabla'], coords:[2.44, -76.61] },
+  { id:1, orden:999, bg:'pt4', cat:'bares', name:'La Octava', nit:'', barrio:'Laureles', tags:['Cerveza artesanal', 'Rock', 'Local'], rating:4.4, horario:'Lun-Dom 12pm-1am', precio:'$$ Promedio', desc:'Bar de cerveza artesanal en Laureles con ambiente rockero. 20 canillas de cervezas locales, hamburguesas artesanales y parqueadero de motos.', img:'', telefono:'+57 604 456 7890', instagram:'laoctavamed', menu:['IPA artesanal', 'Hamburguesa', 'Papas', 'Wings'], coords:[6.24, -75.59] },
+  { id:2, orden:999, bg:'pt5', cat:'bares', name:'Glorias Blues', nit:'', barrio:'Laureles', tags:['Blues', 'Jazz', 'Bohemio'], rating:4.5, horario:'Mar-Sab 7pm-1am', precio:'$$ Promedio', desc:'Legendario bar de blues y jazz en Laureles. Musica en vivo todas las noches, ambiente intimo y la mejor curaduria musical de Medellin.', img:'', telefono:'+57 604 567 8901', instagram:'gloriasblues', menu:['Whisky', 'Cerveza', 'Coctel', 'Tabla de quesos'], coords:[6.245, -75.593] },
+  { id:3, orden:999, bg:'pt6', cat:'bares', name:'Salon Oriental', nit:'', barrio:'Centro', tags:['Tradicional', 'Karaoke', 'Chino'], rating:4.3, horario:'Lun-Dom 6pm-2am', precio:'$$ Promedio', desc:'Bar karaoke en el barrio chino de Medellin. Decoracion oriental, cocteles exoticos y cabinas de karaoke privadas. Experiencia unica en la ciudad.', img:'', telefono:'+57 604 678 9012', instagram:'salonoriental', menu:['Cerveza Tsingtao', 'Coctel de lychee', 'Rollos', 'Wantanes'], coords:[6.248, -75.57] },
+  { id:4, orden:999, bg:'pt1', cat:'bares', name:'El Social', nit:'', barrio:'El Poblado', tags:['Cocteles', 'Terraza', 'El Poblado'], rating:4.6, horario:'Lun-Dom 5pm-2am', precio:'$$ Promedio', desc:'Bar con terraza en El Poblado perfecto para after office. Cocteles de autor, musica electronica suave y vistas a la ciudad. Ambiente internacional y turistas.', img:'', telefono:'+57 604 123 4567', instagram:'elsocialmed', menu:['Moscow Mule', 'Old Fashioned', 'Ceviche', 'Wrap'], coords:[6.2074, -75.5672] },
+  { id:5, orden:999, bg:'pt2', cat:'bares', name:'37 Park', nit:'', barrio:'El Poblado', tags:['Lounge', 'Piscina', 'VIP'], rating:4.5, horario:'Mar-Dom 6pm-2am', precio:'$$$ Exclusivo', desc:'Rooftop bar con piscina en El Poblado. Camas balinesas, cocteles premium y vista a todo Medellin. El plan mas exclusivo de la ciudad.', img:'', telefono:'+57 604 234 5678', instagram:'37parkmed', menu:['Coctel de la casa', 'Champagne', 'Tabla de carnes', 'Sushi'], coords:[6.205, -75.566] },
+  { id:6, orden:999, bg:'pt3', cat:'bares', name:'Envy', nit:'', barrio:'El Poblado', tags:['Rooftop', 'Elegante', 'Vistas'], rating:4.6, horario:'Lun-Dom 5pm-2am', precio:'$$$ Exclusivo', desc:'Rooftop bar en el techo del hotel The Charlee. Vista panoramica de 360 grados, cocteles de autor y una de las terrazas mas fotografiadas de Medellin.', img:'', telefono:'+57 604 345 6789', instagram:'envyrooftop', menu:['Margarita', 'Mojito', 'Ceviche', 'Tiradito'], coords:[6.207, -75.5665] },
   // === CAFES ===
-  { id:6, orden:999, bg:'pt4', cat:'cafe', name:'Cafe del Museo', nit:'', barrio:'Centro', tags:['Museo', 'Cultural', 'Cafe'], rating:4.5, horario:'Lun-Dom 8am-7pm', precio:'$$ Promedio', desc:'Cafe dentro del museo de arte religioso. Ambiente cultural.', img:'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?w=1920', telefono:'+57 602 456 7890', instagram:'cafedelmuseo', menu:['Espresso', 'Te', 'Muffin', 'Sandwich'], coords:[2.442, -76.608] },
-  { id:7, orden:999, bg:'pt5', cat:'cafe', name:'Cafe de la Catedral', nit:'', barrio:'Centro', tags:['Catedral', 'Cafe', 'Tradicional'], rating:4.4, horario:'Lun-Dom 7am-7pm', precio:'$ Economico', desc:'Cafe con vista a la catedral de Popayan.', img:'https://images.pexels.com/photos/302902/pexels-photo-302902.jpeg?w=1920', telefono:'+57 602 678 9012', instagram:'', menu:['Cafe', 'Te', 'Pan de bono', 'Jugo'], coords:[2.44, -76.61] },
-  { id:8, orden:999, bg:'pt6', cat:'cafe', name:'Cafe de la Herradura', nit:'', barrio:'Centro', tags:['Herradura', 'Cafe', 'Colonial'], rating:4.5, horario:'Lun-Dom 7am-7pm', precio:'$ Economico', desc:'Cafe en la calle de la Herradura.', img:'https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?w=1920', telefono:'+57 602 678 9012', instagram:'', menu:['Cafe', 'Te', 'Pan', 'Jugo'], coords:[2.44, -76.61] },
-  { id:9, orden:999, bg:'pt4', cat:'cafe', name:'Cafe de San Francisco', nit:'', barrio:'Centro', tags:['San Francisco', 'Cafe', 'Colonial'], rating:4.5, horario:'Lun-Dom 7am-7pm', precio:'$ Economico', desc:'Cafe frente a la iglesia de San Francisco.', img:'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?w=1920', telefono:'+57 602 567 8901', instagram:'', menu:['Tinto', 'Cafe', 'Pan', 'Bocadillo'], coords:[2.441, -76.609] },
-  { id:10, orden:999, bg:'pt3', cat:'cafe', name:'Cafe de la Plaza', nit:'', barrio:'Centro', tags:['Plaza', 'Colonial', 'Tradicional'], rating:4.6, horario:'Lun-Dom 7am-8pm', precio:'$ Economico', desc:'Cafe en la plaza principal de Popayan. Tinto y pan de bono.', img:'https://images.pexels.com/photos/302902/pexels-photo-302902.jpeg?w=1920', telefono:'+57 602 345 6789', instagram:'cafeplazapopayan', menu:['Tinto', 'Cafe', 'Pan', 'Jugo'], coords:[2.44, -76.61] },
+  { id:7, orden:999, bg:'pt2', cat:'cafe', name:'Cafe de la Loma', nit:'', barrio:'El Poblado', tags:['Tradicional', 'Vistas', 'Parque'], rating:4.5, horario:'Lun-Dom 7am-9pm', precio:'$ Economico', desc:'Cafe tradicional en la loma de El Poblado con vista al parque. Tinto de olla, pan de bono y tamales. Esencia paisa en cada taza.', img:'', telefono:'+57 604 012 3456', instagram:'', menu:['Tinto', 'Cafe con leche', 'Pan de bono', 'Tamal'], coords:[6.215, -75.57] },
+  { id:8, orden:999, bg:'pt3', cat:'cafe', name:'Al Alma Cafe', nit:'', barrio:'Belen', tags:['Especialidad', 'Brunch', 'Saludable'], rating:4.7, horario:'Lun-Dom 7am-6pm', precio:'$$ Promedio', desc:'Cafe de especialidad con opcion saludable en Belen. Granos de origen etico, leches vegetales y bowls de acai. El favorito de los fumadores.', img:'', telefono:'+57 604 123 4567', instagram:'alalmaacafe', menu:['Acai Bowl', 'Cold Brew', 'Tostadas', 'Jugo verde'], coords:[6.23, -75.595] },
+  { id:9, orden:999, bg:'pt1', cat:'cafe', name:'Urbania Cafe', nit:'', barrio:'Laureles', tags:['Cafe', 'Libros', 'Relax'], rating:4.6, horario:'Lun-Dom 8am-8pm', precio:'$ Economico', desc:'Cafe-libreria en Laureles con coleccion de libros de arte. Ambiente tranquilo, cafe de filtro y musica clasica. Perfecto para leer.', img:'', telefono:'+57 604 901 2345', instagram:'urbanacafe', menu:['Espresso', 'Te', 'Muffin', 'Sandwich'], coords:[6.242, -75.588] },
+  { id:10, orden:999, bg:'pt7', cat:'cafe', name:'Pergamino Cafe', nit:'', barrio:'El Poblado', tags:['Especialidad', 'Tostadores', 'Origen'], rating:4.8, horario:'Lun-Dom 7am-8pm', precio:'$$ Promedio', desc:'Tostaduria de especialidad con granos de fincas antioquenas. Metodos de filtro, latte art y panaderia artesanal. Referente del cafe en Medellin.', img:'', telefono:'+57 604 789 0123', instagram:'pergaminocafe', menu:['Flat White', 'Pour Over', 'Pan de bono', 'Croissant'], coords:[6.21, -75.565] },
+  { id:11, orden:999, bg:'pt8', cat:'cafe', name:'Cafe Velvet', nit:'', barrio:'El Poblado', tags:['Brunch', 'Tostadores', 'Acogedor'], rating:4.7, horario:'Lun-Dom 7am-7pm', precio:'$$ Promedio', desc:'Cafe de especialidad con ambiente vintage y brunch todo el dia. Granos de cafe de la Sierra Nevada y opciones veganas.', img:'', telefono:'+57 604 890 1234', instagram:'cafevelvet', menu:['Capuchino', 'Brunch', 'Smoothie', 'Sandwich'], coords:[6.208, -75.568] },
   // === COMIDA ===
-  { id:11, orden:999, bg:'pt3', cat:'comida', name:'Restaurante La Merced', nit:'', barrio:'Centro', tags:['Merced', 'Tipico', 'Colonial'], rating:4.5, horario:'Mar-Dom 12pm-8pm', precio:'$$ Promedio', desc:'Restaurante colonial con recetas tradicionales.', img:'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?w=1920', telefono:'+57 602 901 2345', instagram:'', menu:['Lomo', 'Pasta', 'Ensalada', 'Postre'], coords:[2.442, -76.608] },
-  { id:12, orden:999, bg:'pt2', cat:'comida', name:'Restaurante El Patio', nit:'', barrio:'Centro', tags:['Patio', 'Colonial', 'Tipico'], rating:4.5, horario:'Lun-Dom 11am-9pm', precio:'$$ Promedio', desc:'Restaurante con patio colonial y comida tipica.', img:'https://images.pexels.com/photos/375889/pexels-photo-375889.jpeg?w=1920', telefono:'+57 602 890 1234', instagram:'elpatiopopayan', menu:['Carne', 'Pescado', 'Arroz', 'Jugo'], coords:[2.44, -76.61] },
-  { id:13, orden:999, bg:'pt5', cat:'comida', name:'Restaurante La Casona', nit:'', barrio:'Centro', tags:['Colonial', 'Tipico', 'Elegante'], rating:4.7, horario:'Mar-Dom 12pm-3pm 7pm-10pm', precio:'$$$ Exclusivo', desc:'Cocina tradicional payanesa en casona colonial. Menu degustacion.', img:'https://images.pexels.com/photos/2295285/pexels-photo-2295285.jpeg?w=1920', telefono:'+57 602 567 8901', instagram:'lacasonapopayan', menu:['Menu degustacion', 'Lomo', 'Pasta', 'Postre'], coords:[2.441, -76.609] },
-  { id:14, orden:999, bg:'pt4', cat:'comida', name:'Restaurante La Plazuela', nit:'', barrio:'Centro', tags:['Plaza', 'Tipico', 'Casero'], rating:4.4, horario:'Lun-Dom 11am-8pm', precio:'$ Economico', desc:'Comida tipica en la plazuela de Popayan.', img:'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?w=1920', telefono:'+57 602 012 3456', instagram:'', menu:['Menu', 'Sopa', 'Seco', 'Jugo'], coords:[2.44, -76.61] },
-  { id:15, orden:999, bg:'pt6', cat:'comida', name:'Restaurante La Catedral', nit:'', barrio:'Centro', tags:['Catedral', 'Vista', 'Elegante'], rating:4.6, horario:'Mar-Dom 12pm-8pm', precio:'$$$ Exclusivo', desc:'Restaurante con vista a la catedral.', img:'https://images.pexels.com/photos/375889/pexels-photo-375889.jpeg?w=1920', telefono:'+57 602 890 1234', instagram:'', menu:['Lomo', 'Pasta', 'Ensalada', 'Postre'], coords:[2.44, -76.61] },
-  { id:16, orden:999, bg:'pt5', cat:'comida', name:'Restaurante El Fogon', nit:'', barrio:'Centro', tags:['Fogon', 'Tipico', 'Casero'], rating:4.5, horario:'Lun-Dom 11am-8pm', precio:'$$ Promedio', desc:'Cocina tradicional de fogon payanes.', img:'https://images.pexels.com/photos/2295285/pexels-photo-2295285.jpeg?w=1920', telefono:'+57 602 789 0123', instagram:'fogonpopayan', menu:['Carne', 'Pescado', 'Arroz', 'Postre'], coords:[2.441, -76.609] },
-  { id:17, orden:999, bg:'pt1', cat:'comida', name:'Restaurante Donde la Tia', nit:'', barrio:'Centro', tags:['Tipico', 'Casero', 'Familiar'], rating:4.4, horario:'Lun-Dom 11am-8pm', precio:'$ Economico', desc:'Comida casera payanesa de la tia.', img:'https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?w=1920', telefono:'+57 602 789 0123', instagram:'', menu:['Menu', 'Sopa', 'Seco', 'Postre'], coords:[2.441, -76.609] },
+  { id:12, orden:999, bg:'pt1', cat:'comida', name:'Mondongos', nit:'', barrio:'El Poblado', tags:['Tipico', 'Sopa', 'Casual'], rating:4.5, horario:'Lun-Dom 11am-10pm', precio:'$ Economico', desc:'Famoso por sus sopas y platos tipicos antioquenos. Mondongo, sancocho, cazuela y bandeja paisa en porciones generosas y precios justos.', img:'', telefono:'+57 604 789 0123', instagram:'mondongosmed', menu:['Mondongo', 'Cazuela de frijoles', 'Sancocho', 'Bandeja paisa'], coords:[6.21, -75.569] },
+  { id:13, orden:999, bg:'pt8', cat:'comida', name:'Hatoviejo', nit:'', barrio:'Centro', tags:['Paisa', 'Tradicional', 'Casero'], rating:4.6, horario:'Lun-Dom 11am-10pm', precio:'$$ Promedio', desc:'Restaurante tipico paisa en el centro desde 1975. Bandeja paisa, mondongo, sancocho y frijoles con garra. Sabor casero antioqueno.', img:'', telefono:'+57 604 678 9012', instagram:'hatoviejomed', menu:['Bandeja paisa', 'Mondongo', 'Sancocho', 'Frijoles'], coords:[6.25, -75.572] },
+  { id:14, orden:999, bg:'pt3', cat:'comida', name:'El Cielo Medellin', nit:'', barrio:'El Poblado', tags:['Molecular', 'Fusion', 'Innovador'], rating:4.8, horario:'Mar-Dom 12pm-3pm 7pm-11pm', precio:'$$$ Exclusivo', desc:'Cocina molecular colombiana del chef Juan Manuel Barrientos. Platos deconstruidos y sabores sorprendentes. Experiencia multisensorial.', img:'', telefono:'+57 604 901 2345', instagram:'elcielomedellin', menu:['Menu degustacion', 'Ceviche molecular', 'Lomo de res', 'Postre'], coords:[6.2055, -75.5675] },
+  { id:15, orden:999, bg:'pt2', cat:'comida', name:'Restaurante de la Abuela', nit:'', barrio:'Laureles', tags:['Casero', 'Tradicional', 'Familiar'], rating:4.5, horario:'Lun-Dom 8am-5pm', precio:'$ Economico', desc:'Comida casera como la de la abuela en Laureles. Almuerzos ejecutivos, sopas del dia y jugos naturales. El mejor almuerzo economico.', img:'', telefono:'+57 604 890 1234', instagram:'', menu:['Sopa del dia', 'Seco del dia', 'Jugo natural', 'Postre'], coords:[6.243, -75.589] },
+  { id:16, orden:999, bg:'pt5', cat:'comida', name:'Ocio', nit:'', barrio:'El Poblado', tags:['Carnes', 'Parrilla', 'Argentino'], rating:4.7, horario:'Lun-Dom 12pm-11pm', precio:'$$$ Exclusivo', desc:'Parrilla argentina de primera en El Poblado. Carnes maduradas, vinos argentinos y postres caseros. El mejor bife de chorizo de la ciudad.', img:'', telefono:'+57 604 345 6789', instagram:'ociomedellin', menu:['Bife de chorizo', 'Parrillada', 'Provoleta', 'Flan'], coords:[6.209, -75.566] },
+  { id:17, orden:999, bg:'pt4', cat:'comida', name:'Restaurante Carmen', nit:'', barrio:'El Poblado', tags:['Alta cocina', 'Fusion', 'Elegante'], rating:4.9, horario:'Mar-Sab 12pm-3pm 7pm-11pm', precio:'$$$ Alta cocina', desc:'Uno de los mejores restaurantes de Colombia. Cocina de autor que fusiona tecnicas francesas con ingredientes colombianos. Servicio impecable.', img:'', telefono:'+57 604 234 5678', instagram:'restaurantecarmen', menu:['Menu degustacion', 'Pato con mango', 'Risotto de hongos', 'Postre de cafe'], coords:[6.206, -75.567] },
+  { id:18, orden:999, bg:'pt7', cat:'comida', name:'La Provincia', nit:'', barrio:'El Poblado', tags:['Espanol', 'Mariscos', 'Tapas'], rating:4.6, horario:'Mar-Dom 12pm-3pm 7pm-11pm', precio:'$$$ Exclusivo', desc:'Cocina espanola contemporanea con mariscos frescos importados. Tapas de autor, paella valenciana y bodega con mas de 200 vinos espanoles.', img:'', telefono:'+57 604 567 8901', instagram:'laprovinciamed', menu:['Paella', 'Pulpo a la gallega', 'Jamon iberico', 'Crema catalana'], coords:[6.204, -75.568] },
+  { id:19, orden:999, bg:'pt6', cat:'comida', name:'In Situ', nit:'', barrio:'El Poblado', tags:['Colombiana', 'Autor', 'Premiado'], rating:4.8, horario:'Mar-Sab 12pm-3pm 7pm-10pm', precio:'$$$ Alta cocina', desc:'Cocina colombiana de autor con ingredientes del Pacifico y la Amazonia. Cada plato cuenta una historia del pais. Experiencia gastronomica.', img:'', telefono:'+57 604 456 7890', instagram:'insitumedellin', menu:['Ceviche de camaron', 'Lomo de res', 'Mousse de lulo', 'Maridaje'], coords:[6.2075, -75.5655] },
   // === ARTE ===
-  { id:18, orden:999, bg:'pt7', cat:'arte', name:'Museo Negret', nit:'', barrio:'Centro', tags:['Negret', 'Escultura', 'Arte'], rating:4.6, horario:'Mar-Sab 9am-5pm', precio:'$ Economico', desc:'Museo del escultor Edgar Negret.', img:'https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?w=1920', telefono:'+57 602 901 2345', instagram:'', menu:[''], coords:[2.441, -76.609] },
-  { id:19, orden:999, bg:'pt6', cat:'arte', name:'Museo de Historia Natural', nit:'', barrio:'Centro', tags:['Naturaleza', 'Cauca', 'Ciencia'], rating:4.5, horario:'Mar-Sab 9am-5pm', precio:'$ Economico', desc:'Museo de historia natural del Cauca.', img:'https://images.pexels.com/photos/1194420/pexels-photo-1194420.jpeg?w=1920', telefono:'+57 602 234 5678', instagram:'', menu:[''], coords:[2.44, -76.61] },
-  { id:20, orden:999, bg:'pt5', cat:'arte', name:'Museo de la Ciudad', nit:'', barrio:'Centro', tags:['Ciudad', 'Historia', 'Cultura'], rating:4.5, horario:'Mar-Sab 9am-5pm', precio:'$ Economico', desc:'Museo de la historia de Popayan.', img:'https://images.pexels.com/photos/5962234/pexels-photo-5962234.jpeg?w=1920', telefono:'+57 602 123 4567', instagram:'', menu:[''], coords:[2.441, -76.609] },
-  { id:21, orden:999, bg:'pt6', cat:'arte', name:'Museo de Arte Religioso', nit:'', barrio:'Centro', tags:['Religioso', 'Arte', 'Colonial'], rating:4.6, horario:'Mar-Sab 9am-5pm', precio:'$ Economico', desc:'Museo con arte religioso de la epoca colonial. Pinturas y esculturas.', img:'https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?w=1920', telefono:'+57 602 678 9012', instagram:'museoartepopayan', menu:[''], coords:[2.442, -76.608] },
+  { id:20, orden:999, bg:'pt6', cat:'arte', name:'Casa Museo Gardeliana', nit:'', barrio:'Centro', tags:['Gardel', 'Tangos', 'Historia'], rating:4.5, horario:'Lun-Vie 9am-5pm Sab 9am-1pm', precio:'$ Economico', desc:'Museo dedicado a Carlos Gardel en la casa donde vivio en Medellin. Fotos, discos y objetos del cantante de tangos mas famoso.', img:'', telefono:'+57 604 231 9310', instagram:'', menu:[''], coords:[6.249, -75.574] },
+  { id:21, orden:999, bg:'pt7', cat:'arte', name:'Galeria La Cometa', nit:'', barrio:'El Poblado', tags:['Galeria', 'Contemporaneo', 'Emergentes'], rating:4.5, horario:'Mar-Vie 10am-7pm Sab 10am-4pm', precio:'Gratis', desc:'Galeria de arte contemporaneo con exposiciones de artistas emergentes colombianos. Arte conceptual, fotografia y escultura.', img:'', telefono:'+57 604 311 1234', instagram:'galerialacometa', menu:[''], coords:[6.206, -75.566] },
+  { id:22, orden:999, bg:'pt4', cat:'arte', name:'Museo de Antioquia', nit:'', barrio:'Centro', tags:['Botero', 'Arte', 'Cultura'], rating:4.8, horario:'Lun-Sab 9am-5pm Dom 10am-4pm', precio:'$ Economico', desc:'Museo con la coleccion mas grande de Fernando Botero. Obras de arte precolombino, colonial y contemporaneo. Las 23 esculturas en la plaza son iconicas.', img:'', telefono:'+57 604 251 3636', instagram:'museodeantioquia', menu:[''], coords:[6.251, -75.57] },
+  { id:23, orden:999, bg:'pt5', cat:'arte', name:'Museo de Arte Moderno', nit:'', barrio:'Ciudad del Rio', tags:['Moderno', 'Contemporaneo', 'Exposiciones'], rating:4.6, horario:'Mar-Sab 10am-6pm Dom 12pm-5pm', precio:'$ Economico', desc:'MAMM con obras de artistas colombianos contemporaneos. Exposiciones temporales, cine arte y la cafeteria mas cool de Medellin.', img:'', telefono:'+57 604 444 2622', instagram:'mammmedellin', menu:[''], coords:[6.218, -75.578] },
   // === PLAN ===
-  { id:22, orden:999, bg:'pt6', cat:'plan', name:'Puente del Rio Molino', nit:'', barrio:'Centro', tags:['Puente', 'Rio', 'Caminata'], rating:4.4, horario:'Siempre abierto', precio:'Gratis', desc:'Puente colonial sobre el rio Molino.', img:'https://images.pexels.com/photos/3214958/pexels-photo-3214958.jpeg?w=1920', telefono:'', instagram:'', menu:[''], coords:[2.438, -76.612] },
-  { id:23, orden:999, bg:'pt5', cat:'plan', name:'Cerro de la Virgen', nit:'', barrio:'Cerro', tags:['Virgen', 'Mirador', 'Cerro'], rating:4.5, horario:'Lun-Dom 6am-5pm', precio:'Gratis', desc:'Cerro con virgen y vista de la ciudad.', img:'https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?w=1920', telefono:'', instagram:'', menu:[''], coords:[2.435, -76.615] },
-  { id:24, orden:999, bg:'pt7', cat:'plan', name:'Semana Santa Popayan', nit:'', barrio:'Centro', tags:['Religioso', 'Cultura', 'Tradicion'], rating:4.9, horario:'Marzo-Abril', precio:'Gratis', desc:'La Semana Santa mas importante de Colombia. Procesiones y tradicion.', img:'https://images.pexels.com/photos/206660/pexels-photo-206660.jpeg?w=1920', telefono:'', instagram:'semanasantapopayan', menu:[''], coords:[2.44, -76.61] },
-  { id:25, orden:999, bg:'pt7', cat:'plan', name:'Puente del Humilladero', nit:'', barrio:'Centro', tags:['Puente', 'Colonial', 'Caminata'], rating:4.6, horario:'Siempre abierto', precio:'Gratis', desc:'Puente colonial del siglo XVIII sobre el rio Molino.', img:'https://images.pexels.com/photos/3214958/pexels-photo-3214958.jpeg?w=1920', telefono:'', instagram:'', menu:[''], coords:[2.438, -76.612] },
-  { id:26, orden:999, bg:'pt8', cat:'plan', name:'Cerro de la Eme', nit:'', barrio:'Cerro', tags:['Mirador', 'Cerro', 'Deporte'], rating:4.5, horario:'Lun-Dom 6am-5pm', precio:'Gratis', desc:'Cerro con forma de M con vista de la ciudad.', img:'https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?w=1920', telefono:'', instagram:'', menu:[''], coords:[2.435, -76.615] },
-  { id:27, orden:999, bg:'pt1', cat:'plan', name:'Morro de Tulcan', nit:'', barrio:'Morro', tags:['Mirador', 'Parque', 'Historico'], rating:4.6, horario:'Lun-Dom 6am-6pm', precio:'Gratis', desc:'Colina con estatua de Belalcazar y vista panoramica.', img:'https://images.pexels.com/photos/206660/pexels-photo-206660.jpeg?w=1920', telefono:'', instagram:'', menu:[''], coords:[2.442, -76.608] },
+  { id:24, orden:999, bg:'pt3', cat:'plan', name:'Jardin Botanico', nit:'', barrio:'Estadio', tags:['Naturaleza', 'Orquideas', 'Paz'], rating:4.7, horario:'Lun-Dom 9am-5pm', precio:'Gratis', desc:'Jardin botanico con lagos, orquideorama disenado por Planeta y mariposario. Pulmon verde de Medellin y espacio de paz en la ciudad.', img:'', telefono:'+57 604 444 5500', instagram:'jardinbotanicomed', menu:[''], coords:[6.27, -75.58] },
+  { id:25, orden:999, bg:'pt4', cat:'plan', name:'Centro Comercial El Tesoro', nit:'', barrio:'El Poblado', tags:['Compras', 'Vistas', 'Panoramico'], rating:4.5, horario:'Lun-Dom 10am-9pm', precio:'Gratis', desc:'Centro comercial con vistas espectaculares de Medellin. Tiendas de diseno, cine, restaurantes y terraza con la mejor vista de la ciudad.', img:'', telefono:'+57 604 321 1111', instagram:'eltesoromed', menu:[''], coords:[6.202, -75.565] },
+  { id:26, orden:999, bg:'pt5', cat:'plan', name:'Parque Explora', nit:'', barrio:'Estadio', tags:['Ciencia', 'Acuario', 'Interactivo'], rating:4.7, horario:'Mar-Vie 8am-5pm Sab-Dom 10am-6pm', precio:'$$ Promedio', desc:'Museo interactivo de ciencias con acuario, planetario y vivario. El acuario mas grande de Colombia con tiburones y piranas.', img:'', telefono:'+57 604 516 8300', instagram:'parqueexplora', menu:[''], coords:[6.269, -75.583] },
+  { id:27, orden:999, bg:'pt8', cat:'plan', name:'Comuna 13 Tour', nit:'', barrio:'Comuna 13', tags:['Grafiti', 'Cultura', 'Tour'], rating:4.9, horario:'Diario 9am-5pm', precio:'$ Economico', desc:'Recorrido por la Comuna 13 con escaleras electricas, grafitis del proyecto Transformacion y vistas de la ciudad. La historia de resiliencia mas inspiradora de Medellin.', img:'', telefono:'+57 604 123 4567', instagram:'comuna13tour', menu:[''], coords:[6.265, -75.58] },
+  { id:28, orden:999, bg:'pt1', cat:'plan', name:'Pueblito Paisa', nit:'', barrio:'Cerro Nutibara', tags:['Paisa', 'Mirador', 'Cultura'], rating:4.6, horario:'Lun-Dom 6am-12am', precio:'Gratis', desc:'Replica de un pueblo antioqueno en la cima del Cerro Nutibara. Iglesia, plaza, tiendas y vista panoramica de Medellin. Imperdible.', img:'', telefono:'', instagram:'pueblitopaisa', menu:[''], coords:[6.237, -75.576] },
+  { id:29, orden:999, bg:'pt2', cat:'plan', name:'Parque Arvi', nit:'', barrio:'Santa Elena', tags:['Naturaleza', 'Metrocable', 'Senderismo'], rating:4.8, horario:'Mar-Dom 9am-6pm', precio:'$ Economico', desc:'Reserva natural a la que se llega en Metrocable desde Santo Domingo. Senderos, avistamiento de aves, mercado de agricultores los domingos.', img:'', telefono:'+57 604 444 7100', instagram:'parquearvi', menu:[''], coords:[6.29, -75.54] },
   // === NOCHE ===
-  { id:28, orden:999, bg:'pt6', cat:'noche', name:'Salsa Colonial', nit:'', barrio:'Centro', tags:['Salsa', 'Colonial', 'Baile'], rating:4.4, horario:'Vie-Sab 7pm-1am', precio:'$$ Promedio', desc:'Salon de salsa colonial.', img:'https://images.pexels.com/photos/1285647/pexels-photo-1285647.jpeg?w=1920', telefono:'+57 602 123 4567', instagram:'', menu:['Cerveza', 'Ron', 'Aguardiente', 'Agua'], coords:[2.44, -76.61] },
-  { id:29, orden:999, bg:'pt8', cat:'noche', name:'Noche Cultural Payanesa', nit:'', barrio:'Centro', tags:['Cultural', 'Noche', 'Poesia'], rating:4.3, horario:'Vie 7pm-11pm', precio:'$ Economico', desc:'Noche de poesia y musica en el centro.', img:'https://images.pexels.com/photos/696407/pexels-photo-696407.jpeg?w=1920', telefono:'+57 602 345 6789', instagram:'', menu:['Cafe', 'Te', 'Vino', 'Empanada'], coords:[2.44, -76.61] },
-  { id:30, orden:999, bg:'pt5', cat:'noche', name:'Bar El Virrey', nit:'', barrio:'Centro', tags:['Virrey', 'Bar', 'Tradicional'], rating:4.3, horario:'Lun-Dom 5pm-11pm', precio:'$ Economico', desc:'Bar tradicional del centro.', img:'https://images.pexels.com/photos/167092/pexels-photo-167092.jpeg?w=1920', telefono:'+57 602 012 3456', instagram:'', menu:['Cerveza', 'Ron', 'Coctel', 'Empanada'], coords:[2.44, -76.61] },
-  { id:31, orden:999, bg:'pt7', cat:'noche', name:'Cafe Bar Payanes', nit:'', barrio:'Centro', tags:['Cafe', 'Bar', 'Noche'], rating:4.3, horario:'Mar-Dom 5pm-11pm', precio:'$ Economico', desc:'Cafe bar con musica en vivo.', img:'https://images.pexels.com/photos/1285647/pexels-photo-1285647.jpeg?w=1920', telefono:'+57 602 234 5678', instagram:'', menu:['Cafe', 'Cerveza', 'Ron', 'Te'], coords:[2.441, -76.609] },
-  { id:32, orden:999, bg:'pt3', cat:'noche', name:'Noche Blanca', nit:'', barrio:'Centro', tags:['Fiesta', 'Baile', 'Moderna'], rating:4.4, horario:'Vie-Sab 8pm-2am', precio:'$$ Promedio', desc:'Discoteca con musica moderna.', img:'https://images.pexels.com/photos/696407/pexels-photo-696407.jpeg?w=1920', telefono:'+57 602 456 7890', instagram:'', menu:['Cerveza', 'Whisky', 'Ron', 'Coctel'], coords:[2.441, -76.609] },
-  { id:33, orden:999, bg:'pt2', cat:'noche', name:'Salsa Payanesa', nit:'', barrio:'Centro', tags:['Salsa', 'Baile', 'Fiesta'], rating:4.4, horario:'Vie-Sab 7pm-2am', precio:'$$ Promedio', desc:'Salon de salsa con musica en vivo.', img:'https://images.pexels.com/photos/167092/pexels-photo-167092.jpeg?w=1920', telefono:'+57 602 345 6789', instagram:'', menu:['Cerveza', 'Ron', 'Aguardiente', 'Agua'], coords:[2.44, -76.61] },
-  { id:34, orden:999, bg:'pt8', cat:'noche', name:'Salsa y Tradicion', nit:'', barrio:'Centro', tags:['Salsa', 'Baile', 'Tradicional'], rating:4.5, horario:'Vie-Sab 7pm-2am', precio:'$$ Promedio', desc:'Salon de baile con salsa y musica colombiana.', img:'https://images.pexels.com/photos/1285647/pexels-photo-1285647.jpeg?w=1920', telefono:'+57 602 789 0123', instagram:'salsatradicionpop', menu:['Cerveza', 'Ron', 'Aguardiente', 'Agua'], coords:[2.44, -76.61] },
-  { id:35, orden:999, bg:'pt4', cat:'noche', name:'Popayan Nocturna', nit:'', barrio:'Centro', tags:['Noche', 'Cerveza', 'Tradicional'], rating:4.3, horario:'Vie-Sab 7pm-12am', precio:'$ Economico', desc:'Bar tradicional nocturno en el centro.', img:'https://images.pexels.com/photos/696407/pexels-photo-696407.jpeg?w=1920', telefono:'+57 602 567 8901', instagram:'', menu:['Cerveza', 'Ron', 'Coctel', 'Empanada'], coords:[2.44, -76.61] },
+  { id:30, orden:999, bg:'pt1', cat:'noche', name:'Infinito', nit:'', barrio:'Laureles', tags:['Rock', 'Cerveza', 'Local'], rating:4.4, horario:'Jue-Sab 8pm-3am', precio:'$$ Promedio', desc:'Bar rockero en Laureles con bandas en vivo. Cerveza artesanal, ambiente de barrio y la mejor musica rock de Medellin.', img:'', telefono:'+57 604 456 7890', instagram:'infinitomed', menu:['Cerveza artesanal', 'Whisky', 'Hamburguesa', 'Papas'], coords:[6.241, -75.59] },
+  { id:31, orden:999, bg:'pt2', cat:'noche', name:'Blue', nit:'', barrio:'El Poblado', tags:['Lounge', 'Cocteles', 'Elegante'], rating:4.5, horario:'Mar-Dom 6pm-2am', precio:'$$$ Exclusivo', desc:'Lounge bar en El Poblado con iluminacion azul y cocteles premiados. Musica electronica suave y ambiente sofisticado para conversar y socializar.', img:'', telefono:'+57 604 567 8901', instagram:'bluemedellin', menu:['Blue Martini', 'Negroni', 'Tabla de quesos', 'Ceviche'], coords:[6.2075, -75.5675] },
+  { id:32, orden:999, bg:'pt3', cat:'noche', name:'La Popular', nit:'', barrio:'Buenos Aires', tags:['Salsa', 'Tradicional', 'Popular'], rating:4.3, horario:'Vie-Sab 7pm-3am', precio:'$ Economico', desc:'Salon de baile tradicional en Buenos Aires con salsa y merengue en vivo. Clases de baile gratuitas los viernes. Ambiente familiar y alegre.', img:'', telefono:'+57 604 678 9012', instagram:'lapopularmed', menu:['Cerveza', 'Aguardiente', 'Ron', 'Gaseosa'], coords:[6.26, -75.56] },
+  { id:33, orden:999, bg:'pt6', cat:'noche', name:'Parque Lleras', nit:'', barrio:'El Poblado', tags:['Zona Rosa', 'Rumba', 'Turismo'], rating:4.5, horario:'Vie-Sab 6pm-4am', precio:'$$ Promedio', desc:'Epicentro de la vida nocturna de Medellin. Decenas de bares y discotecas alrededor del parque. Ambiente internacional y energia vibrante.', img:'', telefono:'', instagram:'parquelleras', menu:['Cerveza', 'Ron', 'Coctel', 'Agua'], coords:[6.207, -75.566] },
+  { id:34, orden:999, bg:'pt7', cat:'noche', name:'Donde Julio', nit:'', barrio:'El Poblado', tags:['Discoteca', 'Reggaeton', 'Popular'], rating:4.4, horario:'Vie-Sab 9pm-4am', precio:'$$ Promedio', desc:'Discoteca clasica de El Poblado con musica urbana y electronica. Pista de baile grande y ambiente festivo. La fiesta mas alegre del barrio.', img:'', telefono:'+57 604 234 5678', instagram:'dondejuliomed', menu:['Cerveza', 'Whisky', 'Club Colombia', 'Ron'], coords:[6.2065, -75.5665] },
+  { id:35, orden:999, bg:'pt8', cat:'noche', name:'Mansion Club', nit:'', barrio:'El Poblado', tags:['VIP', 'Electronica', 'Elegante'], rating:4.6, horario:'Vie-Sab 10pm-5am', precio:'$$$ Exclusivo', desc:'Club nocturno premium en El Poblado con DJs internacionales. Sonido de primera, luces laser y ambiente exclusivo. La noche mas cara de Medellin.', img:'', telefono:'+57 604 345 6789', instagram:'mansionclubmed', menu:['Champagne', 'Whisky', 'Coctel', 'Cerveza'], coords:[6.204, -75.567] },
 ];
 
-// ══════════════════════════════════════
+// --------------------------------------
 // EVENTOS
-// ══════════════════════════════════════
+// --------------------------------------
 const eventList = [
-  { date:'2026-07-20', endDate:'2026-07-22', cat:'arte', icon:'🎭', name:'Semana Santa Cultural', nit:'', place:'Centro', price:'Variable', short:'20-22 de julio' },
-  { date:'2026-08-15', endDate:'2026-08-17', cat:'arte', icon:'🎵', name:'Festival de Musica Religiosa', nit:'', place:'Centro', price:'Entrada libre', short:'15-17 de agosto' },
-  { date:'2026-09-15', endDate:'2026-09-17', cat:'arte', icon:'🎭', name:'Festival de Teatro Payanes', nit:'', place:'Centro', price:'Variable', short:'15-17 de septiembre' },
-  { date:'2026-10-10', endDate:'2026-10-12', cat:'arte', icon:'🎵', name:'Festival de Musica Andina', nit:'', place:'Centro', price:'Entrada libre', short:'10-12 de octubre' },
-  { date:'2026-11-05', endDate:'2026-11-07', cat:'comida', icon:'🍴', name:'Festival Gastronomico del Cauca', nit:'', place:'Centro', price:'Variable', short:'5-7 de noviembre' },
+  { date:'2026-07-10', endDate:'2026-07-12', cat:'arte', icon:'??', name:'Festival Internacional de Tango', nit:'', place:'Centro', price:'Variable', short:'10-12 de julio' },
+  { date:'2026-08-20', endDate:'2026-08-25', cat:'arte', icon:'??', name:'Feria de las Flores', nit:'', place:'Toda la ciudad', price:'Variable', short:'20-25 de agosto' },
+  { date:'2026-09-15', endDate:'2026-09-17', cat:'arte', icon:'??', name:'Medellin Music Week', nit:'', place:'El Poblado', price:'Desde $50.000', short:'15-17 de septiembre' },
+  { date:'2026-10-01', endDate:'2026-10-03', cat:'comida', icon:'??', name:'Alimentarte Medellin', nit:'', place:'Jardin Botanico', price:'Variable', short:'1-3 de octubre' },
+  { date:'2026-11-05', endDate:'2026-11-07', cat:'arte', icon:'??', name:'Festival de Cine de Medellin', nit:'', place:'Varios teatros', price:'Desde $15.000', short:'5-7 de noviembre' },
+  { date:'2026-12-01', endDate:'2026-12-03', cat:'plan', icon:'??', name:'Carrera de la Luz', nit:'', place:'Centro', price:'.000', short:'1-3 de diciembre' },
 ];
 
 function getUpcomingEvents() {
@@ -717,9 +710,9 @@ function renderEventsList(list) {
       <div class="ev-thumb-full ${etClasses[i % 5]}">${e.icon}<div class="ev-badge-full dia">${meses[m]}</div></div>
       <div class="ev-info-full">
         <h3>${e.name}</h3>
-        <div class="ev-detail-row"><span>🕐</span> ${e.short}</div>
-        <div class="ev-detail-row"><span>📍</span> ${e.place}</div>
-        <div class="ev-detail-row"><span>🎟</span> ${e.price}</div>
+        <div class="ev-detail-row"><span>??</span> ${e.short}</div>
+        <div class="ev-detail-row"><span>??</span> ${e.place}</div>
+        <div class="ev-detail-row"><span>??</span> ${e.price}</div>
       </div>`;
     feed.appendChild(card);
   });
@@ -742,10 +735,10 @@ function renderBannerEvents() {
   });
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // ESTADO
-// ══════════════════════════════════════
-let saved = JSON.parse(localStorage.getItem('pop_saved') || '[]');
+// --------------------------------------
+let saved = JSON.parse(localStorage.getItem('med_saved') || '[]');
 let currentFilter = 'todos';
 let currentSearch = '';
 let currentModal = null;
@@ -754,9 +747,9 @@ let mapMarkers = [];
 let mapInitialized = false;
 let mapFocusPlace = null;
 
-// ══════════════════════════════════════
+// --------------------------------------
 // NAVEGACIÓN
-// ══════════════════════════════════════
+// --------------------------------------
 function goScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -770,9 +763,9 @@ function goScreen(id) {
   window.scrollTo(0,0);
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // FILTROS
-// ══════════════════════════════════════
+// --------------------------------------
 function setFilter(cat, el) {
   currentFilter = cat;
   document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
@@ -795,9 +788,9 @@ function matchesFilter(p) {
   return catMatch && searchMatch;
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // RENDER LUGARES
-// ══════════════════════════════════════
+// --------------------------------------
 function renderPlaces() {
   const feed = document.getElementById('places-feed');
   feed.innerHTML = '';
@@ -826,15 +819,15 @@ function makePlaceCard(p, i) {
     <div class="place-info">
       <h3>${p.name}</h3>
       <div class="place-tags">${p.tags.map(t=>`<span class="p-tag">${t}</span>`).join('')}</div>
-      <div class="place-barrio">📍 ${p.barrio}</div>
+      <div class="place-barrio">?? ${p.barrio}</div>
     </div>`;
   d.addEventListener('click', e => { if(!e.target.closest('.heart-btn')) openModal(p); });
   return d;
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // FILTER EVENTOS
-// ══════════════════════════════════════
+// --------------------------------------
 function filterEvents() {
   const upcoming = getUpcomingEvents();
   const filtered = upcoming.filter(e => {
@@ -847,13 +840,13 @@ function filterEvents() {
   renderBannerEvents();
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // MAPA
-// ══════════════════════════════════════
+// --------------------------------------
 function initMap() {
   if(mapInitialized) { leafMap.invalidateSize(); updateMapPins(); return; }
   mapInitialized = true;
-  leafMap = L.map('map', {zoomControl:true}).setView([2.4440,-76.6140],16);
+  leafMap = L.map('map', {zoomControl:true}).setView([6.2476,-75.5658],13);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:19}).addTo(leafMap);
   updateMapPins();
 }
@@ -865,10 +858,10 @@ function updateMapPins() {
   const toShow = mapFocusPlace !== null ? places.filter(p => p.id === mapFocusPlace) : places.filter(matchesFilter);
   toShow.forEach(p => {
     const icon = L.divIcon({
-      html:`<div style="background:#1C1508;border:2px solid #D4AC0D;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.5);"><svg viewBox="0 0 80 80" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">${getSVG(p.cat)}</svg></div>`,
+      html:`<div style="background:#1C1508;border:2px solid #27AE60;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.5);"><svg viewBox="0 0 80 80" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">${getSVG(p.cat)}</svg></div>`,
       className:'', nit:'', iconSize:[36,36], iconAnchor:[18,18]
     });
-    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">📍 ${p.barrio}</div>`);
+    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">?? ${p.barrio}</div>`);
     mapMarkers.push(marker);
   });
 }
@@ -888,9 +881,9 @@ function goToMap(place) {
   }, 380);
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // MODAL
-// ══════════════════════════════════════
+// --------------------------------------
 function openModal(p) {
   currentModal = p;
   const isSaved = saved.includes(p.id);
@@ -910,7 +903,7 @@ function openModal(p) {
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-tags').innerHTML = p.tags.map(t=>`<span class="m-tag">${t}</span>`).join('');
   document.getElementById('modal-desc').textContent = p.desc;
-  document.getElementById('modal-barrio').innerHTML = `📍 ${p.barrio}`;
+  document.getElementById('modal-barrio').innerHTML = `?? ${p.barrio}`;
 
   const full = Math.floor(p.rating);
   const starsHtml = Array.from({length:5},(_,i)=>`<i class="star fa${i<full?'s':'r'} fa-star ${i<full?'on':'off'}"></i>`).join('');
@@ -921,8 +914,8 @@ function openModal(p) {
     <div class="detail-box"><div class="d-label">Precio</div><div class="d-val">${p.precio}</div></div>`;
 
   let infoHtml = '';
-  if (p.telefono) infoHtml += `<div class="info-line"><span>📞</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
-  if (p.instagram) infoHtml += `<div class="info-line"><span>📷</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
+  if (p.telefono) infoHtml += `<div class="info-line"><span>??</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
+  if (p.instagram) infoHtml += `<div class="info-line"><span>??</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
   document.getElementById('modal-info').innerHTML = infoHtml;
 
   if (p.menu && p.menu.some(it => it)) {
@@ -952,9 +945,9 @@ function handleOverlayClick(e) {
   if(e.target === document.getElementById('overlay')) closeModal();
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // GUARDAR
-// ══════════════════════════════════════
+// --------------------------------------
 function toggleSave(e, id) {
   e.stopPropagation();
   const btn = e.currentTarget;
@@ -969,7 +962,7 @@ function toggleSave(e, id) {
     btn.style.transform = 'scale(1.4)';
     setTimeout(() => btn.style.transform = '', 250);
   }
-  localStorage.setItem('pop_saved', JSON.stringify(saved));
+  localStorage.setItem('med_saved', JSON.stringify(saved));
 }
 
 function toggleSaveFromModal() {
@@ -978,7 +971,7 @@ function toggleSaveFromModal() {
   const hb = document.getElementById('btn-modal-heart');
   if(saved.includes(id)) { saved = saved.filter(s=>s!==id); hb.innerHTML='<i class="fa-regular fa-heart"></i>'; }
   else { saved.push(id); hb.innerHTML='<i class="fa-solid fa-heart" style="color:#E24B4A"></i>'; }
-  localStorage.setItem('pop_saved', JSON.stringify(saved));
+  localStorage.setItem('med_saved', JSON.stringify(saved));
   renderPlaces();
 }
 
@@ -1000,7 +993,7 @@ function sharePlace() {
   if(!currentModal) return;
   const p = currentModal;
   if(navigator.share) {
-    navigator.share({title:p.name, text:`Mira este parche en Popayan Local: ${p.name} — ${p.barrio}`, url:window.location.href});
+    navigator.share({title:p.name, text:`Mira este parche en Cartagena Local: ${p.name} — ${p.barrio}`, url:window.location.href});
   } else {
     navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Enlace copiado!'));
   }
@@ -1016,5 +1009,6 @@ renderBannerEvents();
 </script>
 </body>
 </html>
+
 
 

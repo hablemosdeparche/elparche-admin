@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <!-- Google Tag Manager -->
@@ -63,7 +63,7 @@ body::before {
   padding-bottom: 90px;
 }
 
-/* ── HEADER ── */
+/* -- HEADER -- */
 .app-header {
   padding: 22px 20px 14px;
   position: sticky;
@@ -84,7 +84,7 @@ body::before {
 }
 .search-box input::placeholder { color: var(--muted); }
 .search-box input:focus { border-color: var(--gold); }
-.search-box::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
+.search-box::before { content: '??'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
 .cats-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .cats-scroll::-webkit-scrollbar { display: none; }
 .cat-pill {
@@ -95,11 +95,11 @@ body::before {
 }
 .cat-pill.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
 
-/* ── SCREENS ── */
+/* -- SCREENS -- */
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ── BANNER ── */
+/* -- BANNER -- */
 .banner {
   margin: 16px 16px 0;
   background: linear-gradient(135deg, #2A1505, #1C0F03);
@@ -129,11 +129,11 @@ body::before {
 .btn-ver-eventos:hover { background: var(--gold-light); }
 .btn-ver-eventos:active { transform: scale(0.98); }
 
-/* ── SEC HEADER ── */
+/* -- SEC HEADER -- */
 .sec-header { display: flex; justify-content: space-between; align-items: center; padding: 22px 16px 12px; }
 .sec-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; font-style: italic; color: var(--text); }
 
-/* ── PLACES FEED ── */
+/* -- PLACES FEED -- */
 .places-feed { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
 .place-card {
   background: var(--card-bg); border: 1px solid var(--card-border);
@@ -209,7 +209,7 @@ body::before {
 .place-barrio { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
 .place-barrio i { color: var(--muted2); font-size: 11px; }
 
-/* ── EVENTOS SCREEN ── */
+/* -- EVENTOS SCREEN -- */
 .events-screen-header { padding: 20px 16px 0; }
 .events-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--gold); font-style: italic; }
 .events-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; margin-bottom: 14px; }
@@ -238,7 +238,7 @@ body::before {
 .ev-info-full h3 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
 .ev-detail-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted2); margin-bottom: 6px; }
 
-/* ── MAPA ── */
+/* -- MAPA -- */
 .map-screen { display: flex; flex-direction: column; height: calc(100vh - 140px); }
 #map { flex: 1; width: 100%; min-height: 400px; }
 .leaflet-popup-content-wrapper { background: var(--card-bg) !important; color: var(--text) !important; border: 1px solid var(--gold) !important; border-radius: 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important; }
@@ -246,7 +246,7 @@ body::before {
 .popup-name { font-weight: 600; font-size: 14px; color: var(--gold); margin-bottom: 4px; }
 .popup-barrio { font-size: 12px; color: var(--muted2); }
 
-/* ── GUARDADOS ── */
+/* -- GUARDADOS -- */
 .saved-screen-header { padding: 20px 16px 16px; }
 .saved-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; font-style: italic; color: var(--gold); }
 .saved-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; }
@@ -255,9 +255,9 @@ body::before {
 .saved-empty h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--muted2); margin-bottom: 8px; }
 .saved-empty p { font-size: 13px; line-height: 1.6; }
 
-/* ══════════════════════════════════
+/* ----------------------------------
    MODAL — todo en una pantalla
-══════════════════════════════════ */
+---------------------------------- */
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.9);
@@ -436,7 +436,7 @@ body::before {
 }
 .btn-icon:hover { border-color: var(--gold); color: var(--gold); }
 
-/* ── BOTTOM NAV ── */
+/* -- BOTTOM NAV -- */
 .bottom-nav {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
   width: 100%; max-width: 480px;
@@ -451,7 +451,7 @@ body::before {
 .nav-it.active .nav-icon { transform: scale(1.15); }
 .nav-it.active .nav-icon i { color: var(--gold); }
 
-/* ── WHATSAPP FLOTANTE ── */
+/* -- WHATSAPP FLOTANTE -- */
 .wa-float { position: fixed; bottom: 88px; right: calc(50% - 228px); z-index: 400; }
 .wa-btn {
   background: var(--whatsapp); border: none; border-radius: 50px;
@@ -486,12 +486,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="cats-scroll">
       <div class="cat-pill active" onclick="setFilter('todos',this)">Todos</div>
-      <div class="cat-pill" onclick="setFilter('bares',this)">🍺 Bares</div>
-      <div class="cat-pill" onclick="setFilter('cafe',this)">☕ Cafés</div>
-      <div class="cat-pill" onclick="setFilter('comida',this)">🍽 Comida</div>
-      <div class="cat-pill" onclick="setFilter('plan',this)">🌅 Planes</div>
-      <div class="cat-pill" onclick="setFilter('arte',this)">🎨 Arte</div>
-      <div class="cat-pill" onclick="setFilter('noche',this)">🌙 Noche</div>
+      <div class="cat-pill" onclick="setFilter('bares',this)">?? Bares</div>
+      <div class="cat-pill" onclick="setFilter('cafe',this)">? Cafés</div>
+      <div class="cat-pill" onclick="setFilter('comida',this)">?? Comida</div>
+      <div class="cat-pill" onclick="setFilter('plan',this)">?? Planes</div>
+      <div class="cat-pill" onclick="setFilter('arte',this)">?? Arte</div>
+      <div class="cat-pill" onclick="setFilter('noche',this)">?? Noche</div>
     </div>
   </div>
 
@@ -499,17 +499,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="screen active" id="screen-inicio">
     <div class="banner" id="banner-eventos">
       <div class="banner-header" onclick="toggleBanner()">
-        <div class="banner-flame">🔥</div>
+        <div class="banner-flame">??</div>
         <div class="banner-texto">
           <h3>¿Qué hacer esta noche?</h3>
           <p>Eventos programados para el mes</p>
         </div>
-        <div class="banner-arrow">❯</div>
+        <div class="banner-arrow">?</div>
       </div>
       <div class="banner-body">
         <div id="banner-events-list"></div>
         <div class="banner-cta">
-          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año →</button>
+          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año ?</button>
         </div>
       </div>
     </div>
@@ -550,7 +550,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- BOTON REGISTRO -->
 <div class="wa-float">
   <a class="wa-btn" href="https://hablemosdeparche.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
-    <span class="wa-btn-icon">📋</span>
+    <span class="wa-btn-icon">??</span>
     <span class="wa-btn-text">Registra tu local</span>
   </a>
 </div>
@@ -560,7 +560,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="modal-sheet" id="modal-sheet">
     <div class="modal-hero" id="modal-hero">
       <div class="modal-handle"></div>
-      <div class="modal-close" onclick="closeModal()">✕</div>
+      <div class="modal-close" onclick="closeModal()">?</div>
       <svg class="modal-hero-icon" id="modal-hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <div class="modal-body">
@@ -586,9 +586,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-// ══════════════════════════════════════
+// --------------------------------------
 // SVG ICONS
-// ══════════════════════════════════════
+// --------------------------------------
 const svgIcons = {
   bares: `<circle cx="40" cy="28" r="18" stroke="#C9983A" stroke-width="2.5" fill="none"/>
     <path d="M28 28 Q28 52 40 52 Q52 52 52 28" stroke="#C9983A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
@@ -636,12 +636,12 @@ function getSVG(cat) {
   return svgIcons[map[cat]] || svgIcons.default;
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // DATOS
-// ══════════════════════════════════════
+// --------------------------------------
 const places = [
-  // ═══ BARES ═══
-  { id:1, orden:999, bg:'pt1', cat:'bares', name:'Alquímico', nit:'', barrio:'Centro Histórico', tags:['Coctelería','Tres pisos','Top 50 mundial'], rating:4.7, horario:'Mar–Sáb · 5pm–2am', precio:'$$$ Exclusivo', desc:'Reconocido entre los 50 mejores bares del mundo. Tres pisos con propuestas distintas: cócteles de los años 20, coctelería clásica y sabores caribeños en la azotea.', img:'https://images.pexels.com/photos/17119947/pexels-photo-17119947.jpeg?w=1920', telefono:'+57 605 660 0907', instagram:'alquimicocartagena', menu:['Coctel de mango con tamarindo','Old Fashioned caribeño','Ceviche de camarón','Tostones con hogao'], coords:[10.4237,-75.5497] },
+  // --- BARES ---
+  { id:1, orden:99999, bg:'pt1', cat:'bares', name:'Alquímico', nit:'', barrio:'Centro Histórico', tags:['Coctelería','Tres pisos','Top 50 mundial'], rating:4.7, horario:'Mar–Sáb · 5pm–2am', precio:'$$$ Exclusivo', desc:'Reconocido entre los 50 mejores bares del mundo. Tres pisos con propuestas distintas: cócteles de los años 20, coctelería clásica y sabores caribeños en la azotea.', img:'https://images.pexels.com/photos/17119947/pexels-photo-17119947.jpeg?w=1920', telefono:'+57 605 660 0907', instagram:'alquimicocartagena', menu:['Coctel de mango con tamarindo','Old Fashioned caribeño','Ceviche de camarón','Tostones con hogao'], coords:[10.4237,-75.5497] },
   { id:2, orden:999, bg:'pt2', cat:'bares', name:'Café Havana', nit:'', barrio:'Getsemaní', tags:['Salsa','Música en vivo','Rumba'], rating:4.6, horario:'Vie–Dom · 8pm–3am', precio:'$$$ Exclusivo', desc:'El templo de la salsa en Cartagena. Paredes empapeladas de fotos vintage y una banda en vivo que enciende la pista cada noche. Imperdible si te gusta bailar.', img:'https://images.pexels.com/photos/2188012/pexels-photo-2188012.jpeg?w=1920', telefono:'+57 605 664 7450', instagram:'cafehavana_cartagena', menu:['Mojito cubano','Daiquirí de fresa','Ron con cola','Cerveza Águila'], coords:[10.4222,-75.5454] },
   { id:3, orden:999, bg:'pt3', cat:'bares', name:'El Pasquín de Joaco Gastro Bar', nit:'', barrio:'Centro Histórico', tags:['Gastro bar','Brunch','Música local'], rating:4.8, horario:'Lun–Dom · 8am–2am', precio:'$$$ Exclusivo', desc:'Esquina colonial convertida en gastro bar de moda. Brunch espectacular, comida deliciosa y una apuesta por la música local que lo hace único en el Centro.', img:'https://images.pexels.com/photos/31155820/pexels-photo-31155820.jpeg?w=1920', telefono:'+57 300 813 5762', instagram:'elpasquindejoaco', menu:['Tartar de atún','Pulpo al olivo','Hamburguesa artesanal','Limonada de coco'], coords:[10.4234,-75.5494] },
   { id:4, orden:999, bg:'pt4', cat:'bares', name:'Donde Fidel Salsa Club', nit:'', barrio:'Centro Histórico', tags:['Salsa','Pegado','Torre del Reloj'], rating:4.4, horario:'Lun–Dom · 6pm–2am', precio:'$$ Promedio', desc:'Frente a la Torre del Reloj, este antro salsero es parada obligada. Paredes con fotos de leyendas, cerveza fría y salsa las 24/7. No sabes bailar? Aquí aprendes.', img:'https://images.pexels.com/photos/28184044/pexels-photo-28184044.jpeg?w=1920', telefono:'+57 300 456 7890', instagram:'dondefidelsalsa', menu:['Cerveza Águila','Ron Medellín','Mojito','Cubalibre'], coords:[10.4227,-75.5496] },
@@ -649,7 +649,7 @@ const places = [
   { id:6, orden:999, bg:'pt6', cat:'bares', name:'El Barón Café & Cocktail Bar', nit:'', barrio:'Centro Histórico', tags:['Terraza','Cócteles','Plaza Santo Domingo'], rating:4.3, horario:'Lun–Dom · 5pm–12am', precio:'$$ Exclusivo', desc:'Terraza elegante frente a la Plaza Santo Domingo. Perfecto para un cóctel al caer la tarde viendo pasar la vida cartagenera. Ambiente relajado y servicio impecable.', img:'https://images.pexels.com/photos/32089215/pexels-photo-32089215.jpeg?w=1920', telefono:'+57 300 567 8901', instagram:'elbaroncafe', menu:['Negroni','Gin Tonic','Margarita','Aperol Spritz'], coords:[10.4219,-75.5509] },
   { id:7, orden:999, bg:'pt7', cat:'bares', name:'La Movida', nit:'', barrio:'Centro Histórico', tags:['Discoteca','Rooftop','Fiesta'], rating:4.4, horario:'Vie–Sáb · 9pm–3am', precio:'$$$ Exclusivo', desc:'Discoteca y rooftop en el corazón del Centro. Música variada, ambiente festivo y un público que viene a bailar hasta el cierre. Dos ambientes para dos momentos de la noche.', img:'https://images.pexels.com/photos/6982443/pexels-photo-6982443.jpeg?w=1920', telefono:'+57 300 678 9012', instagram:'lamovidacartagena', menu:['Botella de ron','Whisky nacional','Cerveza','Coctel de la casa'], coords:[10.4233,-75.5532] },
 
-  // ═══ CAFÉS ═══
+  // --- CAFÉS ---
   { id:8, orden:999, bg:'pt8', cat:'cafe', name:'Época Café Bar', nit:'', barrio:'Centro Histórico', tags:['Café de especialidad','Brunch','Wifi'], rating:4.8, horario:'Lun–Dom · 7am–9pm', precio:'$$ Promedio', desc:'Cafetería de especialidad con ambiente parisino años 40. Café de origen colombiano certificado y una carta de desayunos que enamora. El cardamomo latte es legendario.', img:'https://images.pexels.com/photos/29250093/pexels-photo-29250093.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 300 789 0123', instagram:'epocacafebar', menu:['Cardamomo Latte','Espresso','Banana Bread','Sándwich de pollo'], coords:[10.4238,-75.5503] },
   { id:9, orden:999, bg:'pt1', cat:'cafe', name:'Ábaco Libros y Café', nit:'', barrio:'Centro Histórico', tags:['Librería','Café','Lectura'], rating:4.6, horario:'Lun–Sáb · 9am–9pm', precio:'$$ Promedio', desc:'Librería-café de cuento con estantes hasta el techo y escalera tipo Beauty and the Beast. Café bien servido entre libros, ideal para una tarde de lectura o conversación.', img:'https://images.pexels.com/photos/32445699/pexels-photo-32445699.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 605 660 4745', instagram:'abacolibrosycafe', menu:['Cappuccino','Té chai','Brownie','Croissant'], coords:[10.4250,-75.5512] },
   { id:10, orden:999, bg:'pt2', cat:'cafe', name:'Café del Mural', nit:'', barrio:'Getsemaní', tags:['Café','Arte callejero','Terraza'], rating:4.6, horario:'Lun–Dom · 8am–6pm', precio:'$ Económico', desc:'En pleno Getsemaní, frente al mural más instagrameable del barrio. Café de filtro, buena música y una terraza perfecta para ver la vida pasar. Punto de encuentro de viajeros.', img:'https://images.pexels.com/photos/30774028/pexels-photo-30774028.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 300 890 1234', instagram:'cafedelmuralctg', menu:['Tinto colombiano','Café con leche','Jugo de naranja','Pan de bono'], coords:[10.4201,-75.5465] },
@@ -657,7 +657,7 @@ const places = [
   { id:12, orden:999, bg:'pt4', cat:'cafe', name:'Manna Breakfast & Lunch', nit:'', barrio:'Centro Histórico', tags:['Desayuno','Brunch','Saludable'], rating:4.7, horario:'Lun–Dom · 7am–4pm', precio:'$$ Promedio', desc:'El mejor brunch del Centro. Ingredientes frescos, opciones saludables y un café que despierta hasta al más dormido. Atendido por su dueño, un argentino enamorado de Cartagena.', img:'https://images.pexels.com/photos/7664367/pexels-photo-7664367.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 301 012 3456', instagram:'mannacafebar', menu:['Acai bowl','Huevos benedictinos','Smoothie verde','Espresso'], coords:[10.4203,-75.5462] },
   { id:13, orden:999, bg:'pt5', cat:'cafe', name:'Señor Titis Coffee & Gifts', nit:'', barrio:'Centro Histórico', tags:['Café','Regalos','Colombiano'], rating:4.5, horario:'Lun–Dom · 9am–8pm', precio:'$ Económico', desc:'Cafetería boutique que también vende artesanías colombianas. Café de la Sierra Nevada en cada taza, ambiente familiar y el mejor souvenir: una bolsa de café recién tostado.', img:'https://images.pexels.com/photos/29298129/pexels-photo-29298129.jpeg?auto=compress&cs=tinysrgb&w=1200', telefono:'+57 301 123 4567', instagram:'senortitiscoffee', menu:['Café filtrado','Chocolate caliente','Arepa con queso','Bocadillo veleño'], coords:[10.4265,-75.5481] },
 
-  // ═══ COMIDA ═══
+  // --- COMIDA ---
   { id:14, orden:999, bg:'pt6', cat:'comida', name:'Celele', nit:'', barrio:'Centro Histórico', tags:['Gastronomía','Alta cocina','Caribe'], rating:4.9, horario:'Mar–Sáb · 12pm–10pm', precio:'$$$ Alta cocina', desc:'Uno de los mejores restaurantes de Colombia según Latin America. Reconocido entre los mejores del pais.', img:'https://images.pexels.com/photos/29962487/pexels-photo-29962487.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 6790', instagram:'celelerestaurante', menu:['Tartar de camarones','Lomo de cerdo con corozo','Arroz de chipi chipi','Cocada con helado'], coords:[10.4222,-75.5445] },
   { id:15, orden:999, bg:'pt7', cat:'comida', name:'Carmen Cartagena', nit:'', barrio:'Centro Histórico', tags:['Cocina fusión','Elegante','Chef'], rating:4.8, horario:'Mar–Dom · 12pm–11pm', precio:'$$$ Alta cocina', desc:'Restaurante emblemático dentro de una casa colonial restaurada. Fusión de sabores colombianos con técnicas internacionales. El cerdo con salsa de tamarindo y la terraza son imperdibles.', img:'https://images.pexels.com/photos/6844877/pexels-photo-6844877.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 7276', instagram:'carmencartagena', menu:['Cerdo glaseado con tamarindo','Ceviche de pescado','Arroz con coco y langostinos','Postre de tres leches'], coords:[10.4269,-75.5478] },
   { id:16, orden:999, bg:'pt8', cat:'comida', name:'Buena Vida Marisquería y Rooftop', nit:'', barrio:'Centro Histórico', tags:['Mariscos','Rooftop','Vista'], rating:4.7, horario:'Lun–Dom · 12pm–11pm', precio:'$$$ Exclusivo', desc:'Marisquería en la azotea con vista panorámica de la ciudad. Mariscos frescos, coctelería de autor y un atardecer que compite con la comida. El lugar perfecto para una cena especial.', img:'https://images.pexels.com/photos/9360525/pexels-photo-9360525.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 7277', instagram:'buenavidamarisqueria', menu:['Ceviche mixto','Langosta al grill','Arroz de mariscos','Pulpo al olivo'], coords:[10.4242,-75.5518] },
@@ -669,7 +669,7 @@ const places = [
   { id:22, orden:999, bg:'pt6', cat:'comida', name:'Totopo', nit:'', barrio:'Getsemaní', tags:['Mexicano','Casual','Plaza'], rating:4.4, horario:'Lun–Dom · 12pm–10pm', precio:'$$ Promedio', desc:'En la esquina de la Plaza Fernández Madrid. Cocina mexicana con toque caribeño. Tacos, burritos y margaritas en un ambiente relajado. Perfecto para comer rico sin gastar de más.', img:'https://images.pexels.com/photos/5848706/pexels-photo-5848706.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 300 567 8901', instagram:'totopoctg', menu:['Tacos al pastor','Burrito de pollo','Margarita clásica','Guacamole'], coords:[10.4227,-75.5459] },
   { id:23, orden:999, bg:'pt7', cat:'comida', name:'Restaurante Olano', nit:'', barrio:'Centro Histórico', tags:['Francesa','Caribe','Elegante'], rating:4.6, horario:'Mar–Sáb · 12pm–10pm', precio:'$$$ Exclusivo', desc:'Cocina francesa con alma caribeña en el Centro Histórico. Las muelas de cangrejo de entrada son legendarias. Menú degustación que sorprende en cada paso. Terraza íntima con encanto colonial.', img:'https://images.pexels.com/photos/8350134/pexels-photo-8350134.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 660 4567', instagram:'dondeolano', menu:['Muelas de cangrejo','Solomillo al vino tinto','Tartar de atún','Crème brûlée'], coords:[10.4235,-75.5503] },
 
-  // ═══ ARTE ═══
+  // --- ARTE ---
   { id:24, orden:999, bg:'pt8', cat:'arte', name:'Museo del Oro Zenú', nit:'', barrio:'Centro Histórico', tags:['Oro','Arqueología','Historia'], rating:4.6, horario:'Mar–Sáb · 9am–6pm', precio:'$ Económico', desc:'Piezas de oro de la cultura Zenú en una casa colonial restaurada. Una colección fascinante que narra la historia precolombina del Caribe colombiano. Entrada muy económica y gratuita los domingos.', img:'https://images.pexels.com/photos/20610629/pexels-photo-20610629.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 5481', instagram:'museodelorogenu', menu:[''], coords:[10.4239,-75.5517] },
   { id:25, orden:999, bg:'pt1', cat:'arte', name:'Museo de Arte Moderno de Cartagena', nit:'', barrio:'Centro Histórico', tags:['Arte','Moderno','Exposiciones'], rating:4.5, horario:'Mar–Dom · 10am–6pm', precio:'$ Económico', desc:'La colección de arte moderno y contemporáneo más importante de la ciudad. Obras de Enrique Grau, Alejandro Obregón y artistas emergentes del Caribe. Exposiciones temporales todo el año.', img:'https://images.pexels.com/photos/36900018/pexels-photo-36900018.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 5815', instagram:'mamcartagena', menu:[''], coords:[10.4228,-75.5503] },
   { id:26, orden:999, bg:'pt2', cat:'arte', name:'Santuario Museo San Pedro Claver', nit:'', barrio:'Centro Histórico', tags:['Religioso','Colonial','Museo'], rating:4.7, horario:'Lun–Sáb · 8am–5pm', precio:'$ Económico', desc:'Iglesia y museo dedicado a San Pedro Claver, el esclavo de los esclavos. Arquitectura barroca impresionante, claustro colonial y una historia conmovedora. La plaza frente al museo es de las más bellas.', img:'https://images.pexels.com/photos/13809258/pexels-photo-13809258.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 1308', instagram:'sanpedroclaver', menu:[''], coords:[10.4227,-75.5505] },
@@ -678,7 +678,7 @@ const places = [
   { id:29, orden:999, bg:'pt5', cat:'arte', name:'Palacio de la Inquisición', nit:'', barrio:'Centro Histórico', tags:['Historia','Museo','Arquitectura'], rating:4.5, horario:'Lun–Sáb · 9am–6pm', precio:'$ Económico', desc:'Imponente edificio colonial que albergó el Tribunal del Santo Oficio. Museo Histórico de Cartagena con salas que narran la época colonial, la independencia y la inquisición. Imperdible.', img:'https://images.pexels.com/photos/20375711/pexels-photo-20375711.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 664 4570', instagram:'museohistoricoctg', menu:[''], coords:[10.4229,-75.5514] },
   { id:30, orden:999, bg:'pt6', cat:'arte', name:'Las Bóvedas', nit:'', barrio:'Centro Histórico', tags:['Artesanías','Galería','Muralla'], rating:4.3, horario:'Lun–Dom · 9am–9pm', precio:'$ Económico', desc:'23 bóvedas construidas dentro de la muralla en el siglo XVIII, hoy convertidas en galería de artesanías y arte local. Esmeraldas, hamacas, cuadros y recuerdos auténticos de la costa caribe.', img:'https://images.pexels.com/photos/24514434/pexels-photo-24514434.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4246,-75.5536] },
 
-  // ═══ PLAN ═══
+  // --- PLAN ---
   { id:31, orden:999, bg:'pt7', cat:'plan', name:'Playa Blanca (Isla Barú)', nit:'', barrio:'Barú', tags:['Playa','Mar cristalino','Escape'], rating:4.5, horario:'Todos los días · 6am–5pm', precio:'$$ Promedio', desc:'La playa más famosa cerca de Cartagena. Arena blanca, aguas turquesa y palmeras. Se llega en lancha o por carretera. Ideal para un día de sol, mar y ceviche frente al agua. Fin de semana llega temprano.', img:'https://images.pexels.com/photos/32214906/pexels-photo-32214906.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.2567,-75.6006] },
   { id:32, orden:999, bg:'pt8', cat:'plan', name:'Aviario Nacional de Colombia', nit:'', barrio:'Barú', tags:['Aves','Naturaleza','Familia'], rating:4.7, horario:'Lun–Dom · 9am–4pm', precio:'$$ Promedio', desc:'El aviario más grande de Colombia con más de 170 especies de aves. Recorrido guiado entre túneles de naturaleza, jaguares y flamencos. Perfecto para ir en familia o con amigos. Combínalo con Playa Blanca.', img:'https://images.pexels.com/photos/15037526/pexels-photo-15037526.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 605 668 7171', instagram:'aviariocolombia', menu:[''], coords:[10.3056,-75.5614] },
   { id:33, orden:999, bg:'pt1', cat:'plan', name:'Chiva Tour — Rumba en Chiva', nit:'', barrio:'Centro Histórico', tags:['Rumba','Tradicional','Recorrido'], rating:4.3, horario:'Todos los días · 8pm–12am', precio:'$$ Promedio', desc:'El clásico paseo en chiva rumbera por las calles de Cartagena. Música, baile, paradas en miradores y una noche que termina en discoteca. La forma más divertida de conocer la ciudad de noche.', img:'https://images.pexels.com/photos/13804522/pexels-photo-13804522.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 301 234 5678', instagram:'chivatourctg', menu:[''], coords:[10.4228,-75.5500] },
@@ -690,7 +690,7 @@ const places = [
   { id:39, orden:999, bg:'pt7', cat:'plan', name:'Mercado de Bazurto', nit:'', barrio:'Bazurto', tags:['Mercado','Local','Auténtico'], rating:4.3, horario:'Lun–Sáb · 5am–4pm', precio:'$ Económico', desc:'El mercado más auténtico de Cartagena. Frutas exóticas, pescado fresco, jugos naturales y el mejor frito de la ciudad. No es un lugar turístico sino la verdadera cara de Cartagena. Ideal para almorzar como local.', img:'https://images.pexels.com/photos/36895093/pexels-photo-36895093.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'', instagram:'', menu:[''], coords:[10.4067,-75.5220] },
   { id:40, orden:999, bg:'pt8', cat:'plan', name:'Amaré Rooftop', nit:'', barrio:'Centro Histórico', tags:['Rooftop','Cócteles','Vista'], rating:4.5, horario:'Lun–Dom · 4pm–12am', precio:'$$$ Exclusivo', desc:'Azotea elegante con piscina infinita y vista a la ciudad amurallada. Cócteles de autor al atardecer con la brisa del Caribe. Ambiente sofisticado pero relajado. El lugar para un atardecer inolvidable.', img:'https://images.pexels.com/photos/33553690/pexels-photo-33553690.jpeg?auto=compress&cs=tinysrgb&w=1920', telefono:'+57 301 567 8901', instagram:'amarerooftop', menu:['Mojito de maracuyá','Piña colada','Ceviche','Copa de vino espumoso'], coords:[10.4252,-75.5521] },
 
-  // ═══ NOCHE ═══
+  // --- NOCHE ---
   { id:41, orden:999, bg:'pt1', cat:'noche', name:'Bazurto Social Club', nit:'', barrio:'Getsemaní', tags:['Champeta','Baile','Energía'], rating:4.6, horario:'Vie–Dom · 9pm–3am', precio:'$$ Promedio', desc:'Epicentro de la champeta en Getsemaní. Empieza como restaurante y se transforma en la discoteca más auténtica de la ciudad. La banda Bazurto All Star toca antes de la media noche. Baile asegurado.', img:'https://images.pexels.com/photos/30730352/pexels-photo-30730352.jpeg?w=1920', telefono:'+57 300 678 9012', instagram:'bazurtosocialclub', menu:['Cerveza','Ron','Champeta y salsa','Comida tradicional'], coords:[10.4220,-75.5458] },
   { id:42, orden:999, bg:'pt2', cat:'noche', name:'La Jugada Club House', nit:'', barrio:'Centro Histórico', tags:['Urbano','Reggaetón','Elegante'], rating:4.5, horario:'Vie–Sáb · 9pm–3am', precio:'$$$ Exclusivo', desc:'Club house de los mismos creadores de La Movida. Inspiración Gatsby, música urbana y un sistema de sonido de última generación. Ambiente premium cerca de la Torre del Reloj. Fotos obligatorias.', img:'https://images.pexels.com/photos/1605417/pexels-photo-1605417.jpeg?w=1920', telefono:'+57 300 789 0123', instagram:'lajugadaclubhouse', menu:['Botella de whisky','Champán','Cerveza','Coctel de la casa'], coords:[10.4237,-75.5497] },
   { id:43, orden:999, bg:'pt3', cat:'noche', name:'Seven 7 Times', nit:'', barrio:'Getsemaní', tags:['Discoteca','5 ambientes','Shows'], rating:4.5, horario:'Vie–Dom · 9pm–3am', precio:'$$$ Exclusivo', desc:'Cinco ambientes en un solo lugar: terraza, discoteca, sala de cócteles, karaoke y más. Shows en vivo de artistas locales. En Getsemaní, Calle Media Luna. Una experiencia nocturna completa en un solo sitio.', img:'https://images.pexels.com/photos/1766568/pexels-photo-1766568.jpeg?w=1920', telefono:'+57 300 890 1234', instagram:'seven7timescartagena', menu:['Cóctel de la casa','Cerveza','Whisky','Champán'], coords:[10.4214,-75.5448] },
@@ -703,35 +703,35 @@ const places = [
   { id:50, orden:999, bg:'pt2', cat:'noche', name:'Boheme Lounge', nit:'', barrio:'Centro Histórico', tags:['Lounge','Música','Shows'], rating:4.6, horario:'Jue–Dom · 7pm–2am', precio:'$$$ Exclusivo', desc:'Bar lounge de autor con shows en vivo de artistas locales. Ambiente íntimo, decoración cuidada y una atmósfera que invita a quedarse más de la cuenta. Música en vivo que va del jazz a los ritmos caribeños.', img:'https://images.pexels.com/photos/8512201/pexels-photo-8512201.jpeg?w=1920', telefono:'+57 301 567 8901', instagram:'bohemecartagena', menu:['Coctel de la casa','Vino tinto','Ceviche','Tabla de quesos'], coords:[10.4241,-75.5504] },
 ];
 
-// ══════════════════════════════════════
+// --------------------------------------
 // EVENTOS
-// ══════════════════════════════════════
+// --------------------------------------
 const eventList = [
-  { date:'2026-06-08', endDate:'2026-06-08', cat:'comida', icon:'🍳', name:'Asamblea de Cocina Tradicional', nit:'', place:'Centro Histórico', price:'Entrada libre', short:'8 de junio' },
-  { date:'2026-06-24', endDate:'2026-06-24', cat:'cultural', icon:'🎉', name:'Noche de San Juan', nit:'', place:'Playas y espacios públicos', price:'Entrada libre', short:'24 de junio' },
-  { date:'2026-07-03', endDate:'2026-07-05', cat:'cultural', icon:'🎸', name:'Rock Imperium Festival', nit:'', place:'Parque El Batel', price:'Desde 195€', short:'3–5 de julio' },
-  { date:'2026-07-09', endDate:'2026-11-05', cat:'arte', icon:'📖', name:'Festival Internacional de Poesía IPCC', nit:'', place:'Bibliotecas y centros culturales', price:'Entrada libre', short:'9 jul – 5 nov' },
-  { date:'2026-07-14', endDate:'2026-07-14', cat:'arte', icon:'🎭', name:'Agenda Cultural Alianza Francesa', nit:'', place:'Alianza Francesa, Centro', price:'Variable', short:'14 de julio' },
-  { date:'2026-07-17', endDate:'2026-07-25', cat:'cultural', icon:'🎶', name:'La Mar de Músicas', nit:'', place:'Varios enclaves históricos', price:'Variable', short:'17–25 de julio' },
-  { date:'2026-07-18', endDate:'2026-07-19', cat:'cultural', icon:'🥁', name:'Festival de Tambores', nit:'', place:'Palenque y plazas del Centro', price:'Entrada libre', short:'18–19 de julio' },
-  { date:'2026-08-13', endDate:'2026-08-13', cat:'noche', icon:'💃', name:'Día de la Champeta', nit:'', place:'Barrios de Cartagena', price:'Entrada libre', short:'13 de agosto' },
-  { date:'2026-08-15', endDate:'2026-08-15', cat:'comida', icon:'🫓', name:'Festival de la Arepa de Huevo', nit:'', place:'Getsemaní', price:'Desde $5.000 COP', short:'15 de agosto' },
-  { date:'2026-08-20', endDate:'2026-08-22', cat:'arte', icon:'🩰', name:'Festival Música y Danza del Mundo', nit:'', place:'Teatros y plazas del Centro', price:'Variable', short:'20–22 de agosto' },
-  { date:'2026-08-28', endDate:'2026-08-31', cat:'arte', icon:'✍️', name:'Parlamento Internacional de Escritores', nit:'', place:'Centro Histórico', price:'Entrada libre', short:'28–31 de agosto' },
-  { date:'2026-09-10', endDate:'2026-09-12', cat:'arte', icon:'🎷', name:'Festival Voces del Jazz', nit:'', place:'Plazas y teatros del Centro', price:'Variable', short:'10–12 de septiembre' },
-  { date:'2026-09-18', endDate:'2026-09-20', cat:'arte', icon:'🎸', name:'Festival de Guitarras', nit:'', place:'Auditorios del Centro', price:'Variable', short:'18–20 de septiembre' },
-  { date:'2026-09-21', endDate:'2026-09-21', cat:'arte', icon:'🎨', name:'Día del Artista Plástico', nit:'', place:'Galerías y espacios culturales', price:'Entrada libre', short:'21 de septiembre' },
-  { date:'2026-10-10', endDate:'2026-10-12', cat:'noche', icon:'💃', name:'Festival de Salsa de Cartagena', nit:'', place:'Clubes del Centro Histórico', price:'Desde $40.000 COP', short:'10–12 de octubre' },
-  { date:'2026-10-29', endDate:'2026-11-16', cat:'arte', icon:'🎷', name:'Cartagena Jazz Festival', nit:'', place:'Auditorio El Batel', price:'Por confirmar', short:'29 oct – 16 nov' },
-  { date:'2026-10-30', endDate:'2026-10-30', cat:'noche', icon:'🔥', name:'Noche de Candela y Jolgorio', nit:'', place:'Plazas del Centro Histórico', price:'Entrada libre', short:'30 de octubre' },
-  { date:'2026-11-01', endDate:'2026-11-04', cat:'arte', icon:'🪇', name:'Festival Regional de Gaitas', nit:'', place:'Barrio El Socorro', price:'Entrada libre', short:'1–4 de noviembre' },
-  { date:'2026-11-07', endDate:'2026-11-09', cat:'arte', icon:'📖', name:'Festival de Poesía de Cartagena', nit:'', place:'Bibliotecas y cafés del Centro', price:'Entrada libre', short:'7–9 de noviembre' },
-  { date:'2026-11-11', endDate:'2026-11-16', cat:'cultural', icon:'🎉', name:'Fiestas de Independencia', nit:'', place:'Calles del Centro Histórico', price:'Entrada libre', short:'11–16 de noviembre' },
-  { date:'2026-11-13', endDate:'2026-11-14', cat:'plan', icon:'⛵', name:'Festival Náutico', nit:'', place:'Bahía de Cartagena', price:'Entrada libre', short:'13–14 de noviembre' },
-  { date:'2026-11-29', endDate:'2026-11-29', cat:'cultural', icon:'🏊', name:'IRONMAN 70.3 Cartagena', nit:'', place:'Playas de Cartagena', price:'Inscripción ~$700 USD', short:'29 de noviembre' },
-  { date:'2026-12-15', endDate:'2026-12-22', cat:'arte', icon:'🎨', name:'Feria de Artesanías de Cartagena', nit:'', place:'Plaza de San Diego', price:'Entrada libre', short:'15–22 de diciembre' },
-  { date:'2026-12-16', endDate:'2026-12-24', cat:'cultural', icon:'⭐', name:'Novenas de Aguinaldos', nit:'', place:'Calles e iglesias del Centro', price:'Entrada libre', short:'16–24 de diciembre' },
-  { date:'2026-12-17', endDate:'2026-12-26', cat:'comida', icon:'🥟', name:'Festival del Pastel Cartagenero', nit:'', place:'Plaza de los Coches', price:'Desde $5.000 COP', short:'17–26 de diciembre' },
+  { date:'2026-06-08', endDate:'2026-06-08', cat:'comida', icon:'??', name:'Asamblea de Cocina Tradicional', nit:'', place:'Centro Histórico', price:'Entrada libre', short:'8 de junio' },
+  { date:'2026-06-24', endDate:'2026-06-24', cat:'cultural', icon:'??', name:'Noche de San Juan', nit:'', place:'Playas y espacios públicos', price:'Entrada libre', short:'24 de junio' },
+  { date:'2026-07-03', endDate:'2026-07-05', cat:'cultural', icon:'??', name:'Rock Imperium Festival', nit:'', place:'Parque El Batel', price:'Desde 195€', short:'3–5 de julio' },
+  { date:'2026-07-09', endDate:'2026-11-05', cat:'arte', icon:'??', name:'Festival Internacional de Poesía IPCC', nit:'', place:'Bibliotecas y centros culturales', price:'Entrada libre', short:'9 jul – 5 nov' },
+  { date:'2026-07-14', endDate:'2026-07-14', cat:'arte', icon:'??', name:'Agenda Cultural Alianza Francesa', nit:'', place:'Alianza Francesa, Centro', price:'Variable', short:'14 de julio' },
+  { date:'2026-07-17', endDate:'2026-07-25', cat:'cultural', icon:'??', name:'La Mar de Músicas', nit:'', place:'Varios enclaves históricos', price:'Variable', short:'17–25 de julio' },
+  { date:'2026-07-18', endDate:'2026-07-19', cat:'cultural', icon:'??', name:'Festival de Tambores', nit:'', place:'Palenque y plazas del Centro', price:'Entrada libre', short:'18–19 de julio' },
+  { date:'2026-08-13', endDate:'2026-08-13', cat:'noche', icon:'??', name:'Día de la Champeta', nit:'', place:'Barrios de Cartagena', price:'Entrada libre', short:'13 de agosto' },
+  { date:'2026-08-15', endDate:'2026-08-15', cat:'comida', icon:'??', name:'Festival de la Arepa de Huevo', nit:'', place:'Getsemaní', price:'Desde $5.000 COP', short:'15 de agosto' },
+  { date:'2026-08-20', endDate:'2026-08-22', cat:'arte', icon:'??', name:'Festival Música y Danza del Mundo', nit:'', place:'Teatros y plazas del Centro', price:'Variable', short:'20–22 de agosto' },
+  { date:'2026-08-28', endDate:'2026-08-31', cat:'arte', icon:'??', name:'Parlamento Internacional de Escritores', nit:'', place:'Centro Histórico', price:'Entrada libre', short:'28–31 de agosto' },
+  { date:'2026-09-10', endDate:'2026-09-12', cat:'arte', icon:'??', name:'Festival Voces del Jazz', nit:'', place:'Plazas y teatros del Centro', price:'Variable', short:'10–12 de septiembre' },
+  { date:'2026-09-18', endDate:'2026-09-20', cat:'arte', icon:'??', name:'Festival de Guitarras', nit:'', place:'Auditorios del Centro', price:'Variable', short:'18–20 de septiembre' },
+  { date:'2026-09-21', endDate:'2026-09-21', cat:'arte', icon:'??', name:'Día del Artista Plástico', nit:'', place:'Galerías y espacios culturales', price:'Entrada libre', short:'21 de septiembre' },
+  { date:'2026-10-10', endDate:'2026-10-12', cat:'noche', icon:'??', name:'Festival de Salsa de Cartagena', nit:'', place:'Clubes del Centro Histórico', price:'Desde $40.000 COP', short:'10–12 de octubre' },
+  { date:'2026-10-29', endDate:'2026-11-16', cat:'arte', icon:'??', name:'Cartagena Jazz Festival', nit:'', place:'Auditorio El Batel', price:'Por confirmar', short:'29 oct – 16 nov' },
+  { date:'2026-10-30', endDate:'2026-10-30', cat:'noche', icon:'??', name:'Noche de Candela y Jolgorio', nit:'', place:'Plazas del Centro Histórico', price:'Entrada libre', short:'30 de octubre' },
+  { date:'2026-11-01', endDate:'2026-11-04', cat:'arte', icon:'??', name:'Festival Regional de Gaitas', nit:'', place:'Barrio El Socorro', price:'Entrada libre', short:'1–4 de noviembre' },
+  { date:'2026-11-07', endDate:'2026-11-09', cat:'arte', icon:'??', name:'Festival de Poesía de Cartagena', nit:'', place:'Bibliotecas y cafés del Centro', price:'Entrada libre', short:'7–9 de noviembre' },
+  { date:'2026-11-11', endDate:'2026-11-16', cat:'cultural', icon:'??', name:'Fiestas de Independencia', nit:'', place:'Calles del Centro Histórico', price:'Entrada libre', short:'11–16 de noviembre' },
+  { date:'2026-11-13', endDate:'2026-11-14', cat:'plan', icon:'?', name:'Festival Náutico', nit:'', place:'Bahía de Cartagena', price:'Entrada libre', short:'13–14 de noviembre' },
+  { date:'2026-11-29', endDate:'2026-11-29', cat:'cultural', icon:'??', name:'IRONMAN 70.3 Cartagena', nit:'', place:'Playas de Cartagena', price:'Inscripción ~$700 USD', short:'29 de noviembre' },
+  { date:'2026-12-15', endDate:'2026-12-22', cat:'arte', icon:'??', name:'Feria de Artesanías de Cartagena', nit:'', place:'Plaza de San Diego', price:'Entrada libre', short:'15–22 de diciembre' },
+  { date:'2026-12-16', endDate:'2026-12-24', cat:'cultural', icon:'?', name:'Novenas de Aguinaldos', nit:'', place:'Calles e iglesias del Centro', price:'Entrada libre', short:'16–24 de diciembre' },
+  { date:'2026-12-17', endDate:'2026-12-26', cat:'comida', icon:'??', name:'Festival del Pastel Cartagenero', nit:'', place:'Plaza de los Coches', price:'Desde $5.000 COP', short:'17–26 de diciembre' },
 ];
 
 function getUpcomingEvents() {
@@ -757,9 +757,9 @@ function renderEventsList(list) {
       <div class="ev-thumb-full ${etClasses[i % 5]}">${e.icon}<div class="ev-badge-full dia">${meses[m]}</div></div>
       <div class="ev-info-full">
         <h3>${e.name}</h3>
-        <div class="ev-detail-row"><span>🕐</span> ${e.short}</div>
-        <div class="ev-detail-row"><span>📍</span> ${e.place}</div>
-        <div class="ev-detail-row"><span>🎟</span> ${e.price}</div>
+        <div class="ev-detail-row"><span>??</span> ${e.short}</div>
+        <div class="ev-detail-row"><span>??</span> ${e.place}</div>
+        <div class="ev-detail-row"><span>??</span> ${e.price}</div>
       </div>`;
     feed.appendChild(card);
   });
@@ -782,9 +782,9 @@ function renderBannerEvents() {
   });
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // ESTADO
-// ══════════════════════════════════════
+// --------------------------------------
 let saved = JSON.parse(localStorage.getItem('ctg_saved') || '[]');
 let currentFilter = 'todos';
 let currentSearch = '';
@@ -794,9 +794,9 @@ let mapMarkers = [];
 let mapInitialized = false;
 let mapFocusPlace = null;
 
-// ══════════════════════════════════════
+// --------------------------------------
 // NAVEGACIÓN
-// ══════════════════════════════════════
+// --------------------------------------
 function goScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -810,9 +810,9 @@ function goScreen(id) {
   window.scrollTo(0,0);
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // FILTROS
-// ══════════════════════════════════════
+// --------------------------------------
 function setFilter(cat, el) {
   currentFilter = cat;
   document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
@@ -835,9 +835,9 @@ function matchesFilter(p) {
   return catMatch && searchMatch;
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // RENDER LUGARES
-// ══════════════════════════════════════
+// --------------------------------------
 function renderPlaces() {
   const feed = document.getElementById('places-feed');
   feed.innerHTML = '';
@@ -866,15 +866,15 @@ function makePlaceCard(p, i) {
     <div class="place-info">
       <h3>${p.name}</h3>
       <div class="place-tags">${p.tags.map(t=>`<span class="p-tag">${t}</span>`).join('')}</div>
-      <div class="place-barrio">📍 ${p.barrio}</div>
+      <div class="place-barrio">?? ${p.barrio}</div>
     </div>`;
   d.addEventListener('click', e => { if(!e.target.closest('.heart-btn')) openModal(p); });
   return d;
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // FILTER EVENTOS
-// ══════════════════════════════════════
+// --------------------------------------
 function filterEvents() {
   const upcoming = getUpcomingEvents();
   const filtered = upcoming.filter(e => {
@@ -887,9 +887,9 @@ function filterEvents() {
   renderBannerEvents();
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // MAPA
-// ══════════════════════════════════════
+// --------------------------------------
 function initMap() {
   if(mapInitialized) { leafMap.invalidateSize(); updateMapPins(); return; }
   mapInitialized = true;
@@ -908,7 +908,7 @@ function updateMapPins() {
       html:`<div style="background:#1C1508;border:2px solid #C9983A;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.5);"><svg viewBox="0 0 80 80" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">${getSVG(p.cat)}</svg></div>`,
       className:'', nit:'', iconSize:[36,36], iconAnchor:[18,18]
     });
-    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">📍 ${p.barrio}</div>`);
+    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">?? ${p.barrio}</div>`);
     mapMarkers.push(marker);
   });
 }
@@ -928,9 +928,9 @@ function goToMap(place) {
   }, 380);
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // MODAL
-// ══════════════════════════════════════
+// --------------------------------------
 function openModal(p) {
   currentModal = p;
   const isSaved = saved.includes(p.id);
@@ -950,7 +950,7 @@ function openModal(p) {
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-tags').innerHTML = p.tags.map(t=>`<span class="m-tag">${t}</span>`).join('');
   document.getElementById('modal-desc').textContent = p.desc;
-  document.getElementById('modal-barrio').innerHTML = `📍 ${p.barrio}`;
+  document.getElementById('modal-barrio').innerHTML = `?? ${p.barrio}`;
 
   const full = Math.floor(p.rating);
   const starsHtml = Array.from({length:5},(_,i)=>`<i class="star fa${i<full?'s':'r'} fa-star ${i<full?'on':'off'}"></i>`).join('');
@@ -961,8 +961,8 @@ function openModal(p) {
     <div class="detail-box"><div class="d-label">Precio</div><div class="d-val">${p.precio}</div></div>`;
 
   let infoHtml = '';
-  if (p.telefono) infoHtml += `<div class="info-line"><span>📞</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
-  if (p.instagram) infoHtml += `<div class="info-line"><span>📷</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
+  if (p.telefono) infoHtml += `<div class="info-line"><span>??</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
+  if (p.instagram) infoHtml += `<div class="info-line"><span>??</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
   document.getElementById('modal-info').innerHTML = infoHtml;
 
   if (p.menu && p.menu.some(it => it)) {
@@ -992,9 +992,9 @@ function handleOverlayClick(e) {
   if(e.target === document.getElementById('overlay')) closeModal();
 }
 
-// ══════════════════════════════════════
+// --------------------------------------
 // GUARDAR
-// ══════════════════════════════════════
+// --------------------------------------
 function toggleSave(e, id) {
   e.stopPropagation();
   const btn = e.currentTarget;

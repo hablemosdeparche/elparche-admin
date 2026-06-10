@@ -45,6 +45,7 @@ jobs:
           $subBody = @{
             reason = "$nombre - $plan - $ciudad"
             external_reference = $externalRef
+            payer_email = $email
             auto_recurring = @{
               frequency = 1
               frequency_type = "months"

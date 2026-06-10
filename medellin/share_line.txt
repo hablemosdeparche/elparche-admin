@@ -1,0 +1,1 @@
+navigator.share({title:p.name, text:`Mira este parche en Medellin Local: ${p.name} ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ${p.barrio}`, url:window.location.href});
