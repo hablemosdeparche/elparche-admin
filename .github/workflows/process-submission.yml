@@ -76,12 +76,23 @@ jobs:
 
           # Step 2: Create preapproval (subscription) with plan_id + card_token_id
           Write-Output "Creating subscription..."
+          $now = (Get-Date).ToUniversalTime()
+          $startDate = $now.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+          $endDate = $now.AddYears(5).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
           $subBody = @{
             preapproval_plan_id = $planId
             reason = "$nombre - $plan - $ciudad"
             external_reference = $externalRef
             payer_email = $email
             card_token_id = $cardTokenId
+            auto_recurring = @{
+              frequency = 1
+              frequency_type = "months"
+              start_date = $startDate
+              end_date = $endDate
+              transaction_amount = $amount
+              currency_id = "COP"
+            }
             back_url = "https://hablemosdeparche.github.io/elparche-admin/admintaller/"
             status = "authorized"
           } | ConvertTo-Json -Depth 10
