@@ -968,7 +968,7 @@ async function createCardToken(mp) {
   if (expYear.length === 2) expYear = '20' + expYear;
   const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
 
-  const tokenData = await mp.getCardToken({
+  const tokenData = await mp.createCardToken({
     cardNumber,
     cardholderName: document.getElementById('cardholderName').value,
     cardExpirationMonth: expMonth,
