@@ -155,7 +155,7 @@ function Get-OrdenForPlan($plan) {
     $map = @{
         "Presencia Basica" = 999
         "Presencia Básica" = 999
-        "Verificado"       = 999
+        "Verificado"       = 100
         "Destacado"        = 50
         "Completo"         = 10
     }

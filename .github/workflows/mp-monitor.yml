@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check pending Issues and update subscription status
+      - name: Check stale Issues and process authorized payments
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
@@ -19,17 +19,18 @@ jobs:
         run: |
           $headers = @{ Authorization = "Bearer $env:MP_ACCESS_TOKEN"; "Content-Type" = "application/json" }
 
-          # ─── PART 1: Check open Issues with nuevo-local label ───
-          $issues = gh issue list --label "nuevo-local" --state open --json number,body --jq '.[]'
+          # ─── BACKUP: Check open Issues with subscriptions that may have been approved ───
+          $issues = gh issue list --label "nuevo-local" --state open --json number,body,createdAt --jq '.[]'
           if ($issues) {
             $issues = $issues | ConvertFrom-Json
+            $now = Get-Date
             foreach ($issue in $issues) {
               $num = $issue.number
               $body = $issue.body
 
-              if ($body -match 'mp-sub-id:\s*(\S+)') {
+              if ($body -match 'mp-sub-id:\s*(\S+)' -and $body -match 'mp-status:pending') {
                 $subId = $matches[1]
-                Write-Output "Issue #$num has MP subscription: $subId"
+                Write-Output "Issue #$num has pending MP subscription: $subId"
 
                 try {
                   $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval/$subId" -Headers $headers -Method Get
@@ -37,70 +38,29 @@ jobs:
                   Write-Output "  MP status: $mpStatus"
 
                   if ($mpStatus -eq "authorized" -or $mpStatus -eq "active") {
-                    if ($body -match 'mp-status:authorized') {
-                      Write-Output "  Already processed"
-                      continue
-                    }
                     $newBody = $body -replace 'mp-status:pending', 'mp-status:authorized'
                     gh issue edit $num --body "$newBody"
                     gh issue comment $num --body "✅ Pago confirmado por Mercado Pago. Activando tu local..."
                     gh workflow run process-payment.yml --ref main -f issue_number=$num
                     Write-Output "  -> Process-payment triggered for issue #$num"
                   }
-                  elseif ($mpStatus -eq "cancelled" -or $mpStatus -eq "rejected") {
-                    if ($body -notmatch 'mp-status:cancelled') {
-                      $newBody = $body -replace 'mp-status:pending', "mp-status:$mpStatus"
-                      gh issue edit $num --body "$newBody"
-                      gh issue comment $num --body "❌ La suscripción fue cancelada."
-                      Write-Output "  -> Issue #$num marked as $mpStatus"
-                    }
-                  }
-                  elseif ($mpStatus -eq "pending") {
-                    if ($body -notmatch 'mp-init-point:') {
-                      $initPoint = $resp.init_point
-                      if ($initPoint) {
-                        $newBody = "$body`nmp-init-point: $initPoint"
-                        gh issue edit $num --body "$newBody"
-                        Write-Output "  -> Added init_point to issue #$num"
-                      }
-                    }
+                  elseif ($mpStatus -in @("cancelled","rejected")) {
+                    $newBody = $body -replace 'mp-status:pending', "mp-status:$mpStatus"
+                    gh issue edit $num --body "$newBody"
+                    gh issue comment $num --body "❌ La suscripción fue cancelada."
+                    Write-Output "  -> Issue #$num marked as $mpStatus"
                   }
                 } catch {
                   Write-Output "  Error checking subscription $subId : $_"
                 }
               }
               else {
-                if ($body -match 'mp-status:pending') {
-                  Write-Output "Issue #$num has no MP subscription yet. Creating..."
-                  $nombre = if ($body -match '^## Nuevo registro: (.+)') { $matches[1].Trim() } else { "Venue" }
-                  $ciudad = if ($body -match '\*\*Ciudad:\*\* (.+)') { $matches[1].Trim() } else { "" }
-                  $plan = if ($body -match '\*\*Plan:\*\* (.+) \(\$') { $matches[1].Trim() } else { "Presencia Basica" }
-                  $email = if ($body -match '\*\*Email:\*\* (.+)') { $matches[1].Trim() } else { "" }
-
-                  $prices = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
-                  $amount = if ($prices.ContainsKey($plan)) { $prices[$plan] } else { 30000 }
-                  $externalRef = "elparche-$num"
-
-                  $subBody = @{
-                    reason = "$nombre - $plan - $ciudad"
-                    external_reference = $externalRef
-                    payer_email = $email
-                    auto_recurring = @{
-                      frequency = 1; frequency_type = "months"
-                      transaction_amount = $amount; currency_id = "COP"
-                      free_trial = @{ frequency = 1; frequency_type = "months" }
-                    }
-                    back_url = "https://hablemosdeparche.github.io/admintaller/mp-success.html"
-                    status = "pending"
-                  } | ConvertTo-Json -Depth 10
-
-                  try {
-                    $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval" -Headers $headers -Method Post -Body $subBody -ContentType "application/json"
-                    $newBody = "$body`nmp-sub-id: $($resp.id)`nmp-init-point: $($resp.init_point)"
-                    gh issue edit $num --body "$newBody"
-                    gh issue comment $num --body "🔗 Completá tu suscripción en Mercado Pago: [$($resp.init_point)]($($resp.init_point))"
-                    Write-Output "  MP subscription created: $($resp.id)"
-                  } catch { Write-Output "  ERROR creating MP subscription: $_" }
+                # Issues >12h without mp-sub-id: flag as abandoned
+                $created = [DateTime]::Parse($issue.createdAt)
+                if (($now - $created).TotalHours -gt 12 -and $body -match 'mp-status:pending' -and $body -notmatch 'mp-sub-id:') {
+                  gh issue comment $num --body "⏰ Esta solicitud expiró sin completarse. Si querés registrarte, creá una nueva solicitud."
+                  gh issue close $num --comment "Expirado por inactividad"
+                  Write-Output "  -> Issue #$num closed (expired)"
                 }
               }
             }

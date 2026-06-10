@@ -1,0 +1,181 @@
+name: Process Edit Request
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to process'
+        required: false
+
+jobs:
+  edit-venue:
+    if: github.event_name == 'issues' && contains(github.event.issue.title, '[EDITAR]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get issue details
+        id: issue-data
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = '${{ github.event_name }}' === 'issues'
+              ? ${{ github.event.issue.number }}
+              : parseInt('${{ github.event.inputs.issue_number }}');
+
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            const body = issue.data.body;
+
+            const get = (pattern) => {
+              const m = body.match(pattern);
+              return m ? m[1].trim() : '';
+            };
+
+            const data = {
+              ciudad: get(/\*\*Ciudad:\*\* (.+)/),
+              nombre: get(/^## Editar: (.+)/m),
+              nit: get(/\*\*NIT:\*\* (.+)/),
+              plan: get(/\*\*Plan:\*\* (.+)/),
+              barrio: get(/\*\*Barrio:\*\* (.+)/),
+              categoria: get(/\*\*Categoría:\*\* (.+)/),
+              telefono: get(/\*\*Teléfono:\*\* (.+)/),
+              instagram: get(/\*\*Instagram:\*\* (.+)/),
+              horario: get(/\*\*Horario:\*\* (.+)/),
+              descripcion: get(/\*\*Descripción:\*\* (.+)/),
+              menu: get(/\*\*Menú:\*\* (.+)/),
+              etiquetas: get(/\*\*Etiquetas:\*\* (.+)/),
+              fotoUrl: get(/\*\*Foto URL:\*\* (.+)/)
+            };
+
+            for (const key of Object.keys(data)) {
+              if (data[key] === '—') data[key] = '';
+            }
+
+            core.setOutput('ciudad', data.ciudad);
+            core.setOutput('nombre', data.nombre);
+            core.setOutput('nit', data.nit || '');
+            core.setOutput('plan', data.plan);
+            core.setOutput('barrio', data.barrio);
+            core.setOutput('categoria', data.categoria);
+            core.setOutput('telefono', data.telefono);
+            core.setOutput('instagram', data.instagram);
+            core.setOutput('horario', data.horario);
+            core.setOutput('descripcion', data.descripcion);
+            core.setOutput('menu', data.menu);
+            core.setOutput('etiquetas', data.etiquetas);
+            core.setOutput('fotoUrl', data.fotoUrl);
+            core.setOutput('issueNumber', issueNumber.toString());
+
+      - name: Determine city repo slug
+        id: city-slug
+        shell: pwsh
+        run: |
+          $ciudad = "${{ steps.issue-data.outputs.ciudad }}"
+          $slug = $ciudad.ToLower().Replace(' ', '-').Replace('á','a').Replace('é','e').Replace('í','i').Replace('ó','o').Replace('ú','u').Replace('ñ','n')
+          Write-Output "city-slug=$slug" >> $env:GITHUB_OUTPUT
+
+      - name: Checkout city repo
+        uses: actions/checkout@v4
+        with:
+          repository: hablemosdeparche/${{ steps.city-slug.outputs.city-slug }}
+          token: ${{ secrets.GH_PAT }}
+          path: city-repo
+
+      - name: Update venue in HTML
+        shell: pwsh
+        run: |
+          $repoPath = "city-repo"
+          $indexFile = Join-Path $repoPath "index.html"
+          if (!(Test-Path $indexFile)) { Write-Output "No index.html"; exit 1 }
+
+          $content = Get-Content $indexFile -Raw
+
+          $nombre = "${{ steps.issue-data.outputs.nombre }}" -replace "'", "\'"
+          $barrio = "${{ steps.issue-data.outputs.barrio }}" -replace "'", "\'"
+          $cat = "${{ steps.issue-data.outputs.categoria }}"
+          $plan = "${{ steps.issue-data.outputs.plan }}"
+          $desc = "${{ steps.issue-data.outputs.descripcion }}" -replace "'", "\'"
+          $horario = "${{ steps.issue-data.outputs.horario }}" -replace "'", "\'"
+          $telefono = "${{ steps.issue-data.outputs.telefono }}" -replace "'", "\'"
+          $instagram = "${{ steps.issue-data.outputs.instagram }}" -replace "'", "\'"
+          $menuStr = "${{ steps.issue-data.outputs.menu }}"
+          $etiquetas = "${{ steps.issue-data.outputs.etiquetas }}"
+          $fotoUrl = "${{ steps.issue-data.outputs.fotoUrl }}"
+
+          $orden = 999
+          if ($plan -eq "Destacado") { $orden = 50 }
+          if ($plan -eq "Completo") { $orden = 10 }
+          if ($plan -eq "Verificado") { $orden = 100 }
+
+          $menuArr = @()
+          if ($menuStr) { $menuArr = $menuStr -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ } }
+          $menuJsStr = ($menuArr | ForEach-Object { "'$_'" }) -join ","
+
+          $tagsArr = @($cat)
+          if ($etiquetas) { $etiquetas -split ',' | ForEach-Object { $t = $_.Trim(); if ($t) { $tagsArr += $t } } }
+          $tagsStr = ($tagsArr | ForEach-Object { "'$_'" }) -join ","
+
+          $bgClasses = @{ "bares"="pt1"; "cafe"="pt2"; "comida"="pt3"; "arte"="pt4"; "plan"="pt5"; "noche"="pt6" }
+          $bg = if ($bgClasses.ContainsKey($cat)) { $bgClasses[$cat] } else { "pt1" }
+
+          $precioTag = "$$ Promedio"
+          if ($plan -eq "Presencia Basica") { $precioTag = "$ Económico" }
+
+          # Find and replace venue by name
+          $match = [regex]::Match($content, "\{[^}]*name\s*:\s*'$nombre'[^}]*\}")
+          if ($match.Success) {
+            $oldStr = $match.Value
+            $newStr = $oldStr
+            $newStr = $newStr -replace "orden:\d+", "orden:$orden"
+            $newStr = $newStr -replace "bg:'[^']*'", "bg:'$bg'"
+            $newStr = $newStr -replace "barrio:'[^']*'", "barrio:'$barrio'"
+            $newStr = $newStr -replace "tags:\[[^\]]*\]", "tags:[$tagsStr]"
+            $newStr = $newStr -replace "horario:'[^']*'", "horario:'$horario'"
+            $newStr = $newStr -replace "precio:'[^']*'", "precio:'$precioTag'"
+            $newStr = $newStr -replace "desc:'[^']*'", "desc:'$desc'"
+            $newStr = $newStr -replace "telefono:'[^']*'", "telefono:'$telefono'"
+            $newStr = $newStr -replace "instagram:'[^']*'", "instagram:'$instagram'"
+            $newStr = $newStr -replace "menu:\[[^\]]*\]", "menu:[$menuJsStr]"
+            if ($fotoUrl) { $newStr = $newStr -replace "img:'[^']*'", "img:'$fotoUrl'" }
+            $content = $content.Replace($oldStr, $newStr)
+            Write-Output "Venue edited: $nombre"
+          } else {
+            Write-Output "Venue not found: $nombre"
+            exit 1
+          }
+
+          Set-Content $indexFile $content
+          Write-Output "HTML updated for $nombre"
+
+      - name: Commit and push
+        shell: pwsh
+        run: |
+          Push-Location city-repo
+          git config user.name "El Parche Bot"
+          git config user.email "bot@elparche.co"
+          git add index.html
+          git commit -m "Editado: ${{ steps.issue-data.outputs.nombre }} - $(Get-Date -Format 'dd/MM/yyyy')" || Write-Output "Nothing to commit"
+          git push || Write-Output "Push failed"
+          Pop-Location
+
+      - name: Close issue with success
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = parseInt('${{ steps.issue-data.outputs.issueNumber }}');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: `✅ **Edición completada.**\n\n${{ steps.issue-data.outputs.nombre }} se actualizó correctamente en la guía de ${{ steps.issue-data.outputs.ciudad }}.`
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              state: 'closed'
+            });

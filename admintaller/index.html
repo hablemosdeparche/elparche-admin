@@ -706,65 +706,89 @@ body::before {
     </div>
   </section>
 
-  <!-- EDIT VENUE -->
-  <section class="section" id="edit-section">
-    <span class="section-badge">Editar local</span>
-    <h2>¿Ya estás registrado?</h2>
-    <p>Actualizá la información de tu ficha: imagen, descripción, menú, horario, teléfono, Instagram.
-    <strong>Las estrellas y puntuaciones no se modifican.</strong></p>
+  <!-- MIS DATOS -->
+  <section class="section" id="misdatos-section">
+    <span class="section-badge">Mis Datos</span>
+    <h2>Ya estás registrado?</h2>
+    <p>Ingresá tu NIT y el email que usaste al registrarte para editar tu ficha gratis.</p>
 
-    <div class="edit-card">
-      <div class="icon-big"><i class="fas fa-edit"></i></div>
-      <h3>Editar ficha</h3>
-      <p>Actualizá los datos de tu local. Costo único de <strong>$10.000</strong> por edición.</p>
-      <div class="edit-sub-info">Pago único de <strong>$10.000</strong></div>
-      <ul class="steps" style="margin:10px 0;">
-        <li class="step"><span class="num">1</span><div class="text">Completá el formulario indicando qué querés cambiar</div></li>
-        <li class="step"><span class="num">2</span><div class="text">Pagá <strong>$10.000</strong> por la edición vía Mercado Pago o WhatsApp</div></li>
-        <li class="step"><span class="num">3</span><div class="text">Recibí confirmación y tu ficha se actualiza</div></li>
-      </ul>
+    <div class="form-card" id="misDatosLookup" style="margin-top:12px;">
+      <div class="form-row">
+        <div class="form-group">
+          <label>NIT (sin digito de verificación)</label>
+          <input type="text" id="misDatosNit" placeholder="Ej: 900123456" required>
+        </div>
+        <div class="form-group">
+          <label>Email de la suscripción</label>
+          <input type="email" id="misDatosEmail" placeholder="tulocal@email.com" required>
+        </div>
+      </div>
+      <button class="submit-btn" id="misDatosBuscarBtn">
+        <i class="fas fa-search"></i> Buscar mi local
+      </button>
+      <div id="misDatosError" style="display:none;color:var(--danger);font-size:12px;margin-top:8px;"></div>
     </div>
 
-    <div class="form-card">
-      <form id="editForm">
+    <div class="form-card" id="misDatosEdit" style="display:none;margin-top:12px;">
+      <form id="misDatosForm">
+        <div class="form-group">
+          <label>Nombre del local</label>
+          <input type="text" id="mdName" readonly style="background:var(--tag-bg);cursor:not-allowed;">
+        </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Nombre del local</label>
-            <input type="text" id="editVenueName" placeholder="Ej: Café Havana" required>
+            <label>Ciudad</label>
+            <input type="text" id="mdCity" readonly style="background:var(--tag-bg);cursor:not-allowed;">
           </div>
           <div class="form-group">
-            <label>Ciudad</label>
-            <select id="editCitySelect" required>
-              <option value="">Seleccioná una ciudad</option>
-              <option>Bogotá</option><option>Medellín</option><option>Cali</option>
-              <option>Cartagena</option><option>Santa Marta</option><option>Barranquilla</option>
-              <option>Bucaramanga</option><option>Pereira</option><option>Manizales</option>
-              <option>Cúcuta</option><option>Ibagué</option><option>Villavicencio</option>
-              <option>Armenia</option><option>Neiva</option><option>Sincelejo</option>
-              <option>Pasto</option><option>Montería</option><option>Valledupar</option>
+            <label>Plan</label>
+            <input type="text" id="mdPlan" readonly style="background:var(--tag-bg);cursor:not-allowed;">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Barrio / Zona</label>
+          <input type="text" id="mdBarrio" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Categoría</label>
+            <select id="mdCategoria">
+              <option value="bares">🍺 Bares</option>
+              <option value="cafe">☕ Café</option>
+              <option value="comida">🍽️ Comida / Restaurantes</option>
+              <option value="arte">🎨 Arte / Cultura</option>
+              <option value="plan">🌅 Plan / Turismo</option>
+              <option value="noche">🌙 Noche / Discotecas</option>
             </select>
           </div>
         </div>
         <div class="form-group">
-          <label>¿Qué querés cambiar?</label>
-          <select id="editField" required>
-            <option value="">Seleccioná una opción</option>
-            <option>Imagen del local</option>
-            <option>Descripción</option>
-            <option>Menú</option>
-            <option>Horario</option>
-            <option>Teléfono</option>
-            <option>Instagram</option>
-            <option>Dirección / Barrio</option>
-            <option>Varios campos</option>
-          </select>
+          <label>Descripción (máx. 200 caracteres)</label>
+          <textarea id="mdDesc" maxlength="200" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Horario</label>
+            <input type="text" id="mdHorario" placeholder="Ej: Lun-Sáb 10am-11pm">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Teléfono / WhatsApp</label>
+            <input type="tel" id="mdTelefono" required>
+          </div>
+          <div class="form-group">
+            <label>Instagram</label>
+            <input type="text" id="mdInstagram" placeholder="@tulocal">
+          </div>
         </div>
         <div class="form-group">
-          <label>Nuevo valor / Detalle del cambio</label>
-          <textarea id="editDetail" placeholder="Describí qué querés cambiar..." required></textarea>
+          <label>Menú (productos separados por coma)</label>
+          <input type="text" id="mdMenu" placeholder="Ej: Mojito, Ceviche, Pasta">
         </div>
-        <button type="submit" class="submit-btn" id="editSubmitBtn">
-          <i class="fas fa-edit"></i> Solicitar edición
+        <input type="hidden" id="mdFotoUrl" value="">
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-save"></i> Guardar cambios
         </button>
       </form>
     </div>
@@ -806,7 +830,7 @@ body::before {
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
         <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Cómo sé que mi pago se procesó?</div>
-        <div style="font-size:12px;color:var(--muted2);">Mercado Pago te envía un comprobante. Nosotros verificamos automáticamente y activamos tu ficha.</div>
+        <div style="font-size:12px;color:var(--muted2);">Mercado Pago te envía un comprobante. Activamos tu ficha automáticamente al confirmar.</div>
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
         <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Puedo cambiar de plan?</div>
@@ -814,7 +838,7 @@ body::before {
       </div>
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:12px;">
         <div style="font-weight:600;font-size:13px;margin-bottom:3px;">¿Cuánto tarda en estar mi ficha?</div>
-        <div style="font-size:12px;color:var(--muted2);">Apenas se confirme el pago vía Bold, tu ficha se activa automáticamente.</div>
+        <div style="font-size:12px;color:var(--muted2);">Apenas se confirme el pago, tu ficha se activa automáticamente (generalmente en menos de 5 minutos).</div>
       </div>
     </div>
   </section>
@@ -839,9 +863,9 @@ body::before {
 // ═══════════════════════════════════════
 const CONFIG = {
   whatsapp: '573218879876',
-  githubToken: '{{GITHUB_PAT}}',
-  githubOwner: '{{GITHUB_OWNER}}',
-  githubRepo: '{{GITHUB_REPO}}'
+  githubToken: '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',
+  githubOwner: 'hablemosdeparche',
+  githubRepo: 'elparche-admin'
 };
 
 const PLAN_PRICES = {
@@ -1247,28 +1271,144 @@ function pollForAuthorization(issueNumber) {
 }
 
 // ═══════════════════════════════════════
-// EDIT FORM
+// MIS DATOS - LOOKUP
 // ═══════════════════════════════════════
-document.getElementById('editForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const name = document.getElementById('editVenueName').value;
-  const city = document.getElementById('editCitySelect').value;
-  const field = document.getElementById('editField').value;
-  const detail = document.getElementById('editDetail').value;
+document.getElementById('misDatosBuscarBtn').addEventListener('click', async function() {
+  const nit = document.getElementById('misDatosNit').value.replace(/[^0-9]/g, '');
+  const email = document.getElementById('misDatosEmail').value.trim().toLowerCase();
+  const errDiv = document.getElementById('misDatosError');
 
-  const msg = encodeURIComponent(
-    `✏️ *Edición - El Parche*\n` +
-    `━━━━━━━━━━━━━━━━━━\n` +
-    `🏪 *Local:* ${name}\n` +
-    `🏙 *Ciudad:* ${city}\n` +
-    `🔧 *Cambio:* ${field}\n` +
-    `📝 *Detalle:* ${detail}\n` +
-    `━━━━━━━━━━━━━━━━━━\n` +
-    `*Requiere suscripción activa*`
-  );
-  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${msg}`, '_blank');
-  showToast('Solicitud de edición enviada por WhatsApp', 'success');
-  this.reset();
+  if (!nit || nit.length < 5 || !email) {
+    errDiv.textContent = 'Completá NIT y email correctamente.';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  errDiv.style.display = 'none';
+  this.disabled = true;
+  this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando...';
+
+  try {
+    // Fetch venues.json
+    const venuesResp = await fetch('venues.json');
+    if (!venuesResp.ok) { throw new Error('No se pudo leer venues.json'); }
+    const venues = await venuesResp.json();
+
+    // Find by NIT
+    const venueInfo = venues.find(v => v.nit === nit && v.email && v.email.toLowerCase() === email);
+    if (!venueInfo) {
+      errDiv.textContent = 'No encontramos un local con ese NIT y email.';
+      errDiv.style.display = 'block';
+      this.disabled = false;
+      this.innerHTML = '<i class="fas fa-search"></i> Buscar mi local';
+      return;
+    }
+
+    // Fetch city HTML to get venue data
+    const citySlug = venueInfo.ciudad.toLowerCase().replace(/[\sáéíóúñ]/g, c => {
+      const map = {' ':'-','á':'a','é':'e','í':'i','ó':'o','ú':'u','ñ':'n'};
+      return map[c] || c;
+    });
+
+    const htmlResp = await fetch(`https://hablemosdeparche.github.io/${citySlug}/`);
+    if (!htmlResp.ok) { throw new Error('No se pudo leer el HTML de la ciudad'); }
+    const html = await htmlResp.text();
+
+    // Parse the venue object from HTML places array
+    const match = html.match(new RegExp(`\\{[^}]*name\\s*:\\s*'${escapeRegExp(venueInfo.nombre)}'[^}]*\\}`));
+    if (!match) {
+      errDiv.textContent = 'No encontramos el local en la guía. Puede estar oculto.';
+      errDiv.style.display = 'block';
+      this.disabled = false;
+      this.innerHTML = '<i class="fas fa-search"></i> Buscar mi local';
+      return;
+    }
+
+    const obj = match[0];
+    const getField = (field) => {
+      const m = obj.match(new RegExp(`${field}\\s*:\\s*'([^']*)'`));
+      return m ? m[1] : '';
+    };
+    const getArray = (field) => {
+      const m = obj.match(new RegExp(`${field}\\s*:\\s*\\[([^\\]]*)\\]`));
+      if (!m) return '';
+      return m[1].split(',').map(s => s.trim().replace(/^'|'$/g, '')).filter(s => s).join(', ');
+    };
+
+    // Pre-fill edit form
+    document.getElementById('mdName').value = venueInfo.nombre;
+    document.getElementById('mdCity').value = venueInfo.ciudad;
+    document.getElementById('mdPlan').value = getField('plan') || 'Presencia Basica';
+    document.getElementById('mdBarrio').value = getField('barrio') || '';
+    document.getElementById('mdCategoria').value = getField('cat') || 'bares';
+    document.getElementById('mdDesc').value = getField('desc') || '';
+    document.getElementById('mdHorario').value = getField('horario') || '';
+    document.getElementById('mdTelefono').value = getField('telefono') || '';
+    document.getElementById('mdInstagram').value = getField('instagram') || '';
+    document.getElementById('mdMenu').value = getArray('menu') || '';
+    document.getElementById('mdFotoUrl').value = getField('img') || '';
+
+    // Store metadata for save
+    document.getElementById('misDatosLookup').style.display = 'none';
+    document.getElementById('misDatosEdit').style.display = 'block';
+    showToast('Local encontrado. Editá los campos y guardá.', 'success');
+  } catch (e) {
+    errDiv.textContent = 'Error al buscar: ' + e.message;
+    errDiv.style.display = 'block';
+  }
+
+  this.disabled = false;
+  this.innerHTML = '<i class="fas fa-search"></i> Buscar mi local';
+});
+
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ═══════════════════════════════════════
+// MIS DATOS - SAVE
+// ═══════════════════════════════════════
+document.getElementById('misDatosForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+  const nombre = document.getElementById('mdName').value;
+  const ciudad = document.getElementById('mdCity').value;
+  const nit = document.getElementById('misDatosNit').value;
+
+  const issueBody =
+    `## Editar: ${nombre}\n\n` +
+    `**Ciudad:** ${ciudad}\n` +
+    `**NIT:** ${nit}\n` +
+    `**Plan:** ${document.getElementById('mdPlan').value}\n` +
+    `**Barrio:** ${document.getElementById('mdBarrio').value}\n` +
+    `**Categoría:** ${document.getElementById('mdCategoria').value}\n` +
+    `**Teléfono:** ${document.getElementById('mdTelefono').value}\n` +
+    `**Instagram:** ${document.getElementById('mdInstagram').value || '—'}\n` +
+    `**Horario:** ${document.getElementById('mdHorario').value || '—'}\n` +
+    `**Descripción:** ${document.getElementById('mdDesc').value || '—'}\n` +
+    `**Menú:** ${document.getElementById('mdMenu').value || '—'}\n` +
+    `**Foto URL:** ${document.getElementById('mdFotoUrl').value || '—'}\n` +
+    `**Email:** ${document.getElementById('misDatosEmail').value}\n` +
+    `mp-status:edit`;
+
+  try {
+    const issue = await createGitHubIssue(
+      `[EDITAR] ${ciudad} — ${nombre}`,
+      issueBody
+    );
+    showToast('Solicitud de edición enviada. Tu ficha se actualizará en minutos.', 'success');
+    btn.innerHTML = '<i class="fas fa-check"></i> Guardado';
+    this.reset();
+    document.getElementById('misDatosEdit').style.display = 'none';
+    document.getElementById('misDatosLookup').style.display = 'block';
+  } catch (e) {
+    showToast('Error al guardar. Usá WhatsApp como respaldo.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> Guardar cambios';
+  }
 });
 
 // ═══════════════════════════════════════

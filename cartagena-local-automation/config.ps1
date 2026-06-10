@@ -79,7 +79,7 @@ $CONFIG = @{
 
     PLAN_ORDEN = @{
         "Presencia Basica" = 999
-        "Verificado"       = 60
+        "Verificado"       = 100
         "Destacado"        = 30
         "Completo"         = 10
     }
@@ -115,8 +115,7 @@ $CONFIG = @{
     # ─── APIs ───
     IMGBB_API_KEY    = "2bf08b9ce1d13ca9ddf785696f0ab9c9"
     GEMINI_API_KEY   = "{{GEMINI_API_KEY}}"  # Reemplazar con API key de Gemini
-    BOLD_API_KEY     = "{{BOLD_API_KEY}}"  # Reemplazar con la API key de Bold
-    BOLD_BASE_URL    = "https://integrations.api.bold.co"
+    # Nota: los pagos se procesan via Mercado Pago en GitHub Actions
 
     # ─── GITHUB CENTRAL ───
     CENTRAL_OWNER    = "hablemosdeparche"      # Tu usuario de GitHub

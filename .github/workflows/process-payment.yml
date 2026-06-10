@@ -41,7 +41,9 @@ jobs:
               descripcion: /\*\*Descripción:\*\* (.+)/,
               menu: /\*\*Menú:\*\* (.+)/,
               etiquetas: /\*\*Etiquetas:\*\* (.+)/,
-              fotoUrl: /\*\*Foto URL:\*\* (.+)/
+              fotoUrl: /\*\*Foto URL:\*\* (.+)/,
+              mpSubId: /mp-sub-id:\s*(\S+)/,
+              email: /\*\*Email:\*\* (.+)/
             };
 
             for (const [key, pattern] of Object.entries(patterns)) {
@@ -67,6 +69,8 @@ jobs:
             core.setOutput('menu', data.menu);
             core.setOutput('etiquetas', data.etiquetas);
             core.setOutput('fotoUrl', data.fotoUrl);
+            core.setOutput('mpSubId', data.mpSubId || '');
+            core.setOutput('email', data.email || '');
 
             return data;
 
@@ -149,7 +153,7 @@ jobs:
           $orden = 999
           if ($plan -eq "Destacado") { $orden = 50 }
           if ($plan -eq "Completo") { $orden = 10 }
-          if ($plan -eq "Verificado") { $orden = 60 }
+          if ($plan -eq "Verificado") { $orden = 100 }
 
           # Parse menu (max 4 for basic)
           $menuArr = @()
@@ -178,6 +182,20 @@ jobs:
           # Check if place already exists
           $pattern = [regex]::Escape("name:'$nombre'")
           $exists = $content -match "\{[^}]*name\s*:\s*'$nombre'[^}]*\}"
+
+          # Provisional replacement: if venue exists with empty NIT, replace it
+          $nit = "${{ steps.issue-data.outputs.nit }}".Trim()
+          if ($exists -and $nit) {
+            $existingMatch = [regex]::Match($content, "\{[^}]*name\s*:\s*'$nombre'[^}]*\}")
+            if ($existingMatch.Success) {
+              $existingObj = $existingMatch.Value
+              if ($existingObj -match "nit:''") {
+                Write-Output "Reemplazando venue provisional: $nombre"
+                $content = $content.Remove($existingMatch.Index, $existingMatch.Length)
+                $exists = $false
+              }
+            }
+          }
 
           if ($exists) {
             # Update existing
@@ -247,15 +265,18 @@ jobs:
             $venues = Get-Content $jsonPath -Raw | ConvertFrom-Json
           }
 
+          $email = "${{ steps.issue-data.outputs.email }}"
           $existing = $venues | Where-Object { $_.nombre -eq $nombre -and $_.ciudad -eq $ciudad }
           if ($existing) {
             $existing.nit = $nit
             $existing.activo = $true
+            $existing.email = $email
             if ($telefono) { $existing.telefono = $telefono }
           } else {
             $venues += @{
               nombre = $nombre
               nit = $nit
+              email = $email
               ciudad = $ciudad
               telefono = $telefono
               activo = $true
@@ -283,11 +304,22 @@ jobs:
           $precios = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
           $precio = if ($precios.ContainsKey($plan)) { $precios[$plan] } else { 30000 }
 
+          $subId = "${{ steps.issue-data.outputs.mpSubId }}"
+          $email = "${{ steps.issue-data.outputs.email }}"
+          $today = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+          $fechaVen = (Get-Date).AddMonths(1).AddDays(7).ToString("yyyy-MM-dd")
+
           $existing = $db.venues | Where-Object { $_.Nombre -eq $nombre -and $_.Ciudad -eq $ciudad }
           if ($existing) {
             $existing.activo = $true
             $existing.Estado = "Activo"
-            $existing.updatedAt = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+            $existing.Plan = $plan
+            $existing.Precio = "$precio"
+            $existing.updatedAt = $today
+            $existing.mp_subscription_id = $subId
+            $existing.mp_status = "authorized"
+            $existing.mp_payer_email = $email
+            $existing.FechaVen = $fechaVen
           } else {
             $nextId = if ($db.venues.Count -gt 0) { ($db.venues | ForEach-Object { $_.ID } | Measure-Object -Maximum).Maximum + 1 } else { 1 }
             $newVenue = @{
@@ -299,7 +331,11 @@ jobs:
               Estado = "Activo"
               activo = $true
               FechaReg = (Get-Date -Format "dd/MM/yyyy")
-              updatedAt = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+              FechaVen = $fechaVen
+              updatedAt = $today
+              mp_subscription_id = $subId
+              mp_status = "authorized"
+              mp_payer_email = $email
             }
             $db.venues += $newVenue
           }

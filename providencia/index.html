@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <!-- Google Tag Manager -->
@@ -55,7 +55,7 @@ body::before { display: none; }
   padding-bottom: 90px;
 }
 
-/* -- HEADER -- */
+/* ── HEADER ── */
 .app-header {
   padding: 22px 20px 14px;
   position: sticky;
@@ -76,7 +76,7 @@ body::before { display: none; }
 }
 .search-box input::placeholder { color: var(--muted); }
 .search-box input:focus { border-color: var(--gold); }
-.search-box::before { content: '??'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
+.search-box::before { content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
 .cats-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .cats-scroll::-webkit-scrollbar { display: none; }
 .cat-pill {
@@ -87,11 +87,11 @@ body::before { display: none; }
 }
 .cat-pill.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
 
-/* -- SCREENS -- */
+/* ── SCREENS ── */
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* -- BANNER -- */
+/* ── BANNER ── */
 .banner {
   margin: 16px 16px 0;
   background: linear-gradient(135deg, #06121A, #020A10);
@@ -121,11 +121,11 @@ body::before { display: none; }
 .btn-ver-eventos:hover { background: var(--gold-light); }
 .btn-ver-eventos:active { transform: scale(0.98); }
 
-/* -- SEC HEADER -- */
+/* ── SEC HEADER ── */
 .sec-header { display: flex; justify-content: space-between; align-items: center; padding: 22px 16px 12px; }
 .sec-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; font-style: italic; color: var(--text); }
 
-/* -- PLACES FEED -- */
+/* ── PLACES FEED ── */
 .places-feed { padding: 0 16px; display: flex; flex-direction: column; gap: 16px; }
 .place-card {
   background: var(--card-bg); border: 1px solid var(--card-border);
@@ -201,7 +201,7 @@ body::before { display: none; }
 .place-barrio { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; }
 .place-barrio i { color: var(--muted2); font-size: 11px; }
 
-/* -- EVENTOS SCREEN -- */
+/* ── EVENTOS SCREEN ── */
 .events-screen-header { padding: 20px 16px 0; }
 .events-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--gold); font-style: italic; }
 .events-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; margin-bottom: 14px; }
@@ -230,7 +230,7 @@ body::before { display: none; }
 .ev-info-full h3 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
 .ev-detail-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted2); margin-bottom: 6px; }
 
-/* -- MAPA -- */
+/* ── MAPA ── */
 .map-screen { display: flex; flex-direction: column; height: calc(100vh - 140px); }
 #map { flex: 1; width: 100%; min-height: 400px; }
 .leaflet-popup-content-wrapper { background: var(--card-bg) !important; color: var(--text) !important; border: 1px solid var(--gold) !important; border-radius: 12px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.6) !important; }
@@ -238,7 +238,7 @@ body::before { display: none; }
 .popup-name { font-weight: 600; font-size: 14px; color: var(--gold); margin-bottom: 4px; }
 .popup-barrio { font-size: 12px; color: var(--muted2); }
 
-/* -- GUARDADOS -- */
+/* ── GUARDADOS ── */
 .saved-screen-header { padding: 20px 16px 16px; }
 .saved-screen-header h2 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; font-style: italic; color: var(--gold); }
 .saved-screen-header p { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); font-family: 'Syne', sans-serif; margin-top: 3px; }
@@ -247,9 +247,9 @@ body::before { display: none; }
 .saved-empty h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--muted2); margin-bottom: 8px; }
 .saved-empty p { font-size: 13px; line-height: 1.6; }
 
-/* ----------------------------------
-   MODAL � todo en una pantalla
----------------------------------- */
+/* ══════════════════════════════════
+   MODAL — todo en una pantalla
+══════════════════════════════════ */
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.9);
@@ -428,7 +428,7 @@ body::before { display: none; }
 }
 .btn-icon:hover { border-color: var(--gold); color: var(--gold); }
 
-/* -- BOTTOM NAV -- */
+/* ── BOTTOM NAV ── */
 .bottom-nav {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
   width: 100%; max-width: 480px;
@@ -443,7 +443,7 @@ body::before { display: none; }
 .nav-it.active .nav-icon { transform: scale(1.15); }
 .nav-it.active .nav-icon i { color: var(--gold); }
 
-/* -- WHATSAPP FLOTANTE -- */
+/* ── WHATSAPP FLOTANTE ── */
 .wa-float { position: fixed; bottom: 88px; right: calc(50% - 228px); z-index: 400; }
 .wa-btn {
   background: var(--whatsapp); border: none; border-radius: 50px;
@@ -470,7 +470,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="header-top">
       <div class="logo">
         <h1>Providencia Local</h1>
-        <p>Lo que hacen los de aqu�</p>
+        <p>Lo que hacen los de aquí</p>
       </div>
     </div>
     <div class="search-box">
@@ -478,12 +478,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="cats-scroll">
       <div class="cat-pill active" onclick="setFilter('todos',this)">Todos</div>
-      <div class="cat-pill" onclick="setFilter('bares',this)">?? Bares</div>
-      <div class="cat-pill" onclick="setFilter('cafe',this)">? Caf�s</div>
-      <div class="cat-pill" onclick="setFilter('comida',this)">?? Comida</div>
-      <div class="cat-pill" onclick="setFilter('plan',this)">?? Planes</div>
-      <div class="cat-pill" onclick="setFilter('arte',this)">?? Arte</div>
-      <div class="cat-pill" onclick="setFilter('noche',this)">?? Noche</div>
+      <div class="cat-pill" onclick="setFilter('bares',this)">🍺 Bares</div>
+      <div class="cat-pill" onclick="setFilter('cafe',this)">☕ Cafés</div>
+      <div class="cat-pill" onclick="setFilter('comida',this)">🍽 Comida</div>
+      <div class="cat-pill" onclick="setFilter('plan',this)">🌅 Planes</div>
+      <div class="cat-pill" onclick="setFilter('arte',this)">🎨 Arte</div>
+      <div class="cat-pill" onclick="setFilter('noche',this)">🌙 Noche</div>
     </div>
   </div>
 
@@ -491,17 +491,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="screen active" id="screen-inicio">
     <div class="banner" id="banner-eventos">
       <div class="banner-header" onclick="toggleBanner()">
-        <div class="banner-flame">??</div>
+        <div class="banner-flame">🔥</div>
         <div class="banner-texto">
-          <h3>�Qu� hacer esta noche?</h3>
+          <h3>¿Qué hacer esta noche?</h3>
           <p>Eventos programados para el mes</p>
         </div>
-        <div class="banner-arrow">?</div>
+        <div class="banner-arrow">❯</div>
       </div>
       <div class="banner-body">
         <div id="banner-events-list"></div>
         <div class="banner-cta">
-          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del a�o ?</button>
+          <button class="btn-ver-eventos" onclick="goScreen('screen-eventos')">Ver todos los eventos del año →</button>
         </div>
       </div>
     </div>
@@ -513,7 +513,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="screen" id="screen-eventos">
     <div class="events-screen-header">
       <h2>Agenda</h2>
-      <p>Pr�ximos eventos en Cartagena</p>
+      <p>Próximos eventos en Cartagena</p>
     </div>
       <div class="events-feed" id="events-feed"></div>
   </div>
@@ -541,8 +541,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- BOTON REGISTRO -->
 <div class="wa-float">
-  <a class="wa-btn" href="https://hablemosdeparche.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
-    <span class="wa-btn-icon">??</span>
+  <a class="wa-btn" href="https://cartagenalocal.github.io/elparche-admin/admintaller/" style="text-decoration:none;">
+    <span class="wa-btn-icon">📋</span>
     <span class="wa-btn-text">Registra tu local</span>
   </a>
 </div>
@@ -552,7 +552,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="modal-sheet" id="modal-sheet">
     <div class="modal-hero" id="modal-hero">
       <div class="modal-handle"></div>
-      <div class="modal-close" onclick="closeModal()">?</div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
       <svg class="modal-hero-icon" id="modal-hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
     </div>
     <div class="modal-body">
@@ -569,7 +569,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div id="modal-info"></div>
       <div id="modal-menu"></div>
       <div class="modal-cta">
-        <button class="btn-primary" id="btn-como-llegar"><i class="fa-solid fa-location-dot"></i> C�mo llegar</button>
+        <button class="btn-primary" id="btn-como-llegar"><i class="fa-solid fa-location-dot"></i> Cómo llegar</button>
         <button class="btn-icon" id="btn-modal-heart" onclick="toggleSaveFromModal()"><i class="fa-regular fa-heart"></i></button>
         <button class="btn-icon" onclick="sharePlace()"><i class="fa-solid fa-share-from-square"></i></button>
       </div>
@@ -578,9 +578,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 
 <script>
-// --------------------------------------
+// ══════════════════════════════════════
 // SVG ICONS
-// --------------------------------------
+// ══════════════════════════════════════
 const svgIcons = {
   bares: `<circle cx="40" cy="28" r="18" stroke="#1A8FBA" stroke-width="2.5" fill="none"/>
     <path d="M28 28 Q28 52 40 52 Q52 52 52 28" stroke="#1A8FBA" stroke-width="2.5" fill="none" stroke-linecap="round"/>
@@ -628,9 +628,9 @@ function getSVG(cat) {
   return svgIcons[map[cat]] || svgIcons.default;
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // DATOS
-// --------------------------------------
+// ══════════════════════════════════════
 const places = [
   // === BARES ===
   { id:1, orden:999, bg:'pt6', cat:'bares', name:'Bar Playa Manzanillo', nit:'', barrio:'Playa', tags:['Manzanillo', 'Playa', 'Fiesta'], rating:4.4, horario:'Lun-Dom 10am-9pm', precio:'$ Economico', desc:'Bar en playa Manzanillo con musica islena.', img:'', telefono:'+57 608 456 7890', instagram:'', menu:['Cerveza', 'Ron', 'Coco', 'Limonada'], coords:[13.34, -81.36] },
@@ -675,16 +675,16 @@ const places = [
   { id:35, orden:999, bg:'pt8', cat:'noche', name:'Bar Musical Providencia', nit:'', barrio:'Centro', tags:['Musica', 'Baile', 'Isla'], rating:4.3, horario:'Vie-Sab 7pm-12am', precio:'$ Economico', desc:'Bar con musica en vivo de la isla.', img:'', telefono:'+57 608 567 8901', instagram:'', menu:['Cerveza', 'Ron', 'Coctel', 'Gaseosa'], coords:[13.351, -81.369] },
 ];
 
-// --------------------------------------
+// ══════════════════════════════════════
 // EVENTOS
-// --------------------------------------
+// ══════════════════════════════════════
 const eventList = [
-  { date:'2026-07-05', endDate:'2026-07-07', cat:'arte', icon:'??', name:'Festival del Mar', nit:'', place:'Playa', price:'Entrada libre', short:'5-7 de julio' },
-  { date:'2026-07-20', endDate:'2026-07-22', cat:'arte', icon:'??', name:'Festival de la Cosecha de Coco', nit:'', place:'Centro', price:'Entrada libre', short:'20-22 de julio' },
-  { date:'2026-08-15', endDate:'2026-08-17', cat:'comida', icon:'??', name:'Festival Gastronomico Isleno', nit:'', place:'Centro', price:'Variable', short:'15-17 de agosto' },
-  { date:'2026-09-10', endDate:'2026-09-12', cat:'plan', icon:'??', name:'Torneo de Buceo', nit:'', place:'Crab Cay', price:'$50.000', short:'10-12 de septiembre' },
-  { date:'2026-10-05', endDate:'2026-10-07', cat:'arte', icon:'??', name:'Feria Artesanal de Providencia', nit:'', place:'Centro', price:'Entrada libre', short:'5-7 de octubre' },
-  { date:'2026-11-15', endDate:'2026-11-17', cat:'arte', icon:'??', name:'Festival de la Cultura Raizal', nit:'', place:'Centro', price:'Entrada libre', short:'15-17 de noviembre' },
+  { date:'2026-07-05', endDate:'2026-07-07', cat:'arte', icon:'🎵', name:'Festival del Mar', nit:'', place:'Playa', price:'Entrada libre', short:'5-7 de julio' },
+  { date:'2026-07-20', endDate:'2026-07-22', cat:'arte', icon:'🎵', name:'Festival de la Cosecha de Coco', nit:'', place:'Centro', price:'Entrada libre', short:'20-22 de julio' },
+  { date:'2026-08-15', endDate:'2026-08-17', cat:'comida', icon:'🍴', name:'Festival Gastronomico Isleno', nit:'', place:'Centro', price:'Variable', short:'15-17 de agosto' },
+  { date:'2026-09-10', endDate:'2026-09-12', cat:'plan', icon:'🏊', name:'Torneo de Buceo', nit:'', place:'Crab Cay', price:'$50.000', short:'10-12 de septiembre' },
+  { date:'2026-10-05', endDate:'2026-10-07', cat:'arte', icon:'🎨', name:'Feria Artesanal de Providencia', nit:'', place:'Centro', price:'Entrada libre', short:'5-7 de octubre' },
+  { date:'2026-11-15', endDate:'2026-11-17', cat:'arte', icon:'🎨', name:'Festival de la Cultura Raizal', nit:'', place:'Centro', price:'Entrada libre', short:'15-17 de noviembre' },
 ];
 
 function getUpcomingEvents() {
@@ -710,14 +710,14 @@ function renderEventsList(list) {
       <div class="ev-thumb-full ${etClasses[i % 5]}">${e.icon}<div class="ev-badge-full dia">${meses[m]}</div></div>
       <div class="ev-info-full">
         <h3>${e.name}</h3>
-        <div class="ev-detail-row"><span>??</span> ${e.short}</div>
-        <div class="ev-detail-row"><span>??</span> ${e.place}</div>
-        <div class="ev-detail-row"><span>??</span> ${e.price}</div>
+        <div class="ev-detail-row"><span>🕐</span> ${e.short}</div>
+        <div class="ev-detail-row"><span>📍</span> ${e.place}</div>
+        <div class="ev-detail-row"><span>🎟</span> ${e.price}</div>
       </div>`;
     feed.appendChild(card);
   });
   if (list.length === 0) {
-    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No hay eventos pr�ximos.</div>';
+    feed.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px;">No hay eventos próximos.</div>';
   }
 }
 
@@ -730,14 +730,14 @@ function renderBannerEvents() {
     const item = document.createElement('div');
     item.className = 'banner-event-item';
     item.dataset.cat = e.cat;
-    item.innerHTML = `<div class="bev-icon">${e.icon}</div><div class="bev-info"><h5>${e.name}</h5><p>${e.short} � ${e.price}</p></div>`;
+    item.innerHTML = `<div class="bev-icon">${e.icon}</div><div class="bev-info"><h5>${e.name}</h5><p>${e.short} · ${e.price}</p></div>`;
     container.appendChild(item);
   });
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // ESTADO
-// --------------------------------------
+// ══════════════════════════════════════
 let saved = JSON.parse(localStorage.getItem('pro_saved') || '[]');
 let currentFilter = 'todos';
 let currentSearch = '';
@@ -747,9 +747,9 @@ let mapMarkers = [];
 let mapInitialized = false;
 let mapFocusPlace = null;
 
-// --------------------------------------
-// NAVEGACI�N
-// --------------------------------------
+// ══════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════
 function goScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -763,9 +763,9 @@ function goScreen(id) {
   window.scrollTo(0,0);
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // FILTROS
-// --------------------------------------
+// ══════════════════════════════════════
 function setFilter(cat, el) {
   currentFilter = cat;
   document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
@@ -788,9 +788,9 @@ function matchesFilter(p) {
   return catMatch && searchMatch;
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // RENDER LUGARES
-// --------------------------------------
+// ══════════════════════════════════════
 function renderPlaces() {
   const feed = document.getElementById('places-feed');
   feed.innerHTML = '';
@@ -819,15 +819,15 @@ function makePlaceCard(p, i) {
     <div class="place-info">
       <h3>${p.name}</h3>
       <div class="place-tags">${p.tags.map(t=>`<span class="p-tag">${t}</span>`).join('')}</div>
-      <div class="place-barrio">?? ${p.barrio}</div>
+      <div class="place-barrio">📍 ${p.barrio}</div>
     </div>`;
   d.addEventListener('click', e => { if(!e.target.closest('.heart-btn')) openModal(p); });
   return d;
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // FILTER EVENTOS
-// --------------------------------------
+// ══════════════════════════════════════
 function filterEvents() {
   const upcoming = getUpcomingEvents();
   const filtered = upcoming.filter(e => {
@@ -840,9 +840,9 @@ function filterEvents() {
   renderBannerEvents();
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // MAPA
-// --------------------------------------
+// ══════════════════════════════════════
 function initMap() {
   if(mapInitialized) { leafMap.invalidateSize(); updateMapPins(); return; }
   mapInitialized = true;
@@ -861,7 +861,7 @@ function updateMapPins() {
       html:`<div style="background:#1C1508;border:2px solid #1A8FBA;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.5);"><svg viewBox="0 0 80 80" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">${getSVG(p.cat)}</svg></div>`,
       className:'', nit:'', iconSize:[36,36], iconAnchor:[18,18]
     });
-    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">?? ${p.barrio}</div>`);
+    const marker = L.marker(p.coords,{icon}).addTo(leafMap).bindPopup(`<div class="popup-name">${p.name}</div><div class="popup-barrio">📍 ${p.barrio}</div>`);
     mapMarkers.push(marker);
   });
 }
@@ -881,9 +881,9 @@ function goToMap(place) {
   }, 380);
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // MODAL
-// --------------------------------------
+// ══════════════════════════════════════
 function openModal(p) {
   currentModal = p;
   const isSaved = saved.includes(p.id);
@@ -903,7 +903,7 @@ function openModal(p) {
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-tags').innerHTML = p.tags.map(t=>`<span class="m-tag">${t}</span>`).join('');
   document.getElementById('modal-desc').textContent = p.desc;
-  document.getElementById('modal-barrio').innerHTML = `?? ${p.barrio}`;
+  document.getElementById('modal-barrio').innerHTML = `📍 ${p.barrio}`;
 
   const full = Math.floor(p.rating);
   const starsHtml = Array.from({length:5},(_,i)=>`<i class="star fa${i<full?'s':'r'} fa-star ${i<full?'on':'off'}"></i>`).join('');
@@ -914,14 +914,14 @@ function openModal(p) {
     <div class="detail-box"><div class="d-label">Precio</div><div class="d-val">${p.precio}</div></div>`;
 
   let infoHtml = '';
-  if (p.telefono) infoHtml += `<div class="info-line"><span>??</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='�Copiado!';">${p.telefono}</span></div>`;
-  if (p.instagram) infoHtml += `<div class="info-line"><span>??</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
+  if (p.telefono) infoHtml += `<div class="info-line"><span>📞</span> <span style="cursor:pointer;color:var(--gold);" onclick="navigator.clipboard.writeText('${p.telefono}');this.innerText='¡Copiado!';">${p.telefono}</span></div>`;
+  if (p.instagram) infoHtml += `<div class="info-line"><span>📷</span> <a href="https://instagram.com/${p.instagram}" target="_blank" style="color:var(--gold);text-decoration:none;">@${p.instagram}</a></div>`;
   document.getElementById('modal-info').innerHTML = infoHtml;
 
   if (p.menu && p.menu.some(it => it)) {
     document.getElementById('modal-menu').innerHTML = `
       <div class="menu-box">
-        <div class="mb-title">Men� destacado</div>
+        <div class="mb-title">Menú destacado</div>
         <ul>${p.menu.filter(it=>it).map(it=>`<li><i class="fa-regular fa-circle" style="font-size:6px;color:var(--gold);vertical-align:middle;margin-right:6px"></i>${it}</li>`).join('')}</ul>
       </div>`;
   } else {
@@ -945,9 +945,9 @@ function handleOverlayClick(e) {
   if(e.target === document.getElementById('overlay')) closeModal();
 }
 
-// --------------------------------------
+// ══════════════════════════════════════
 // GUARDAR
-// --------------------------------------
+// ══════════════════════════════════════
 function toggleSave(e, id) {
   e.stopPropagation();
   const btn = e.currentTarget;
@@ -979,7 +979,7 @@ function renderSaved() {
   const c = document.getElementById('saved-container');
   const sp = places.filter(p => saved.includes(p.id)).sort((a,b)=>(a.orden||999)-(b.orden||999));
   if(sp.length === 0) {
-    c.innerHTML = `<div class="saved-empty"><div class="saved-empty-icon"><i class="fa-regular fa-heart"></i></div><h3>A�n no tienes guardados</h3><p>Toca el coraz�n en cualquier lugar para guardarlo aqu�.</p></div>`;
+    c.innerHTML = `<div class="saved-empty"><div class="saved-empty-icon"><i class="fa-regular fa-heart"></i></div><h3>Aún no tienes guardados</h3><p>Toca el corazón en cualquier lugar para guardarlo aquí.</p></div>`;
     return;
   }
   c.innerHTML = '';
@@ -993,9 +993,9 @@ function sharePlace() {
   if(!currentModal) return;
   const p = currentModal;
   if(navigator.share) {
-    navigator.share({title:p.name, text:`Mira este parche en Cartagena Local: ${p.name} � ${p.barrio}`, url:window.location.href});
+    navigator.share({title:p.name, text:`Mira este parche en Cartagena Local: ${p.name} — ${p.barrio}`, url:window.location.href});
   } else {
-    navigator.clipboard.writeText(window.location.href).then(()=>alert('�Enlace copiado!'));
+    navigator.clipboard.writeText(window.location.href).then(()=>alert('¡Enlace copiado!'));
   }
 }
 
