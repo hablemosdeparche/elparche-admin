@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 <style>
 :root {
   --gold: #C9983A;
@@ -246,6 +247,29 @@ body::before {
   text-decoration: none; transition: opacity 0.2s; margin-top: 8px;
 }
 .bold-pay-btn:hover { opacity: 0.9; }
+
+/* ── CARD FORM (Mercado Pago) ── */
+.card-form-section { display: none; margin-top: 24px; }
+.card-form-section.active { display: block; }
+.card-form-section h3 { font-family: 'Syne', sans-serif; font-size: 15px; color: var(--gold); margin-bottom: 14px; }
+.card-form-section .mp-card-form { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 20px; }
+.card-form-section .mp-card-form input,
+.card-form-section .mp-card-form select {
+  background: var(--dark2); border: 1px solid var(--card-border); border-radius: 8px;
+  padding: 10px 12px; color: var(--text); font-size: 14px; width: 100%; margin-bottom: 10px;
+  outline: none; transition: border 0.2s;
+}
+.card-form-section .mp-card-form input:focus,
+.card-form-section .mp-card-form select:focus { border-color: var(--gold); }
+.card-form-section .mp-card-form label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; font-family: 'Syne', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+.card-form-section .mp-card-form .row { display: flex; gap: 10px; }
+.card-form-section .mp-card-form .row > div { flex: 1; }
+.card-form-section .mp-card-form .submit-card { width: 100%; padding: 14px; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 6px; background: var(--gold); color: var(--dark); }
+.card-form-section .mp-card-form .submit-card:hover { background: var(--gold-light); }
+.card-form-section .mp-card-form .submit-card:disabled { opacity: 0.4; cursor: not-allowed; }
+.card-form-section .mp-card-form .card-error { color: var(--danger); font-size: 12px; margin-top: 8px; display: none; }
+.card-form-section .mp-secure-badge { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+.card-form-section .mp-secure-badge i { color: var(--gold); }
 
 /* ── WHATSAPP ── */
 .whatsapp-fallback {
@@ -631,16 +655,16 @@ body::before {
     <div class="payment-step pending" id="paymentStep2">
       <div class="step-icon"><i class="fas fa-credit-card"></i></div>
       <div class="step-info">
-        <div class="title">Completá en Mercado Pago</div>
-        <div class="desc" id="paymentStep2Desc">Esperando link de pago...</div>
+        <div class="title">Procesando pago</div>
+        <div class="desc" id="paymentStep2Desc">Creando tu suscripción...</div>
       </div>
     </div>
 
     <div class="payment-step pending" id="paymentStep3">
-      <div class="step-icon"><i class="fas fa-cog"></i></div>
+      <div class="step-icon"><i class="fas fa-check"></i></div>
       <div class="step-info">
-        <div class="title">Verificando pago</div>
-        <div class="desc">Mercado Pago está procesando tu suscripción</div>
+        <div class="title">Suscripción activa</div>
+        <div class="desc">Tu local ya está publicado. Primer mes gratis.</div>
       </div>
     </div>
 
@@ -658,6 +682,53 @@ body::before {
     <p style="font-size:11px;color:var(--muted);margin-top:8px;">
       Aceptamos tarjetas crédito/débito, PSE, Nequi y Mercado Pago
     </p>
+  </section>
+
+  <!-- CARD FORM -->
+  <section class="card-form-section" id="cardFormSection">
+    <h3><i class="fas fa-credit-card"></i> Ingresá los datos de tu tarjeta</h3>
+    <div class="mp-card-form" id="cardFormContainer">
+      <div class="row">
+        <div>
+          <label>Titular</label>
+          <input type="text" id="cardholderName" placeholder="Como figura en la tarjeta">
+        </div>
+      </div>
+      <div>
+        <label>Número de tarjeta</label>
+        <input type="text" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" inputmode="numeric">
+      </div>
+      <div class="row">
+        <div>
+          <label>Vencimiento</label>
+          <input type="text" id="cardExpiration" placeholder="MM/AA">
+        </div>
+        <div>
+          <label>CVV</label>
+          <input type="text" id="cardSecurityCode" placeholder="123" inputmode="numeric">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Tipo doc.</label>
+          <select id="cardDocType">
+            <option value="CC">CC</option>
+            <option value="CE">CE</option>
+            <option value="NIT">NIT</option>
+            <option value="PP">Pasaporte</option>
+          </select>
+        </div>
+        <div>
+          <label>N° documento</label>
+          <input type="text" id="cardDocNumber" placeholder="123456789" inputmode="numeric">
+        </div>
+      </div>
+      <div class="card-error" id="cardError"></div>
+      <button class="submit-card" id="cardSubmitBtn">
+        <i class="fas fa-lock"></i> Pagar $<span id="cardAmount">30.000</span>/mes
+      </button>
+      <div class="mp-secure-badge"><i class="fas fa-shield-alt"></i> Datos protegidos por Mercado Pago</div>
+    </div>
   </section>
 
   <!-- WHATSAPP FALLBACK -->
@@ -865,7 +936,8 @@ const CONFIG = {
   whatsapp: '573218879876',
   githubToken: 'ghp_' + 'j5G6YOyXROoaXNawcqdKCsEGAwowPX1trAoZ',
   githubOwner: 'hablemosdeparche',
-  githubRepo: 'elparche-admin'
+  githubRepo: 'elparche-admin',
+  mpPublicKey: 'APP_USR-4c6a0f42-463e-48b0-a840-b8ba85925f8b'
 };
 
 const PLAN_PRICES = {
@@ -874,6 +946,43 @@ const PLAN_PRICES = {
   'Destacado': 80000,
   'Completo': 100000
 };
+
+let mpCardToken = null;
+
+function initMercadoPago() {
+  try {
+    const mp = new MercadoPago(CONFIG.mpPublicKey);
+    return mp;
+  } catch (e) {
+    console.error('MP init error:', e);
+    return null;
+  }
+}
+
+async function createCardToken(mp) {
+  const expValue = document.getElementById('cardExpiration').value.trim();
+  const parts = expValue.split('/');
+  if (parts.length !== 2) throw new Error('Formato de vencimiento inválido (MM/AA)');
+  const expMonth = parts[0].padStart(2, '0');
+  let expYear = parts[1].trim();
+  if (expYear.length === 2) expYear = '20' + expYear;
+  const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+
+  const tokenData = await mp.getCardToken({
+    cardNumber,
+    cardholderName: document.getElementById('cardholderName').value,
+    cardExpirationMonth: expMonth,
+    cardExpirationYear: expYear,
+    securityCode: document.getElementById('cardSecurityCode').value,
+    identificationType: document.getElementById('cardDocType').value,
+    identificationNumber: document.getElementById('cardDocNumber').value
+  });
+
+  if (!tokenData || tokenData.error) {
+    throw new Error(tokenData ? tokenData.error : 'Error al tokenizar tarjeta');
+  }
+  return tokenData.id;
+}
 
 // ═══════════════════════════════════════
 // PLAN SELECTOR
@@ -1102,92 +1211,72 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     } catch (e) { console.error('Photo upload error:', e); }
   }
 
-  try {
-    // Step 1: Create GitHub Issue (without Bold - mp-status:pending)
-    const issueBody =
-      `## Nuevo registro: ${data.nombre}\n\n` +
-      `**Ciudad:** ${data.ciudad}\n` +
-      `**NIT:** ${data.nit}\n` +
-      `**Plan:** ${plan} ($${precio.toLocaleString('es-CO')}/mes)\n` +
-      `**Email:** ${data.email}\n\n` +
-      `---\n\n` +
-      `**Barrio:** ${data.barrio}\n` +
-      `**Categoría:** ${data.categoria}\n` +
-      `**Teléfono:** ${data.telefono}\n` +
-      `**Instagram:** ${data.instagram || '—'}\n` +
-      `**Horario:** ${data.horario || '—'}\n` +
-      `**Descripción:** ${data.descripcion || '—'}\n` +
-      `**Menú:** ${data.menu || '—'}\n` +
-      `**Etiquetas:** ${data.etiquetas || '—'}\n` +
-      `**Foto URL:** ${fotoUrl || '—'}\n\n` +
-      `mp-status:pending`;
+  // Show card form instead of creating issue immediately
+  document.getElementById('paymentStep1').className = 'payment-step active';
+  flow.classList.add('active');
+  flow.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('cardFormSection').classList.add('active');
+  document.getElementById('cardAmount').textContent = precio.toLocaleString('es-CO');
 
-    const issue = await createGitHubIssue(
-      `[${data.ciudad}] ${data.nombre} — ${plan}`,
-      issueBody
-    );
+  // Init Mercado Pago
+  const mp = initMercadoPago();
 
-    // Step 2: Show "creating subscription" state
-    document.getElementById('paymentStep1').className = 'payment-step done';
-    document.getElementById('paymentStep1').querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-    document.getElementById('paymentStep2').className = 'payment-step active';
+  // Set up card submit button
+  document.getElementById('cardSubmitBtn').onclick = async function(ev) {
+    ev.preventDefault();
+    const payBtn = document.getElementById('cardSubmitBtn');
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
 
-    flow.classList.add('active');
-    flow.scrollIntoView({ behavior: 'smooth' });
+    try {
+      // Tokenize card
+      const cardTokenId = await createCardToken(mp);
 
-    showToast('Creando tu suscripción...', 'success');
+      // Create GitHub Issue with card_token_id
+      const issueBody =
+        `## Nuevo registro: ${data.nombre}\n\n` +
+        `**Ciudad:** ${data.ciudad}\n` +
+        `**NIT:** ${data.nit}\n` +
+        `**Plan:** ${plan} ($${precio.toLocaleString('es-CO')}/mes)\n` +
+        `**Email:** ${data.email}\n\n` +
+        `---\n\n` +
+        `**Barrio:** ${data.barrio}\n` +
+        `**Categoría:** ${data.categoria}\n` +
+        `**Teléfono:** ${data.telefono}\n` +
+        `**Instagram:** ${data.instagram || '—'}\n` +
+        `**Horario:** ${data.horario || '—'}\n` +
+        `**Descripción:** ${data.descripcion || '—'}\n` +
+        `**Menú:** ${data.menu || '—'}\n` +
+        `**Etiquetas:** ${data.etiquetas || '—'}\n` +
+        `**Foto URL:** ${fotoUrl || '—'}\n` +
+        `**card_token_id:** ${cardTokenId}\n\n` +
+        `mp-status:pending`;
 
-    // Step 3: Poll issue for mp-init-point (created by GHA)
-    const initPoint = await pollForInitPoint(issue.number);
-    if (initPoint) {
-      document.getElementById('paymentStep2').className = 'payment-step done';
-      document.getElementById('paymentStep2').querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-      document.getElementById('mpPayBtn').href = initPoint;
-      document.getElementById('mpPayBtn').style.display = 'inline-flex';
-      document.getElementById('paymentStep2Desc').innerHTML =
-        `Hacé clic en "Ir a Mercado Pago" para ingresar tu tarjeta`;
+      const issue = await createGitHubIssue(
+        `[${data.ciudad}] ${data.nombre} — ${plan}`,
+        issueBody
+      );
 
-      // WhatsApp fallback
-      data.mpUrl = initPoint;
-      const waMsg = buildWhatsAppMsg(data);
-      document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
+      // Show progress
+      document.getElementById('paymentStep1').className = 'payment-step done';
+      document.getElementById('paymentStep1').querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+      document.getElementById('paymentStep2').className = 'payment-step active';
+      document.getElementById('cardFormSection').classList.remove('active');
+      document.getElementById('paymentStep2Desc').innerHTML = 'Creando tu suscripción en Mercado Pago...';
+      showToast('Solicitud enviada. Procesando pago...', 'success');
 
-      document.getElementById('paymentStep3').className = 'payment-step active';
-
-      showToast('Suscripción creada. Ingresá tu tarjeta en Mercado Pago.', 'success');
-
-      // Step 4: Poll for mp-status:authorized
+      // Poll for mp-status:authorized
       pollForAuthorization(issue.number);
+
+    } catch (e) {
+      console.error('Card error:', e);
+      document.getElementById('cardError').textContent = e.message || 'Error al procesar la tarjeta';
+      document.getElementById('cardError').style.display = 'block';
+      payBtn.disabled = false;
+      payBtn.innerHTML = '<i class="fas fa-lock"></i> Intentar de nuevo';
     }
-
-  } catch (e) {
-    console.error('Error:', e);
-    showToast('Error al procesar. Usá WhatsApp como respaldo.', 'error');
-
-    data.mpUrl = 'Pendiente';
-    const waMsg = buildWhatsAppMsg(data);
-    document.getElementById('whatsappFallbackBtn').href = `https://wa.me/${CONFIG.whatsapp}?text=${waMsg}`;
-  }
-
-  btn.innerHTML = '<i class="fas fa-check"></i> Solicitud enviada';
+  };
 });
-
-// ═══════════════════════════════════════
-// POLL FOR MP INIT POINT
-// ═══════════════════════════════════════
-function pollForInitPoint(issueNumber) {
-  return new Promise((resolve) => {
-    let attempts = 0;
-    const maxAttempts = 30;
-
-    const check = async () => {
-      try {
-        const resp = await fetch(
-          `https://api.github.com/repos/${CONFIG.githubOwner}/${CONFIG.githubRepo}/issues/${issueNumber}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${CONFIG.githubToken}`,
-              'Accept': 'application/vnd.github+json'
             }
           }
         );
@@ -1224,9 +1313,6 @@ function pollForInitPoint(issueNumber) {
 // POLL FOR MP AUTHORIZATION
 // ═══════════════════════════════════════
 function pollForAuthorization(issueNumber) {
-  const step3 = document.getElementById('paymentStep3');
-  const step4 = document.getElementById('paymentStep4');
-
   const checkStatus = async () => {
     try {
       const resp = await fetch(
@@ -1240,19 +1326,15 @@ function pollForAuthorization(issueNumber) {
       );
       const issue = await resp.json();
 
-      if (issue.body && issue.body.includes('mp-status:authorized')) {
-        step3.className = 'payment-step done';
+      if (issue.state === 'closed') {
+        const step2 = document.getElementById('paymentStep2');
+        const step3 = document.getElementById('paymentStep3');
+        step2.className = 'payment-step done';
+        step2.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+        step3.className = 'payment-step active';
         step3.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-        step4.className = 'payment-step active';
-        step4.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
-        document.getElementById('mpPayBtn').style.display = 'none';
+        document.getElementById('cardFormSection').classList.remove('active');
         showToast('¡Suscripción activa! Primer mes gratis.', 'success');
-        return;
-      }
-
-      if (issue.body && (issue.body.includes('mp-status:cancelled') || issue.body.includes('mp-status:rejected'))) {
-        step3.className = 'payment-step pending';
-        showToast('La suscripción no se completó. Intentá de nuevo.', 'error');
         return;
       }
 
@@ -1265,7 +1347,6 @@ function pollForAuthorization(issueNumber) {
     }
   };
 
-  // Check every 10 seconds
   setTimeout(checkStatus, 5000);
   setInterval(checkStatus, 15000);
 }

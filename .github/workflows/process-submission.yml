@@ -11,41 +11,47 @@ on:
 
 jobs:
   create-checkout:
-    if: github.event_name == 'issues' && contains(github.event.issue.body, 'mp-status:pending')
+    if: github.event_name == 'issues' && contains(github.event.issue.body, 'mp-status:pending') && !contains(github.event.issue.body, 'mp-sub-id')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Create MP Subscription and update issue
+      - name: Create MP Plan + Subscription
         id: create-mp
         env:
           MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
         shell: pwsh
         run: |
           $issueBody = '${{ github.event.issue.body }}'
-          $issueNum = if ('${{ github.event_name }}' -eq 'issues') { ${{ github.event.issue.number }} } else { 0 }
-
-          if ($issueBody -match 'mp-sub-id:\s*(\S+)') {
-            Write-Output "Subscription already exists: $($matches[1])"
-            exit 0
-          }
+          $issueNum = ${{ github.event.issue.number }}
 
           # Extract data
           $nombre = if ($issueBody -match '^## Nuevo registro: (.+)') { $matches[1].Trim() } else { "Venue" }
           $ciudad = if ($issueBody -match '\*\*Ciudad:\*\* (.+)') { $matches[1].Trim() } else { "" }
           $plan = if ($issueBody -match '\*\*Plan:\*\* (.+) \(\$') { $matches[1].Trim() } else { "Presencia Basica" }
           $email = if ($issueBody -match '\*\*Email:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $cardTokenId = if ($issueBody -match '\*\*card_token_id:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $barrio = if ($issueBody -match '\*\*Barrio:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $categoria = if ($issueBody -match '\*\*Categoría:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $telefono = if ($issueBody -match '\*\*Teléfono:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $instagram = if ($issueBody -match '\*\*Instagram:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $horario = if ($issueBody -match '\*\*Horario:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $descripcion = if ($issueBody -match '\*\*Descripción:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $menu = if ($issueBody -match '\*\*Menú:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $etiquetas = if ($issueBody -match '\*\*Etiquetas:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $fotoUrl = if ($issueBody -match '\*\*Foto URL:\*\* (.+)') { $matches[1].Trim() } else { "" }
+          $nitDir = if ($issueBody -match '\*\*NIT:\*\* (.+)') { $matches[1].Trim() } else { "" }
 
           $prices = @{ "Presencia Basica"=30000; "Verificado"=60000; "Destacado"=80000; "Completo"=100000 }
           $amount = if ($prices.ContainsKey($plan)) { $prices[$plan] } else { 30000 }
 
           $externalRef = "elparche-$issueNum"
-
           $headers = @{ Authorization = "Bearer $env:MP_ACCESS_TOKEN"; "Content-Type" = "application/json" }
-          $subBody = @{
+
+          # Step 1: Create preapproval_plan dynamically
+          Write-Output "Creating plan for $plan - $amount COP..."
+          $planBody = @{
             reason = "$nombre - $plan - $ciudad"
-            external_reference = $externalRef
-            payer_email = $email
             auto_recurring = @{
               frequency = 1
               frequency_type = "months"
@@ -56,44 +62,231 @@ jobs:
                 frequency_type = "months"
               }
             }
-            back_url = "https://hablemosdeparche.github.io/admintaller/mp-success.html"
-            status = "pending"
+            back_url = "https://hablemosdeparche.github.io/elparche-admin/admintaller/"
           } | ConvertTo-Json -Depth 10
 
           try {
-            $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval" -Headers $headers -Method Post -Body $subBody -ContentType "application/json"
-
-            $subId = $resp.id
-            $initPoint = $resp.init_point
-
-            Write-Output "MP Subscription: $subId"
-            echo "mp-sub-id=$subId" >> $env:GITHUB_OUTPUT
-            echo "mp-init-point=$initPoint" >> $env:GITHUB_OUTPUT
+            $planResp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval_plan" -Headers $headers -Method Post -Body $planBody -ContentType "application/json" -ErrorAction Stop
+            $planId = $planResp.id
+            Write-Output "Plan created: $planId"
           } catch {
-            Write-Output "Error creating MP subscription: $_"
+            Write-Output "Error creating plan: $_"
             exit 1
           }
 
-      - name: Update issue with subscription info
-        if: steps.create-mp.outputs.mp-sub-id
+          # Step 2: Create preapproval (subscription) with plan_id + card_token_id
+          Write-Output "Creating subscription..."
+          $subBody = @{
+            preapproval_plan_id = $planId
+            reason = "$nombre - $plan - $ciudad"
+            external_reference = $externalRef
+            payer_email = $email
+            card_token_id = $cardTokenId
+            back_url = "https://hablemosdeparche.github.io/elparche-admin/admintaller/"
+            status = "authorized"
+          } | ConvertTo-Json -Depth 10
+
+          try {
+            $resp = Invoke-RestMethod -Uri "https://api.mercadopago.com/preapproval" -Headers $headers -Method Post -Body $subBody -ContentType "application/json" -ErrorAction Stop
+            $subId = $resp.id
+            Write-Output "MP Subscription created: $subId (Status: $($resp.status))"
+            echo "mp-sub-id=$subId" >> $env:GITHUB_OUTPUT
+            echo "nombre=$nombre" >> $env:GITHUB_OUTPUT
+            echo "ciudad=$ciudad" >> $env:GITHUB_OUTPUT
+            echo "plan=$plan" >> $env:GITHUB_OUTPUT
+            echo "email=$email" >> $env:GITHUB_OUTPUT
+            echo "barrio=$barrio" >> $env:GITHUB_OUTPUT
+            echo "categoria=$categoria" >> $env:GITHUB_OUTPUT
+            echo "telefono=$telefono" >> $env:GITHUB_OUTPUT
+            echo "instagram=$instagram" >> $env:GITHUB_OUTPUT
+            echo "horario=$horario" >> $env:GITHUB_OUTPUT
+            echo "descripcion=$descripcion" >> $env:GITHUB_OUTPUT
+            echo "menu=$menu" >> $env:GITHUB_OUTPUT
+            echo "etiquetas=$etiquetas" >> $env:GITHUB_OUTPUT
+            echo "fotoUrl=$fotoUrl" >> $env:GITHUB_OUTPUT
+            echo "nit=$nitDir" >> $env:GITHUB_OUTPUT
+            echo "amount=$amount" >> $env:GITHUB_OUTPUT
+          } catch {
+            Write-Output "Error creating subscription: $_"
+            exit 1
+          }
+
+      - name: Determine city repo slug
+        id: city-slug
+        shell: pwsh
+        run: |
+          $ciudad = "${{ steps.create-mp.outputs.ciudad }}"
+          $slug = $ciudad.ToLower().Replace(' ', '-').Replace('á','a').Replace('é','e').Replace('í','i').Replace('ó','o').Replace('ú','u').Replace('ñ','n')
+          Write-Output "city-slug=$slug" >> $env:GITHUB_OUTPUT
+
+      - name: Checkout city repo
+        uses: actions/checkout@v4
+        with:
+          repository: hablemosdeparche/${{ steps.city-slug.outputs.city-slug }}
+          token: ${{ secrets.GH_PAT }}
+          path: city-repo
+
+      - name: Update city HTML
+        shell: pwsh
+        run: |
+          $repoPath = "city-repo"
+          $indexFile = Join-Path $repoPath "index.html"
+          if (!(Test-Path $indexFile)) { Write-Output "No index.html"; exit 1 }
+
+          $content = Get-Content $indexFile -Raw
+          $nombre = "${{ steps.create-mp.outputs.nombre }}" -replace "'", "\'"
+          $barrio = "${{ steps.create-mp.outputs.barrio }}" -replace "'", "\'"
+          $categoria = "${{ steps.create-mp.outputs.categoria }}"
+          $plan = "${{ steps.create-mp.outputs.plan }}"
+          $desc = "${{ steps.create-mp.outputs.descripcion }}" -replace "'", "\'"
+          $horario = "${{ steps.create-mp.outputs.horario }}" -replace "'", "\'"
+          $telefono = "${{ steps.create-mp.outputs.telefono }}" -replace "'", "\'"
+          $instagram = "${{ steps.create-mp.outputs.instagram }}" -replace "'", "\'"
+          $menuStr = "${{ steps.create-mp.outputs.menu }}"
+          $etiquetas = "${{ steps.create-mp.outputs.etiquetas }}"
+          $fotoUrl = "${{ steps.create-mp.outputs.fotoUrl }}"
+          $nit = "${{ steps.create-mp.outputs.nit }}".Trim()
+
+          $orden = 999
+          if ($plan -eq "Destacado") { $orden = 50 }
+          if ($plan -eq "Completo") { $orden = 10 }
+          if ($plan -eq "Verificado") { $orden = 100 }
+
+          $menuArr = @()
+          if ($menuStr) { $menuArr = $menuStr -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ } }
+          if ($plan -eq "Presencia Basica" -and $menuArr.Count -gt 4) { $menuArr = $menuArr[0..3] }
+          $menuJsStr = ($menuArr | ForEach-Object { "'$_'" }) -join ","
+
+          $tagsArr = @($categoria)
+          if ($etiquetas) { $etiquetas -split ',' | ForEach-Object { $t = $_.Trim(); if ($t) { $tagsArr += $t } } }
+          $tagsStr = ($tagsArr | ForEach-Object { "'$_'" }) -join ","
+
+          $bgClasses = @{ "bares"="pt1"; "cafe"="pt2"; "comida"="pt3"; "arte"="pt4"; "plan"="pt5"; "noche"="pt6" }
+          $bg = if ($bgClasses.ContainsKey($categoria)) { $bgClasses[$categoria] } else { "pt1" }
+
+          $precioTag = "$ Económico"
+          if ($plan -eq "Verificado" -or $plan -eq "Presencia Basica") { $precioTag = "$$ Promedio" }
+          if ($plan -eq "Destacado" -or $plan -eq "Completo") { $precioTag = "$$$ Exclusivo" }
+
+          # Provisional replacement
+          $pattern = [regex]::Escape("name:'$nombre'")
+          $exists = $content -match "\{[^}]*name\s*:\s*'$nombre'[^}]*\}"
+          if ($exists -and $nit) {
+            $existingMatch = [regex]::Match($content, "\{[^}]*name\s*:\s*'$nombre'[^}]*\}")
+            if ($existingMatch.Success -and $existingMatch.Value -match "nit:''") {
+              Write-Output "Reemplazando provisional: $nombre"
+              $content = $content.Remove($existingMatch.Index, $existingMatch.Length)
+              $exists = $false
+            }
+          }
+
+          if ($exists) {
+            $match = [regex]::Match($content, "\{[^}]*name\s*:\s*'$nombre'[^}]*\}")
+            if ($match.Success) {
+              $oldStr = $match.Value; $newStr = $oldStr
+              $newStr = $newStr -replace "orden:\d+", "orden:$orden"
+              $newStr = $newStr -replace "barrio:'[^']*'", "barrio:'$barrio'"
+              $newStr = $newStr -replace "tags:\[[^\]]*\]", "tags:[$tagsStr]"
+              $newStr = $newStr -replace "horario:'[^']*'", "horario:'$horario'"
+              $newStr = $newStr -replace "precio:'[^']*'", "precio:'$precioTag'"
+              $newStr = $newStr -replace "desc:'[^']*'", "desc:'$desc'"
+              $newStr = $newStr -replace "telefono:'[^']*'", "telefono:'$telefono'"
+              $newStr = $newStr -replace "instagram:'[^']*'", "instagram:'$instagram'"
+              $newStr = $newStr -replace "menu:\[[^\]]*\]", "menu:[$menuJsStr]"
+              if ($fotoUrl) { $newStr = $newStr -replace "img:'[^']*'", "img:'$fotoUrl'" }
+              $content = $content.Replace($oldStr, $newStr)
+            }
+          } else {
+            $idMatch = [regex]::Matches($content, "id\s*:\s*(\d+)")
+            $maxId = 0
+            foreach ($m in $idMatch) { $id = [int]$m.Groups[1].Value; if ($id -gt $maxId) { $maxId = $id } }
+            $nextId = $maxId + 1
+            $newPlace = "  { id:$nextId, orden:$orden, bg:'$bg', cat:'$categoria', name:'$nombre', nit:'$nit', barrio:'$barrio', tags:[$tagsStr], rating:4.5, horario:'$horario', precio:'$precioTag', desc:'$desc', img:'$fotoUrl', telefono:'$telefono', instagram:'$instagram', menu:[$menuJsStr], coords:[10.4240,-75.5510] },"
+            $closeMatch = [regex]::Match($content, '\];\s*\n\s*// ═══')
+            if ($closeMatch.Success) {
+              $content = $content.Substring(0, $closeMatch.Index) + "`n$newPlace`n" + $content.Substring($closeMatch.Index)
+            }
+          }
+          Set-Content $indexFile $content
+          Write-Output "HTML updated for $nombre"
+
+      - name: Commit and push to city repo
+        shell: pwsh
+        run: |
+          Push-Location city-repo
+          git config user.name "El Parche Bot"
+          git config user.email "bot@elparche.co"
+          git add index.html
+          git commit -m "Pago: ${{ steps.create-mp.outputs.nombre }} - ${{ steps.create-mp.outputs.plan }}" || Write-Output "Nada"
+          git push || Write-Output "Push fallo"
+          Pop-Location
+
+      - name: Update venues.json and billing-db.json in central repo
+        shell: pwsh
+        run: |
+          $nombre = "${{ steps.create-mp.outputs.nombre }}"
+          $ciudad = "${{ steps.city-slug.outputs.city-slug }}"
+          $nit = "${{ steps.create-mp.outputs.nit }}"
+          $telefono = "${{ steps.create-mp.outputs.telefono }}"
+          $email = "${{ steps.create-mp.outputs.email }}"
+          $plan = "${{ steps.create-mp.outputs.plan }}"
+          $subId = "${{ steps.create-mp.outputs.mp-sub-id }}"
+          $amount = "${{ steps.create-mp.outputs.amount }}"
+
+          # Update venues.json
+          $venuesPath = "venues.json"
+          $venues = @()
+          if (Test-Path $venuesPath) { $venues = Get-Content $venuesPath -Raw | ConvertFrom-Json }
+          $existing = $venues | Where-Object { $_.nombre -eq $nombre -and $_.ciudad -eq $ciudad }
+          if ($existing) {
+            $existing.nit = $nit; $existing.activo = $true; $existing.email = $email
+            if ($telefono) { $existing.telefono = $telefono }
+          } else {
+            $venues += @{ nombre=$nombre; nit=$nit; email=$email; ciudad=$ciudad; telefono=$telefono; activo=$true }
+          }
+          $venues | ConvertTo-Json -Depth 3 | Set-Content $venuesPath -Encoding UTF8
+
+          # Update billing-db.json
+          $dbPath = "billing-db.json"
+          $db = if (Test-Path $dbPath) { Get-Content $dbPath -Raw -Encoding UTF8 | ConvertFrom-Json } else { @{ payments=@(); venues=@() } }
+          $today = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+          $fechaVen = (Get-Date).AddMonths(1).AddDays(7).ToString("yyyy-MM-dd")
+          $dbExisting = $db.venues | Where-Object { $_.Nombre -eq $nombre -and $_.Ciudad -eq $ciudad }
+          if ($dbExisting) {
+            $dbExisting.activo = $true; $dbExisting.Estado = "Activo"; $dbExisting.Plan = $plan
+            $dbExisting.Precio = $amount; $dbExisting.updatedAt = $today
+            $dbExisting.mp_subscription_id = $subId; $dbExisting.FechaVen = $fechaVen
+          } else {
+            $nextId = if ($db.venues.Count -gt 0) { ($db.venues | ForEach-Object { $_.ID } | Measure-Object -Maximum).Maximum + 1 } else { 1 }
+            $db.venues += @{
+              ID=$nextId; Nombre=$nombre; Ciudad=$ciudad; Plan=$plan; Precio="$amount"
+              Estado="Activo"; activo=$true; FechaReg=(Get-Date -Format "dd/MM/yyyy")
+              FechaVen=$fechaVen; updatedAt=$today; mp_subscription_id=$subId
+              mp_status="authorized"; mp_payer_email=$email
+            }
+          }
+          $db | ConvertTo-Json -Depth 10 | Set-Content $dbPath -Encoding UTF8
+
+          git config user.name "El Parche Bot"
+          git config user.email "bot@elparche.co"
+          git add venues.json billing-db.json
+          git commit -m "DB: $nombre - $ciudad" || Write-Output "Nada"
+          git push || Write-Output "Push fallo"
+
+      - name: Close issue with success message
         uses: actions/github-script@v7
         with:
           script: |
             const subId = '${{ steps.create-mp.outputs.mp-sub-id }}';
-            const initPoint = '${{ steps.create-mp.outputs.mp-init-point }}';
-            const body = context.payload.issue.body;
-            const updatedBody = body + `\nmp-sub-id: ${subId}\nmp-init-point: ${initPoint}`;
-
-            await github.rest.issues.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.issue.number,
-              body: updatedBody
-            });
-
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.issue.number,
-              body: `🔗 **Completá tu suscripción en Mercado Pago**\n\n[Hacé clic acá para pagar](${initPoint})\n\n📅 Primer mes gratis — después se cobra automáticamente cada mes.\n\n💳 Podés pagar con tarjeta crédito/débito, PSE, Nequi o Mercado Pago.`
+              body: `✅ **Suscripción activa** (ID: ${subId})\n\nEl local ya aparece en la guía. Primer mes gratis — se renueva automáticamente.`
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              state: 'closed'
             });
