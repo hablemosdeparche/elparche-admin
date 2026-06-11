@@ -1,0 +1,15 @@
+name: Verify MP Token
+on: workflow_dispatch
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check token type
+        shell: pwsh
+        env:
+          MP_ACCESS_TOKEN: ${{ secrets.MP_ACCESS_TOKEN }}
+        run: |
+          $t = $env:MP_ACCESS_TOKEN
+          if ($t.StartsWith("APP_USR")) { Write-Output "type=production" }
+          elseif ($t.StartsWith("TEST")) { Write-Output "type=test" }
+          else { Write-Output "type=unknown" }
