@@ -135,6 +135,7 @@ jobs:
         run: |
           $ciudad = "${{ steps.create-mp.outputs.ciudad }}"
           $slug = $ciudad.ToLower().Replace(' ', '-').Replace('á','a').Replace('é','e').Replace('í','i').Replace('ó','o').Replace('ú','u').Replace('ñ','n')
+          if ($slug -eq 'cartagena') { $slug = 'cartagena-local' }
           Write-Output "city-slug=$slug" >> $env:GITHUB_OUTPUT
 
       - name: Checkout city repo
