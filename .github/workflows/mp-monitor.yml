@@ -149,24 +149,24 @@ jobs:
     strategy:
       matrix:
         city:
-          - cartagena
+          - cartagena-local
           - medellin
           - bogota
           - cali
           - santa-marta
           - barranquilla
           - bucaramanga
-          - pereira
-          - manizales
-          - villavicencio
-          - ibague
-          - pasto
-          - monteria
-          - valledupar
-          - cucuta
-          - neiva
-          - armenia
-          - sincelejo
+          - eje-cafetero
+          - guatape
+          - leticia
+          - mompox
+          - nuqui
+          - popayan
+          - providencia
+          - san-agustin
+          - san-andres
+          - san-gil
+          - villa-de-leyva
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
