@@ -10,32 +10,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Generate GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-
       - uses: actions/checkout@v4
 
-      - name: Replace config placeholders
+      - name: Replace token in frontend
         shell: pwsh
         env:
-          GH_PAT: ${{ steps.app-token.outputs.token }}
-          GH_OWNER: ${{ secrets.GH_OWNER }}
-          GH_REPO: ${{ vars.GH_REPO }}
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           $file = "admintaller/index.html"
           if (Test-Path $file) {
             $content = Get-Content $file -Raw
-            if ($env:GH_PAT) { $content = $content -replace '{{GITHUB_PAT}}', $env:GH_PAT }
-            if ($env:GH_OWNER) { $content = $content -replace '{{GITHUB_OWNER}}', $env:GH_OWNER }
-            if ($env:GH_REPO) { $content = $content -replace '{{GITHUB_REPO}}', $env:GH_REPO }
+            $content = $content -replace "'\{\{GITHUB_PAT}}'", "'$env:GH_PAT'"
             Set-Content $file $content -Encoding UTF8 -NoNewline
-            Write-Output "Placeholders reemplazados en admintaller/index.html"
+            Write-Output "Token inyectado en admintaller/index.html"
           }
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
