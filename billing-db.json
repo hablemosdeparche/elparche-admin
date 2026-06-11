@@ -1,31 +1,4 @@
 ﻿{
-    "payments":  [
-
-                 ],
-    "venues":  [
-                    {
-                        "ID":  1,
-                        "NIT":  "",
-                        "Nombre":  "Alquimico",
-                        "Categoria":  "Bares",
-                        "Barrio":  "Centro Historico",
-                        "Plan":  "Verificado",
-                        "Precio":  "60000",
-                        "FechaReg":  "6/01/2026",
-                        "FechaIni":  "6/05/2026",
-                        "FechaVen":  "7/05/2026",
-                        "Estado":  "Activo",
-                        "MetodoPago":  "Mercado Pago",
-                        "Comprobante":  "SI",
-                        "Notas":  "Cliente nuevo - mes gratis aplicado",
-                        "Ciudad":  "cartagena",
-                        "activo":  true,
-                        "updatedAt":  "2026-06-08 18:07:36",
-                        "mp_subscription_id":  "",
-                        "mp_status":  "",
-                        "mp_payer_email":  "",
-                        "mp_next_payment":  "",
-                        "mp_trial_ends":  ""
-                    }
-               ]
+    "payments": [],
+    "venues": []
 }
